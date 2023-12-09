@@ -1,0 +1,18 @@
+{
+    "name": "jayfr/virgener",
+    "description": "a PHP Application for Virgener",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Dvirgener",
+            "email": "142855933+Dvirgener@users.noreply.github.com"
+        }
+    ],
+    "require": {},
+    "autoload":{
+        "psr-4": {
+            "Framework\\": "src/Framework",
+            "App\\": "src/App"
+        }
+    }
+}
