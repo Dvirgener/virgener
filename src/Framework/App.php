@@ -8,6 +8,7 @@ use Framework\Container;
 
 class App
 {
+<<<<<<< HEAD
 
     private Router $router;
     private Container $container;
@@ -39,5 +40,10 @@ class App
     {
         // 6 add the method, path and controller (URL) (go to router.php)
         $this->router->add('GET', $path, $controller);
+=======
+    public function run()
+    {
+        echo "application is running!";
+>>>>>>> parent of 360c17a (Progress)
     }
 }
