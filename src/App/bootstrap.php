@@ -12,7 +12,7 @@ use function App\config\registerRoutes;
 // use App\Controllers\AboutPageController;
 
 // 2 create app instance (go to app.php)
-$app = new App(Paths::SOURCE."App/container-definitions.php");
+$app = new App(Paths::SOURCE . "App/container-definitions.php");
 registerRoutes($app);
 // 4 run get method of app class (go to app.php)
 // $app->get('/', [HomeController::class, 'home']);
