@@ -7,6 +7,7 @@ require __DIR__ . "/../../vendor/autoload.php";
 
 use Framework\App;
 <<<<<<< HEAD
+<<<<<<< HEAD
 use App\Config\paths;
 use function App\config\registerRoutes;
 // use App\Controllers\HomeController;
@@ -18,6 +19,11 @@ registerRoutes($app);
 // 4 run get method of app class (go to app.php)
 // $app->get('/', [HomeController::class, 'home']);
 // $app->get('/about', [AboutPageController::class, 'aboutPage']);
+=======
+
+$app = new App();
+
+>>>>>>> parent of 360c17a (Progress)
 =======
 
 $app = new App();
