@@ -33,7 +33,7 @@ class Router
         return $path;
     }
     // 14 this is the dispatch function
-    public function dispatch(string $path, string $method, Container $container = null)
+    public function dispatch(string $path, string $method)
     {
         // 15 normalize the path and method
         $path = $this->normalizePath($path);
@@ -51,7 +51,7 @@ class Router
 
             [$class, $function] = $route['controller'];
 
-            $controllerInstance = $container ? $container->resolve($class) : new $class;
+            $controllerInstance = new $class;
             // 20 invoke the method of the controller class (This is what will be displayed in the index.php file based on the controller class that was passed)
             $controllerInstance->{$function}();
         }

@@ -4,27 +4,17 @@ declare(strict_types=1);
 
 namespace Framework;
 
-use Framework\Container;
-
 class App
 {
 <<<<<<< HEAD
 <<<<<<< HEAD
 
     private Router $router;
-    private Container $container;
 
     // 3 constructor to make instance of router class (go back to bootstrap.php)
-    public function __construct(string $containerDefinitionsPath = null)
+    public function __construct()
     {
         $this->router = new Router();
-        $this->container = new Container();
-
-        if ($containerDefinitionsPath){
-            $containerDefinitions = include $containerDefinitionsPath;
-            $this->container->addDefinitions($containerDefinitions);
-
-        }
     }
 
     // 12 parse the http request made by user here
@@ -33,7 +23,7 @@ class App
         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $method = $_SERVER['REQUEST_METHOD'];
         // 13 invoke the dispatch method of the router class (go to router.php)
-        $this->router->dispatch($path, $method, $this->container);
+        $this->router->dispatch($path, $method);
     }
 
     // 5 this is the get method of app class
