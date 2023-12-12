@@ -9,6 +9,7 @@ class App
 
     private Router $router;
 
+
     public function __construct()
     {
         // 3. construct method to create a new instance of the router class which will be responsible for routing users URL requests
@@ -24,10 +25,9 @@ class App
         $this->router->dispatch($path, $method);
     }
 
-    // 5 this is the get method of app class
     public function get(string $path, array $controller)
     {
-        // 6 add the method, path and controller (URL) (go to router.php)
+        // 6. add the method, path and controller (URL) (go to router.php)
         $this->router->add('GET', $path, $controller);
     }
 }
