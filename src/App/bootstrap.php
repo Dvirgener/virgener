@@ -9,7 +9,10 @@ use Framework\App;
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 use App\Config\paths;
+=======
+>>>>>>> parent of c747191 (Update from my Laptop)
 =======
 >>>>>>> parent of c747191 (Update from my Laptop)
 use function App\config\registerRoutes;
@@ -18,7 +21,11 @@ use function App\config\registerRoutes;
 
 // 2 create app instance (go to app.php)
 <<<<<<< HEAD
+<<<<<<< HEAD
 $app = new App(Paths::SOURCE . "App/container-definitions.php");
+=======
+$app = new App();
+>>>>>>> parent of c747191 (Update from my Laptop)
 =======
 $app = new App();
 >>>>>>> parent of c747191 (Update from my Laptop)
