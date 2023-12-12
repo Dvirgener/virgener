@@ -8,7 +8,7 @@ use Framework\TemplateEngine;
 use App\config\paths;
 
 
-class HomeController
+class AboutPageController
 {
     private TemplateEngine $view;
     public function __construct()
@@ -16,8 +16,8 @@ class HomeController
         $this->view = new TemplateEngine(paths::VIEW);
     }
 
-    public function home()
+    public function aboutPage()
     {
-        echo $this->view->render("index.php", ['title' => 'HOME PAGESSS']);
+        echo $this->view->render("aboutPage.php", ['title' => 'About Page']);
     }
 }

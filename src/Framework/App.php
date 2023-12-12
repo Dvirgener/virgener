@@ -6,14 +6,12 @@ namespace Framework;
 
 class App
 {
-<<<<<<< HEAD
-<<<<<<< HEAD
 
     private Router $router;
 
-    // 3 constructor to make instance of router class (go back to bootstrap.php)
     public function __construct()
     {
+        // 3. construct method to create a new instance of the router class which will be responsible for routing users URL requests
         $this->router = new Router();
     }
 
@@ -31,15 +29,5 @@ class App
     {
         // 6 add the method, path and controller (URL) (go to router.php)
         $this->router->add('GET', $path, $controller);
-=======
-    public function run()
-    {
-        echo "application is running!";
->>>>>>> parent of 360c17a (Progress)
-=======
-    public function run()
-    {
-        echo "application is running!";
->>>>>>> parent of 360c17a (Progress)
     }
 }
