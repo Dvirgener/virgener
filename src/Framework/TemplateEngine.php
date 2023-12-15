@@ -7,6 +7,7 @@ namespace Framework;
 
 class TemplateEngine
 {
+    // * 3. Construtor for the template engine with the basepath as the value based on the VIEW constant in paths.php (go to App.php)
     public function __construct(private string $basepath)
     {
     }

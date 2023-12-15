@@ -1,7 +1,7 @@
 <?php
 
 include $this->resolve("partials/_header.php");
-echo $title;
+
 ?>
 
 

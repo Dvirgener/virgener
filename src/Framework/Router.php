@@ -11,19 +11,19 @@ class Router
 
     private array $Routes = [];
 
-    // 7 store the passed method, path and controller class here in this array
+    // * 9. store them as array
     public function add(string $method, string $path, array $controller)
     {
-        // 8 normalize first before storing to routes array
+
         $path = $this->normalizePath($path);
-        // 10 store the array with the values here (go back to index.php)
+
         $this->Routes[] = [
             'path' => $path,
             'method' => strtoupper($method),
             'controller' => $controller
         ];
     }
-    //  9 this is the normalize function
+
     private function normalizePath(string $path): string
     {
         $path = trim($path, '/');
@@ -32,27 +32,24 @@ class Router
 
         return $path;
     }
-    // 14 this is the dispatch function
+
     public function dispatch(string $path, string $method, Container $container = null)
     {
-        // 15 normalize the path and method
+        // * 12 this is where you dispatch the requested URL of the user.
         $path = $this->normalizePath($path);
         $method = strtoupper($method);
 
-        // 16 search for all the stored routes in the array of routes.
+        // * 13 search the registered routes to look for the match in URL and method of the user request
         foreach ($this->Routes as $route) {
-            // 17 compare each route if it does not match with the path requested by the user
             if (!preg_match("#^{$route['path']}$#", $path) || $route['method'] !== $method) {
-                // 18 if the condition is true continue to the next route in the array
                 continue;
             }
 
-            // 19 if false, instantiate the controller class based on the array of routes stored
-
+            // * 14 if a match is found, create a new instance of a class or run the method resovle of the container class 
             [$class, $function] = $route['controller'];
 
             $controllerInstance = $container ? $container->resolve($class) : new $class;
-            // 20 invoke the method of the controller class (This is what will be displayed in the index.php file based on the controller class that was passed)
+
             $controllerInstance->{$function}();
         }
     }

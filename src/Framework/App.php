@@ -10,31 +10,33 @@ class App
     private Router $router;
     private Container $container;
 
-
+    // * 4. Construct method of App class that creates instance of the router and container classes
+    // * if a container has value it will invoke the addDefinitions function with the base path as a value.
     public function __construct(string $containerDefinitionsPath = null)
     {
-        // 3. construct method to create a new instance of the router class which will be responsible for routing users URL requests
         $this->router = new Router();
-        $this->container = new Container();
 
+        $this->container = new Container();
         if ($containerDefinitionsPath) {
+
             $containerDefinitions = include $containerDefinitionsPath;
             $this->container->addDefinitions($containerDefinitions);
         }
     }
 
-    // 12 parse the http request made by user here
+
     public function run()
     {
+        // * 11. this is where the program will look for the requested URL and method of the user and store it in a variable as well as the instance of the container
         $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $method = $_SERVER['REQUEST_METHOD'];
-        // 13 invoke the dispatch method of the router class (go to router.php)
         $this->router->dispatch($path, $method, $this->container);
     }
 
+
     public function get(string $path, array $controller)
     {
-        // 6. add the method, path and controller (URL) (go to router.php)
+        // * 8 store values of routes in the router class
         $this->router->add('GET', $path, $controller);
     }
 }
