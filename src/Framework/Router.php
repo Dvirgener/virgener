@@ -10,8 +10,9 @@ class Router
 {
 
     private array $Routes = [];
+    private array $middlewares = [];
 
-    // * 9. store them as array
+    // * 13. store them as array
     public function add(string $method, string $path, array $controller)
     {
 
@@ -35,22 +36,40 @@ class Router
 
     public function dispatch(string $path, string $method, Container $container = null)
     {
-        // * 12 this is where you dispatch the requested URL of the user.
+        // * 22. this is where you dispatch the requested URL of the user.
         $path = $this->normalizePath($path);
         $method = strtoupper($method);
 
-        // * 13 search the registered routes to look for the match in URL and method of the user request
+        // * 23. search the registered routes to look for the match in URL and method of the user request
         foreach ($this->Routes as $route) {
             if (!preg_match("#^{$route['path']}$#", $path) || $route['method'] !== $method) {
                 continue;
             }
 
-            // * 14 if a match is found, create a new instance of a class or run the method resovle of the container class 
+            // * 24. if a match is found, create a new instance of a class or run the method resovle of the container class 
+            // * the class variable came from the registered route matched with the user's requested URL
             [$class, $function] = $route['controller'];
 
+            // * 42. store the instance of the class from the resolve method of the container class in controller instance variable
             $controllerInstance = $container ? $container->resolve($class) : new $class;
 
-            $controllerInstance->{$function}();
+            // * 43. define an arrow function invoking the function of the class instance of the controllerinstancevariable
+            $action = fn () => $controllerInstance->{$function}();
+
+            // * 44. run through registered middlewares 
+            foreach ($this->middlewares as $middleWare) {
+                $middlewareInstance = $container ? $container->resolve($middleWare) : new $middleWare;
+                $action = fn () => $middlewareInstance->process($action);
+            }
+
+            $action();
+            return;
         }
+    }
+
+    public function addMiddleware(string $middleWares)
+    {
+        // * 17. Store middlewares in this array
+        $this->middlewares[] = $middleWares;
     }
 }

@@ -7,6 +7,8 @@ namespace Framework;
 
 class TemplateEngine
 {
+    private array $globalTemplateData = [];
+
     // * 3. Construtor for the template engine with the basepath as the value based on the VIEW constant in paths.php (go to App.php)
     public function __construct(private string $basepath)
     {
@@ -15,6 +17,7 @@ class TemplateEngine
     public function render(string $template, array $data = [])
     {
         extract($data, EXTR_SKIP);
+        extract($this->globalTemplateData, EXTR_SKIP);
 
         ob_start();
         include $this->resolve($template);
@@ -30,5 +33,10 @@ class TemplateEngine
     public function resolve(string $path)
     {
         return "{$this->basepath}/{$path}";
+    }
+
+    public function addGlobal(string $key, mixed $value)
+    {
+        $this->globalTemplateData[$key] = $value;
     }
 }

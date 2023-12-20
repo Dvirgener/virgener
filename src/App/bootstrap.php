@@ -6,14 +6,16 @@ require __DIR__ . "/../../vendor/autoload.php";
 
 use Framework\App;
 use App\config\paths;
-use function App\config\registerRoutes;
+use function App\config\{registerRoutes, registerMiddleware};
 
 
-// * 1. this command bootstraps our program and create instance of the app class with the container-definitions as arguement (go to container-definitions.php)
+// * 2. Create a new instance of the App class with the container-definitions as constructor arguement
 $app = new App(paths::SOURCE . "App/container-definitions.php");
 
-// *6. Register Routes for the app
+// * 10. Register routes
 registerRoutes($app);
+// * 14. Register Middlewares
+registerMiddleware($app);
 
-
+// * 18. return the app class to index.php
 return $app;
