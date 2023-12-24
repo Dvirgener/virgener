@@ -8,7 +8,9 @@
             "email": "142855933+Dvirgener@users.noreply.github.com"
         }
     ],
-    "require": {},
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    },
     "autoload":{
         "psr-4": {
             "Framework\\": "src/Framework",
@@ -18,5 +20,8 @@
             "src/App/Config/Routes.php",
             "src/App/Config/middleWare.php"
         ]
+    },
+    "scripts":{
+        "virgener":"php cli.php"
     }
 }

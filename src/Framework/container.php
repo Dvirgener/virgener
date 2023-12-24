@@ -81,7 +81,7 @@ class Container
         // * 37. if not, store the function in a factory variable 
         $factory = $this->definitions[$id];
         // * 38. this dependency variable will store the invoked factory function
-        $dependency = $factory();
+        $dependency = $factory($this);
         // * 39. store the dependency created in the resolved array with the id as key 
         $this->resolved[$id] = $dependency;
         // * 40. return the dependency

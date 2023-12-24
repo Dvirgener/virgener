@@ -7,9 +7,9 @@ include $this->resolve("partials/_header.php");
 <section class="max-w-2xl mx-auto mt-12 p-4 bg-white shadow-md border border-gray-200 rounded">
 
     <form action="" method="POST" class="grid grid-cols-1 gap-6">
+        <?php include $this->resolve("partials/_token.php"); ?>
         <!-- Email -->
         <?php
-        var_dump($oldFormData);
         $country = isset($oldFormData['country']) ? $oldFormData['country'] : '';
         ?>
         <label class="block">

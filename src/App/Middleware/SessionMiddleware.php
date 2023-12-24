@@ -23,6 +23,11 @@ class SessionMiddleware implements MiddlewareInterface
         }
 
         // * 47. Start a session
+        session_set_cookie_params([
+            'secure' => $_ENV['APP_ENV'] === "production",
+            'httponly' => true,
+            'samesite' => 'lax'
+        ]);
         session_start();
         // * 48. invoke next function
         $next();

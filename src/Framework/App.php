@@ -38,21 +38,30 @@ class App
     }
 
 
-    public function get(string $path, array $controller)
+    public function get(string $path, array $controller): App
     {
         // * 12. store values of routes in the router class
         $this->router->add('GET', $path, $controller);
+
+        return $this;
     }
 
-    public function post(string $path, array $controller)
+    public function post(string $path, array $controller): App
     {
         // * 12. store values of routes in the router class
         $this->router->add('POST', $path, $controller);
+
+        return $this;
     }
 
     public function addMiddleware(string $middleWares)
     {
         // *16. invoke the addmiddleware function of the router
         $this->router->addMiddleware($middleWares);
+    }
+
+    public function add(string $middleware)
+    {
+        $this->router->addRouteMiddleware($middleware);
     }
 }

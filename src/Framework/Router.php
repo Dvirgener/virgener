@@ -6,6 +6,7 @@ declare(strict_types=1);
 namespace Framework;
 
 
+
 class Router
 {
 
@@ -21,7 +22,8 @@ class Router
         $this->Routes[] = [
             'path' => $path,
             'method' => strtoupper($method),
-            'controller' => $controller
+            'controller' => $controller,
+            'middlewares' => []
         ];
     }
 
@@ -56,8 +58,10 @@ class Router
             // * 43. define an arrow function invoking the function of the class instance of the controllerinstancevariable
             $action = fn () => $controllerInstance->{$function}();
 
+            $allMiddleware = [...$route['middlewares'], ...$this->middlewares];
+
             // * 44. run through registered middlewares 
-            foreach ($this->middlewares as $middleWare) {
+            foreach ($allMiddleware as $middleWare) {
                 $middlewareInstance = $container ? $container->resolve($middleWare) : new $middleWare;
                 $action = fn () => $middlewareInstance->process($action);
             }
@@ -71,5 +75,11 @@ class Router
     {
         // * 17. Store middlewares in this array
         $this->middlewares[] = $middleWares;
+    }
+
+    public function addRouteMiddleware(string $middleWare)
+    {
+        $lastRouteKey = array_key_last($this->Routes);
+        $this->Routes[$lastRouteKey]['middlewares'][] = $middleWare;
     }
 }
