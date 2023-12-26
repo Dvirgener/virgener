@@ -17,6 +17,6 @@ class AboutPageController
 
     public function aboutPage()
     {
-        echo $this->view->render("aboutPage.php", ['title' => 'About Page']);
+        echo $this->view->render("aboutPage.php", ['title' => 'About']);
     }
 }
