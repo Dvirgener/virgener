@@ -66,7 +66,19 @@ class UserService
 
     public function logout()
     {
-        unset($_SESSION['user']);
-        session_regenerate_id();
+        // unset($_SESSION['user']);
+
+        session_destroy();
+        // session_regenerate_id();
+        $params = session_get_cookie_params();
+        setcookie(
+            'PHPSESSID',
+            '',
+            time(),
+            $params['path'],
+            $params['domain'],
+            $params['secure'],
+            $params['httponly']
+        );
     }
 }

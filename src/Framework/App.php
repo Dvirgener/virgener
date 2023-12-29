@@ -54,6 +54,15 @@ class App
         return $this;
     }
 
+    public function delete(string $path, array $controller): App
+    {
+        // * 12. store values of routes in the router class
+        $this->router->add('DELETE', $path, $controller);
+
+        return $this;
+    }
+
+
     public function addMiddleware(string $middleWares)
     {
         // *16. invoke the addmiddleware function of the router
@@ -63,5 +72,10 @@ class App
     public function add(string $middleware)
     {
         $this->router->addRouteMiddleware($middleware);
+    }
+
+    public function setErrorHandler (array $controller){
+        $this->router->setErrorHandler($controller);
+
     }
 }
