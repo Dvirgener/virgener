@@ -1,10 +1,72 @@
 <?php
 include $this->resolve("partials/_header.php");
 
+$country = isset($oldFormData['country']) ? $oldFormData['country'] : '';
 
 ?>
 
-<section class="max-w-2xl mx-auto mt-12 p-4 bg-white shadow-md border border-gray-200 rounded">
+<section class="container-fluid my-5">
+    <div class="row justify-content-center">
+        <h1 class="text-center">REGISTER</h1>
+    </div>
+
+    <div class="row justify-content-center mt-4">
+        <div class="col-4">
+            <form action="" method="POST">
+
+                <div class="form-floating">
+
+                    <input value="<?php echo e($oldFormData['email'] ?? '');?>" name="email" id="email" type="email" class="form-control <?php echo !empty($oldFormData['email']) && $errorMsg !== "Invalid Email" ? "is-valid" : ($errorMsg !== "Invalid Email" && $errorMsg !== "This Field is required" ? '' : "is-invalid"); ?>" placeholder="john@example.com">
+
+                    <label for="email">Email Address</label>
+
+                    <?php if (array_key_exists('email', $errors)) : ?>
+                        <div class="row ms-2 mt-1" style="color:red; font-size:14px">
+                        <?php echo e($errors['email'][0]); ?>
+                        </div>
+                    <?php endif; ?>
+
+                </div>
+
+
+                <div class="form-floating mt-3">
+
+                    <input value="<?php echo e($oldFormData['age'] ?? '');?>" name="age" id="age" type="number" class="form-control <?php echo !empty($oldFormData['email']) && $errorMsg !== "Invalid Email" ? "is-valid" : ($errorMsg !== "Invalid Email" && $errorMsg !== "This Field is required" ? '' : "is-invalid"); ?>" placeholder="john@example.com">
+
+                    <label for="email">Age</label>
+
+                    <?php if (array_key_exists('age', $errors)) : ?>
+                        <div class="row ms-2 mt-1" style="color:red; font-size:14px">
+                        <?php echo e($errors['age'][0]); ?>
+                        </div>
+                    <?php endif; ?>
+
+                </div>
+
+                <div class="form-floating mt-3">
+
+                    <select name="country" id="country" class="form-select">
+                        <option value="USA">USA</option>
+                        <option value="Canada" <?php echo $country === 'Canada' ? 'selected' : ''; ?>>Canada</option>
+                        <option value="Mexico" <?php echo $country === 'Mexico' ? 'selected' : ''; ?>>Mexico</option>
+                    </select>
+
+                    <label for="country">Country</label>
+
+                    <?php if (array_key_exists('email', $errors)) : ?>
+                        <div class="row ms-2 mt-1" style="color:red; font-size:14px">
+                        <?php echo e($errors['email'][0]); ?>
+                        </div>
+                    <?php endif; ?>
+
+                </div>
+
+
+
+
+            </form>
+        </div>
+    </div>
 
     <form action="" method="POST" class="grid grid-cols-1 gap-6">
         <?php include $this->resolve("partials/_token.php"); ?>
