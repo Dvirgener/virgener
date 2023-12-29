@@ -9,156 +9,111 @@ $country = isset($oldFormData['country']) ? $oldFormData['country'] : '';
     <div class="row justify-content-center">
         <h1 class="text-center">REGISTER</h1>
     </div>
+    <form action="" method="POST">
+        <div class="row justify-content-center mt-4">
 
-    <div class="row justify-content-center mt-4">
-        <div class="col-4">
-            <form action="" method="POST">
+            <div class="col-4 ">
 
                 <div class="form-floating">
-
-                    <input value="<?php echo e($oldFormData['email'] ?? '');?>" name="email" id="email" type="email" class="form-control <?php echo !empty($oldFormData['email']) && $errorMsg !== "Invalid Email" ? "is-valid" : ($errorMsg !== "Invalid Email" && $errorMsg !== "This Field is required" ? '' : "is-invalid"); ?>" placeholder="john@example.com">
-
-                    <label for="email">Email Address</label>
-
+                    <input value="<?php echo e($oldFormData['email'] ?? ''); ?>" name="firstName" id="firstName" type="text" class="form-control" placeholder="john@example.com">
+                    <label for="firstName">First Name</label>
                     <?php if (array_key_exists('email', $errors)) : ?>
                         <div class="row ms-2 mt-1" style="color:red; font-size:14px">
-                        <?php echo e($errors['email'][0]); ?>
+                            <?php echo e($errors['email'][0]); ?>
                         </div>
                     <?php endif; ?>
-
                 </div>
 
-
                 <div class="form-floating mt-3">
-
-                    <input value="<?php echo e($oldFormData['age'] ?? '');?>" name="age" id="age" type="number" class="form-control <?php echo !empty($oldFormData['email']) && $errorMsg !== "Invalid Email" ? "is-valid" : ($errorMsg !== "Invalid Email" && $errorMsg !== "This Field is required" ? '' : "is-invalid"); ?>" placeholder="john@example.com">
-
-                    <label for="email">Age</label>
-
-                    <?php if (array_key_exists('age', $errors)) : ?>
+                    <input value="<?php echo e($oldFormData['email'] ?? ''); ?>" name="email" id="email" type="email" class="form-control" placeholder="john@example.com">
+                    <label for="email">Email address</label>
+                    <?php if (array_key_exists('email', $errors)) : ?>
                         <div class="row ms-2 mt-1" style="color:red; font-size:14px">
-                        <?php echo e($errors['age'][0]); ?>
+                            <?php echo e($errors['email'][0]); ?>
                         </div>
                     <?php endif; ?>
+                </div>
 
+
+
+                <div class="form-floating mt-3">
+                    <input value="<?php echo e($oldFormData['email'] ?? ''); ?>" name="password" id="password" type="password" class="form-control" placeholder="john@example.com">
+                    <label for="password">Password</label>
+                    <?php if (array_key_exists('email', $errors)) : ?>
+                        <div class="row ms-2 mt-1" style="color:red; font-size:14px">
+                            <?php echo e($errors['email'][0]); ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
 
                 <div class="form-floating mt-3">
+                    <input value="<?php echo e($oldFormData['email'] ?? ''); ?>" name="confirmPassword" id="confirmPassword" type="password" class="form-control" placeholder="john@example.com">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <?php if (array_key_exists('email', $errors)) : ?>
+                        <div class="row ms-2 mt-1" style="color:red; font-size:14px">
+                            <?php echo e($errors['email'][0]); ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
 
-                    <select name="country" id="country" class="form-select">
-                        <option value="USA">USA</option>
-                        <option value="Canada" <?php echo $country === 'Canada' ? 'selected' : ''; ?>>Canada</option>
-                        <option value="Mexico" <?php echo $country === 'Mexico' ? 'selected' : ''; ?>>Mexico</option>
+            </div>
+            <div class="col-4">
+
+                <div class="form-floating">
+                    <input value="<?php echo e($oldFormData['email'] ?? ''); ?>" name="lastName" id="lastName" type="text" class="form-control" placeholder="john@example.com">
+                    <label for="lastName">Last Name</label>
+                    <?php if (array_key_exists('email', $errors)) : ?>
+                        <div class="row ms-2 mt-1" style="color:red; font-size:14px">
+                            <?php echo e($errors['email'][0]); ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+                <div class="form-floating mt-3">
+                    <select name="rank" id="rank" class="form-select">
+                        <option value="1" selected></option>
+                        <option value="2">AM</option>
+                        <option value="3">A2C</option>
+                        <option value="4">A1C</option>
+                        <option value="5">SGT</option>
+                        <option value="6">SSG</option>
+                        <option value="7">TSG</option>
+                        <option value="8">MSG</option>
+                        <option value="9">2LT</option>
+                        <option value="10">1LT</option>
+                        <option value="11">CPT</option>
+                        <option value="12">MAJ</option>
+                        <option value="13">LTC</option>
                     </select>
-
-                    <label for="country">Country</label>
-
-                    <?php if (array_key_exists('email', $errors)) : ?>
-                        <div class="row ms-2 mt-1" style="color:red; font-size:14px">
-                        <?php echo e($errors['email'][0]); ?>
-                        </div>
-                    <?php endif; ?>
-
+                    <label class="form-label" for="rank">Rank</label>
                 </div>
 
+                <div class="form-floating mt-3">
+                    <input value="<?php echo e($oldFormData['email'] ?? ''); ?>" name="serialNumber" id="serialNumber" type="number" class="form-control" placeholder="john@example.com">
+                    <label for="serialNumber">Serial Number</label>
+                </div>
 
-
-
-            </form>
-        </div>
-    </div>
-
-    <form action="" method="POST" class="grid grid-cols-1 gap-6">
-        <?php include $this->resolve("partials/_token.php"); ?>
-        <!-- Email -->
-        <?php
-        $country = isset($oldFormData['country']) ? $oldFormData['country'] : '';
-        ?>
-        <label class="block">
-            <span class="text-gray-700">Email address</span>
-            <input value="<?= e($oldFormData['email'] ?? ''); ?>" name="email" type="email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="john@example.com" />
-            <?php if (array_key_exists('email', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
-                    <?php echo e($errors['email'][0]); ?>
-                </div>
-            <?php endif; ?>
-        </label>
-        <!-- Age -->
-        <label class="block">
-            <span class="text-gray-700">Age</span>
-            <input value="<?= $oldFormData['age'] ?? ''; ?>" name="age" type="number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="" />
-            <?php if (array_key_exists('age', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
-                    <?php echo e($errors['age'][0]); ?>
-                </div>
-            <?php endif; ?>
-        </label>
-        <!-- Country -->
-        <label class="block">
-            <span class="text-gray-700">Country</span>
-            <select name="country" class="block w-full mt-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
-                <option value="USA">USA</option>
-                <option value="Canada" <?php echo $country === 'Canada' ? 'selected' : ''; ?>>Canada</option>
-                <option value="Mexico" <?php echo $country === 'Mexico' ? 'selected' : ''; ?>>Mexico</option>
-                <option value="Invalid">Invalid Country</option>
-            </select>
-            <?php if (array_key_exists('country', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
-                    <?php echo e($errors['country'][0]); ?>
-                </div>
-            <?php endif; ?>
-        </label>
-        <!-- Social Media URL -->
-        <label class="block">
-            <span class="text-gray-700">Social Media URL</span>
-            <input value="<?= $oldFormData['socialMediaURL'] ?? ''; ?>" name=" socialMediaURL" type="text" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="" />
-            <?php if (array_key_exists('socialMediaURL', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
-                    <?php echo e($errors['socialMediaURL'][0]); ?>
-                </div>
-            <?php endif; ?>
-        </label>
-        <!-- Password -->
-        <label class="block">
-            <span class="text-gray-700">Password</span>
-            <input name="password" type="password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="" />
-            <?php if (array_key_exists('password', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
-                    <?php echo e($errors['password'][0]); ?>
-                </div>
-            <?php endif; ?>
-        </label>
-        <!-- Confirm Password -->
-        <label class="block">
-            <span class="text-gray-700">Confirm Password</span>
-            <input name="confirmPassword" type="password" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" placeholder="" />
-            <?php if (array_key_exists('confirmPassword', $errors)) : ?>
-                <div class="bg-gray-100 mt-2 p-2 text-red-500">
-                    <?php echo e($errors['confirmPassword'][0]); ?>
-                </div>
-            <?php endif; ?>
-        </label>
-        <!-- Terms of Service -->
-        <div class="block">
-            <div class="mt-2">
-                <div>
-                    <label class="inline-flex items-center">
-                        <input <?php echo $oldFormData['tos'] ?? false ? 'checked' : ''; ?> name="tos" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-offset-0 focus:ring-indigo-200 focus:ring-opacity-50" type="checkbox" />
-                        <span class="ml-2">I accept the terms of service.</span>
-                        <?php if (array_key_exists('tos', $errors)) : ?>
-                            <div class="bg-gray-100 mt-2 p-2 text-red-500">
-                                <?php echo e($errors['tos'][0]); ?>
-                            </div>
-                        <?php endif; ?>
-
-                    </label>
+                <div class="form-floating mt-3">
+                    <input value="<?php echo e($oldFormData['email'] ?? ''); ?>" name="position" id="position" type="text" class="form-control" placeholder="john@example.com">
+                    <label for="position">Position</label>
                 </div>
             </div>
         </div>
-        <button type="submit" class="block w-full py-2 bg-indigo-600 text-white rounded">
-            Submit
-        </button>
+        <div class="row justify-content-center mt-4">
+            <div class="col-2 d-grid">
+                <button class="btn btn-primary" type="submit">
+                    Submit
+                </button>
+            </div>
+            <div class="col-2 d-grid">
+                <button class="btn btn-primary" type="submit">
+                    Cancel
+                </button>
+            </div>
+        </div>
     </form>
+
+
 </section>
 
 <?php
