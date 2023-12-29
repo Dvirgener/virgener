@@ -1,8 +1,40 @@
 <?php include $this->resolve("partials/_header.php"); ?>
 
-<section class="max-w-2xl mx-auto mt-12 p-4 bg-white shadow-md border border-gray-200 rounded">
+<section class="container my-5">
+    <div class="row justify-content-center">
+        <h1 class="text-center">LOG IN</h1>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <form action="" method="POST">
 
-    <form method="POST" class="grid grid-cols-1 gap-6">
+                <div class="form-floating">
+                    <input name="email" id="email" type="email" class="form-control" placeholder="john@example.com">
+                    <label for="email">Email Address</label>
+                </div>
+
+                <div class="form-floating mt-3">
+                    <input name="password" id="password" type="password" class="form-control" placeholder="john@example.com">
+                    <label for="password">Password</label>
+                </div>
+
+                <div class="row mt-4 justify-content-center">
+                    <div class="col-4 d-grid">
+                        <button class="btn btn-primary" type="submit">
+                            Login
+                        </button>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+
+    <form method="POST">
+
+
+
         <?php include $this->resolve("partials/_token.php"); ?>
         <label class="block">
             <span class="text-gray-700">Email address</span>
@@ -26,6 +58,7 @@
             Submit
         </button>
     </form>
+
 </section>
 
 <?php include $this->resolve("partials/_footer.php"); ?>
