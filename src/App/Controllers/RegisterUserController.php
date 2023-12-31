@@ -23,9 +23,9 @@ class RegisterUserController
     public function register()
     {
         $this->ValidatorService->validateRegister($_POST);
-        $this->userService->isEmailTaken($_POST['email']);
-        $this->userService->registerUser($_POST);
+        // $this->userService->isEmailTaken($_POST['email']);
+        // $this->userService->registerUser($_POST);
 
-        redirectTo('/');
+        // redirectTo('/');
     }
 }
