@@ -6,17 +6,19 @@ namespace App\Controllers;
 
 use Framework\TemplateEngine;
 use App\config\paths;
+use App\Services\musicPlaylist;
 
 
-class AboutPageController
+class playerController
 {
 
     public function __construct(private TemplateEngine $view)
     {
     }
 
-    public function aboutPage()
+    public function player()
     {
-        echo $this->view->render("aboutPage.php", ['title' => 'About']);
+
+        echo $this->view->render('karaoke/player.php', ['title' => 'About']);
     }
 }

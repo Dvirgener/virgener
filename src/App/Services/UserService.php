@@ -25,22 +25,64 @@ class UserService
 
     public function registerUser(array $form)
     {
+        switch ($form['rank']) {
+            case 1:
+                $actual_rank = "AM";
+                break;
+            case 2:
+                $actual_rank = "A2C";
+                break;
+            case 3:
+                $actual_rank = "A1C";
+                break;
+            case 4:
+                $actual_rank = "SGT";
+                break;
+            case 5:
+                $actual_rank = "SSG";
+                break;
+            case 6:
+                $actual_rank = "TSG";
+                break;
+            case 7:
+                $actual_rank = "MSG";
+                break;
+            case 8:
+                $actual_rank = "2LT";
+                break;
+            case 9:
+                $actual_rank = "1LT";
+                break;
+            case 10:
+                $actual_rank = "CPT";
+                break;
+            case 11:
+                $actual_rank = "MAJ";
+                break;
+            case 12:
+                $actual_rank = "LTC";
+                break;
+        }
 
         $password = password_hash($form['password'], PASSWORD_BCRYPT, ['cost => 12']);
 
         $this->db->query(
-            "INSERT INTO `users` (`email`,`password`,`age`,`country`,`social_media_url`) 
-            VALUES (:email,:password,:age,:country,:socialMediaURL)",
+            "INSERT INTO users (email, password, first_name, last_name, actual_rank, number_rank, serial_number, position)
+            VALUES (:email,:password,:first_name,:last_name,:actual_rank,:number_rank,:serial_number,:position)",
             [
                 'email' => $form['email'],
                 'password' => $password,
-                'age' => $form['age'],
-                'country' => $form['country'],
-                'socialMediaURL' => $form['socialMediaURL'],
+                'first_name' => $form['firstName'],
+                'last_name' => $form['lastName'],
+                'actual_rank' => $actual_rank,
+                'number_rank' => $form['rank'],
+                'serial_number' => $form['serialNumber'],
+                'position' => $form['position']
             ]
         );
 
         session_regenerate_id();
+
         $_SESSION['user'] = $this->db->id();
     }
 
