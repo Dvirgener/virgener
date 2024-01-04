@@ -21,6 +21,8 @@ function registerRoutes(App $app)
     $app->post('/login', [LoginController::class, 'login'])->add(GuestOnlyMiddleware::class);
     $app->get('/logout', [LoginController::class, 'logout'])->add(AuthRequiredMiddleware::class);
     $app->get('/transaction', [TransactionController::class, 'createView'])->add(AuthRequiredMiddleware::class);
+
+
     $app->get('/karaoke', [KaraokeController::class, 'karaokeMain'])->add(AuthRequiredMiddleware::class);
     $app->post('/karaoke', [KaraokeController::class, 'addSong'])->add(AuthRequiredMiddleware::class);
     $app->get('/karaoke/edit', [KaraokeController::class, 'editSong'])->add(AuthRequiredMiddleware::class);
@@ -28,6 +30,9 @@ function registerRoutes(App $app)
     $app->get('/karaoke/delete', [KaraokeController::class, 'deleteSong'])->add(AuthRequiredMiddleware::class);
     $app->post('/karaoke/addsong', [KaraokeController::class, 'addSongtoDB'])->add(AuthRequiredMiddleware::class);
     $app->get('/karaoke/song', [KaraokeController::class, 'addSongtoCue'])->add(AuthRequiredMiddleware::class);
+    $app->get('/livesearch', [KaraokeController::class, 'liveSearch'])->add(AuthRequiredMiddleware::class);
+
+
     $app->post('/transaction', [TransactionController::class, 'create'])->add(AuthRequiredMiddleware::class);
     $app->get('/transaction/{transaction}', [TransactionController::class, 'editView'])->add(AuthRequiredMiddleware::class);
     $app->post('/transaction/{transaction}', [TransactionController::class, 'edit'])->add(AuthRequiredMiddleware::class);

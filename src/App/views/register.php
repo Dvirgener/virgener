@@ -14,7 +14,7 @@ $oldFormPosition = isset($oldFormData['position']) ? $oldFormData['position'] : 
         <?php include $this->resolve("partials/_token.php"); ?>
         <div class="row justify-content-center mt-4">
 
-            <div class="col-4 ">
+            <div class="col-12 col-md-4">
 
                 <div class="form-floating">
                     <input value="<?php echo e($oldFormData['firstName'] ?? ''); ?>" name="firstName" id="firstName" type="text" class="form-control <?php echo validInvalidForm($errors, $oldFormData, 'firstName'); ?>" placeholder="john@example.com">
@@ -41,7 +41,7 @@ $oldFormPosition = isset($oldFormData['position']) ? $oldFormData['position'] : 
                 </div>
 
             </div>
-            <div class="col-4">
+            <div class="col-12 col-md-4">
 
                 <div class="form-floating">
                     <input value="<?php echo e($oldFormData['lastName'] ?? ''); ?>" name="lastName" id="lastName" type="text" class="form-control <?php echo validInvalidForm($errors, $oldFormData, 'lastName'); ?>" placeholder="john@example.com">

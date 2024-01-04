@@ -15,6 +15,7 @@ class KaraokeController
     {
     }
 
+
     public function karaokeMain()
     {
         $allSongs = $this->musicService->getSongs();
@@ -54,6 +55,13 @@ class KaraokeController
     {
         $songData = $this->musicService->getOneSong($_GET['cue']);
         $this->musicService->addSongtoPlaylist($songData);
-        // redirectTo('/karaoke');
+    }
+
+    public function liveSearch()
+    {
+        $result = $this->musicService->liveSearch($_GET['input']);
+        echo $this->view->render("karaoke/liveSearch.php", ['searchResult' => $result]);
+
+        echo "no search";
     }
 }

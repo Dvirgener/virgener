@@ -22,6 +22,14 @@ class playlistController
             redirectTo('/karaoke');
         }
         $this->musicPlaylist->addPlays($queue['id'], $queue['plays']);
-        echo $this->view->render("karaoke/playlist.php", ['queue' => $queue['youtube']]);
+        echo $this->view->render(
+            "karaoke/playlist.php",
+            [
+                'queue' => $queue['youtube'],
+                'songTitle' => $queue['title'],
+                'title' => $queue['title'],
+                'artist' => $queue['artist']
+            ]
+        );
     }
 }

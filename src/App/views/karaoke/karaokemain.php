@@ -5,7 +5,7 @@ include $this->resolve("partials/_header.php");
 
 <section class="my-5">
     <div class="row justify-content-between text-center">
-        <div class="col-3 border-start px-5">
+        <div class="col-12 col-md-3 px-5">
             <div class="row my-5">
                 <h4>ADD A YOUTUBE VIDEO</h4>
             </div>
@@ -45,7 +45,7 @@ include $this->resolve("partials/_header.php");
             </div>
 
         </div>
-        <div class="col-6">
+        <div class="col-12 col-md-6">
             <div class="row mb-3">
                 <h1>SONG LIST</h1>
             </div>
@@ -96,20 +96,20 @@ include $this->resolve("partials/_header.php");
 
         </div>
 
-        <div class="col-3 px-5">
+        <div class="col-12 col-md-3 px-5">
             <div class="row my-5">
                 <h3>PLAYLIST:</h3>
             </div>
-            <div class="row d-grid overflow-auto border-end" id="playlistDiv" style="height: 410px;">
+            <div class="row d-flex overflow-auto border-end" id="playlistDiv" style="height: 410px;">
                 <?php $count = 1;
                 foreach ($_SESSION['playlist'] as $song) : ?>
 
-                    <div class="row">
+                    <div class="row border-bottom" style="height: fit-content;">
                         <div class="col-1">
-                            <h5><?php echo $count ?>.</h5>
+                            <h6><?php echo $count ?>.</h6>
                         </div>
                         <div class="col-10 text-start">
-                            <h5><?php echo $song['artist'] . " - " . $song['title'] ?></h5>
+                            <h7><?php echo $song['artist'] . " - " . $song['title'] ?></h7>
                         </div>
                     </div>
 

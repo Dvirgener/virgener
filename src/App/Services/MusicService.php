@@ -76,4 +76,16 @@ class MusicService
         $updatedPlays = $plays + 1;
         $this->db->query("UPDATE karaoke SET plays = :plays WHERE id= :id", ['plays' => $updatedPlays, 'id' => $id]);
     }
+
+    public function liveSearch(string $searchingFor)
+    {
+        $searchRes = $this->db->query(
+            "SELECT * FROM karaoke WHERE title LIKE = :search%",
+            [
+                'search' => $searchingFor
+            ]
+        )->findAll();
+
+        return $searchRes;
+    }
 }

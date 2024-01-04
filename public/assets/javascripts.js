@@ -24,8 +24,8 @@
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('playersa', {
-                height: '390',
-                width: '640',
+                height: '600',
+                width: '1200',
                 videoId: url,
                 playerVars: {
                     'autoplay': 1,
@@ -61,4 +61,27 @@
             }
             return ID;
 }
+
+
+// Live Search Function
+
+
+$(document).ready(function (){
+    $("#live-search").keyup(function () {
+        var input = $(this).val();
+        
+        if (input != "") {
+            $.ajax({
+                url: "/livesearch",
+                method: "GET",
+                data: { input: input },
+                success: function (data) {
+                    $("#searchResult").html(data);
+                }
+            })
+        } else {
+            $("#searchResult").css("display","none");
+        }
+    })
+})
         
