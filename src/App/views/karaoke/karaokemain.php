@@ -97,10 +97,10 @@ include $this->resolve("partials/_header.php");
         </div>
 
         <div class="col-12 col-md-3 px-5">
-            <div class="row my-5">
+            <div class="row mt-5 mb-3">
                 <h3>PLAYLIST:</h3>
             </div>
-            <div class="row d-flex overflow-auto border-end" id="playlistDiv" style="height: 410px;">
+            <div class="row d-flex overflow-auto border-end align-content-start" id="playlistDiv" style="height: 410px;">
                 <?php $count = 1;
                 foreach ($_SESSION['playlist'] as $song) : ?>
 

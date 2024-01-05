@@ -62,6 +62,5 @@ class KaraokeController
         $result = $this->musicService->liveSearch($_GET['input']);
         echo $this->view->render("karaoke/liveSearch.php", ['searchResult' => $result]);
 
-        echo "no search";
     }
 }

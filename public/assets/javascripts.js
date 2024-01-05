@@ -1,6 +1,6 @@
 
 
-    $(document).ready(function() {
+    $(function() {
         $('#example').DataTable({
             order: [
                 [0, 'desc']
@@ -8,6 +8,8 @@
             scrollCollapse: false,
             scrollY: '350px',
         });
+
+
     });
 
         var tag = document.createElement('script');
@@ -25,7 +27,7 @@
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('playersa', {
                 height: '600',
-                width: '1200',
+                width: '1050',
                 videoId: url,
                 playerVars: {
                     'autoplay': 1,
@@ -65,11 +67,11 @@
 
 // Live Search Function
 
+$(function(){
 
-$(document).ready(function (){
     $("#live-search").keyup(function () {
         var input = $(this).val();
-        
+
         if (input != "") {
             $.ajax({
                 url: "/livesearch",
@@ -77,11 +79,16 @@ $(document).ready(function (){
                 data: { input: input },
                 success: function (data) {
                     $("#searchResult").html(data);
+                    $("#searchResult").css("display","block");
                 }
             })
         } else {
             $("#searchResult").css("display","none");
         }
     })
+
 })
+
+    
+
         

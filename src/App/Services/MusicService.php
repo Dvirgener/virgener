@@ -80,7 +80,7 @@ class MusicService
     public function liveSearch(string $searchingFor)
     {
         $searchRes = $this->db->query(
-            "SELECT * FROM karaoke WHERE title LIKE = :search%",
+            "SELECT * FROM karaoke WHERE title LIKE :search '%' OR artist LIKE :search '%'",
             [
                 'search' => $searchingFor
             ]
