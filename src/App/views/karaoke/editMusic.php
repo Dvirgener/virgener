@@ -4,7 +4,7 @@ include $this->resolve("partials/_header.php");
 
 <section>
     <div class="row d-flex justify-content-center">
-        <h1 class="text-center">EDIT SONG</h1>
+        <h1 class="text-center virg-karaoke-font">EDIT SONG</h1>
     </div>
     <div class="row d-flex justify-content-center">
         <div class="col-4 mt-4">
@@ -14,19 +14,19 @@ include $this->resolve("partials/_header.php");
                 <input class=" form-control mt-1" type="hidden" value="<?= $editSong['id']; ?>" name="id">
 
                 <div class="row">
-                    <label for="artist" class="fw-bold">Artist:</label>
+                    <label for="artist" class="fw-bold virg-karaoke-font">Artist:</label>
                     <input class="form-control mt-1" type="text" value="<?= $editSong['artist']; ?>" name="artist" id="artist">
                 </div>
-                <div class="row mt-1">
-                    <label for="title" class="fw-bold">Title:</label>
+                <div class="row mt-3">
+                    <label for="title" class="fw-bold virg-karaoke-font">Title:</label>
                     <input class=" form-control mt-1" type="text" value="<?= $editSong['title']; ?>" name="title" id="title">
                 </div>
-                <div class="row mt-1">
-                    <label for="url" class="fw-bold">URL:</label>
+                <div class="row mt-3">
+                    <label for="url" class="fw-bold virg-karaoke-font" >URL:</label>
                     <input class=" form-control mt-1" type="text" value="<?= $editSong['youtube']; ?>" name="url" id="url">
                 </div>
-                <div class="row mt-1">
-                    <label for="mode" class="fw-bold">Mode:</label>
+                <div class="row mt-3">
+                    <label for="mode" class="fw-bold virg-karaoke-font">Mode:</label>
                     <select name="mode" id="mode" class="form-select">
                         <option value="<?= $editSong['mode']; ?>"><?= $editSong['mode']; ?></option>
                         <option value="karaoke">Karaoke</option>
@@ -35,7 +35,7 @@ include $this->resolve("partials/_header.php");
                         <option value="playlist">Playlist</option>
                     </select>
                 </div>
-                <div class="row justify-content-around mt-4">
+                <div class="row justify-content-around mt-5">
                     <div class="col-3 d-grid">
                         <button type="submit" class="btn btn-primary">Save changes</button>
 

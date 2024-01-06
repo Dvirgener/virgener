@@ -6,7 +6,7 @@ namespace App\config;
 
 use Framework\App;
 
-use App\Controllers\{HomeController, RegisterUserController, LoginController, TransactionController, ReceiptController, ErrorController, playerController, KaraokeController, playlistController};
+use App\Controllers\{HomeController, RegisterUserController, LoginController, TransactionController, ReceiptController, ErrorController, playerController, KaraokeController, playlistController,SpendingPlanController};
 use App\Middleware\{AuthRequiredMiddleware, GuestOnlyMiddleware};
 
 
@@ -42,6 +42,9 @@ function registerRoutes(App $app)
     $app->get('/transaction/{transaction}/receipt/{receipt}', [ReceiptController::class, 'download'])->add(AuthRequiredMiddleware::class);
     $app->delete('/transaction/{transaction}/receipt/{receipt}', [ReceiptController::class, 'delete'])->add(AuthRequiredMiddleware::class);
     $app->get('/player', [playerController::class, 'player'])->add(AuthRequiredMiddleware::class);
+
+
+    $app->get('/spendingplan', [SpendingPlanController::class, 'viewall'])->add(AuthRequiredMiddleware::class);
 
     $app->setErrorHandler([ErrorController::class, 'notFound']);
 }

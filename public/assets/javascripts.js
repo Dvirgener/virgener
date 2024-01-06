@@ -1,5 +1,6 @@
 
 
+
     $(function() {
         $('#example').DataTable({
             order: [
@@ -8,9 +9,23 @@
             scrollCollapse: false,
             scrollY: '350px',
         });
-
-
     });
+
+    $(function() {
+        $('#example2').DataTable({
+            order: [
+                [1, 'asc']
+            ],
+            scrollCollapse: false,
+            scrollY: '550px',
+        });
+    });
+
+
+
+
+
+
 
         var tag = document.createElement('script');
 
@@ -90,5 +105,6 @@ $(function(){
 })
 
     
+// Data Table Nr 2
 
-        
+

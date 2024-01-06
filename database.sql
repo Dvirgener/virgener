@@ -33,3 +33,38 @@ CREATE TABLE IF NOT EXISTS karaoke(
     PRIMARY KEY(id)
 );
 
+CREATE TABLE IF NOT EXISTS table_of_activities(
+    id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+    year year NOT NULL,
+    reviewing_staff varchar(255) NOT NULL,
+    acct_code varchar(255) NOT NULL,
+    fund_source varchar(255) NOT NULL,
+    activity varchar(510) NOT NULL,
+    mode_imp varchar(255) NOT NULL,
+    mode_proc varchar(255) NOT NULL,
+    first_amount decimal(20,2) NOT NULL,
+    first_actual decimal(20) NOT NULL,
+    first_dv varchar(255) NOT NULL,
+    first_obr varchar(255) NOT NULL,
+    first_aar varchar(255) NOT NULL,
+    second_amount decimal(20,2) NOT NULL,
+    second_actual decimal(20) NOT NULL,
+    second_dv varchar(255) NOT NULL,
+    second_obr varchar(255) NOT NULL,
+    second_aar varchar(255) NOT NULL,
+    third_amount decimal(20,2) NOT NULL,
+    third_actual decimal(20) NOT NULL,
+    third_dv varchar(255) NOT NULL,
+    third_obr varchar(255) NOT NULL,
+    third_aar varchar(255) NOT NULL,
+    fourth_amount decimal(20,2) NOT NULL,
+    fourth_actual decimal(20) NOT NULL,
+    fourth_dv varchar(255) NOT NULL,
+    fourth_obr varchar(255) NOT NULL,
+    fourth_aar varchar(255) NOT NULL,
+    created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    updated_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    added_by varchar(255) NOT NULL,
+    PRIMARY KEY(id)
+);
+

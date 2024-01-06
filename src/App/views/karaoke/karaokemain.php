@@ -3,7 +3,7 @@
 include $this->resolve("partials/_header.php");
 ?>
 
-<section class="my-5">
+<section class="my-5 virg-karaoke-font">
     <div class="row justify-content-between text-center">
         <div class="col-12 col-md-3 px-5">
             <div class="row my-5">
@@ -16,19 +16,19 @@ include $this->resolve("partials/_header.php");
 
                         <div class="row">
                             <label for="artist" class="fw-bold">Artist:</label>
-                            <input class="form-control mt-1" type="text" value="" name="artist" id="artist">
+                            <input class="form-control mt-1 virg-normal-font" type="text" value="" name="artist" id="artist">
                         </div>
                         <div class="row mt-1">
                             <label for="title" class="fw-bold">Title:</label>
-                            <input class=" form-control mt-1" type="text" value="" name="title" id="title">
+                            <input class=" form-control mt-1 virg-normal-font" type="text" value="" name="title" id="title">
                         </div>
                         <div class="row mt-1">
                             <label for="url" class="fw-bold">URL:</label>
-                            <input class=" form-control mt-1" type="text" value="" name="url" id="url">
+                            <input class=" form-control mt-1 virg-normal-font" type="text" value="" name="url" id="url">
                         </div>
                         <div class="row mt-1">
                             <label for="title" class="fw-bold">Mode:</label>
-                            <select name="mode" id="mode" class="form-select">
+                            <select name="mode" id="mode" class="form-select virg-normal-font">
                                 <option value=""></option>
                                 <option value="karaoke">Karaoke</option>
                                 <option value="music">Music</option>
@@ -36,8 +36,8 @@ include $this->resolve("partials/_header.php");
                                 <option value="playlist">Playlist</option>
                             </select>
                         </div>
-                        <div class="row mt-3">
-                            <button class="btn btn-primary" type="submit">Add</button>
+                        <div class="row mt-3 virg-normal-font">
+                            <button class="btn btn-primary virg-normal-font" type="submit">Save</button>
                         </div>
                     </form>
                 </div>
@@ -50,8 +50,8 @@ include $this->resolve("partials/_header.php");
                 <h1>SONG LIST</h1>
             </div>
             <div class="row d-flex justify-content-center border-start border-end">
-                <table id="example" class="table table-striped text-start" style="width:100%">
-                    <thead>
+                <table id="example" class="table table-striped text-start virg-normal-font table-light" style="width:100%">
+                    <thead class="virg-karaoke-font">
                         <tr>
                             <th style="width: 30px;">plays</th>
                             <th style="width: 110px;">Artist</th>
@@ -63,7 +63,7 @@ include $this->resolve("partials/_header.php");
                         </tr>
                     </thead>
 
-                    <tbody>
+                    <tbody class="fs-5">
                         <?php foreach ($allSongs as $song) : ?>
                             <tr>
                                 <td class="text-center"><?php echo e($song['plays']); ?></td>
@@ -79,7 +79,7 @@ include $this->resolve("partials/_header.php");
 
                         <?php endforeach ?>
                     </tbody>
-                    <tfoot>
+                    <tfoot class="virg-karaoke-font">
                         <tr>
                             <th style="width: 60px;">plays</th>
                             <th style="width: 200px;">Artist</th>
@@ -100,11 +100,11 @@ include $this->resolve("partials/_header.php");
             <div class="row mt-5 mb-3">
                 <h3>PLAYLIST:</h3>
             </div>
-            <div class="row d-flex overflow-auto border-end align-content-start" id="playlistDiv" style="height: 410px;">
+            <div class="row d-flex overflow-auto border-end align-content-start virg-normal-font fs-5" id="playlistDiv" style="height: 410px;">
                 <?php $count = 1;
                 foreach ($_SESSION['playlist'] as $song) : ?>
 
-                    <div class="row border-bottom" style="height: fit-content;">
+                    <div class="row border-bottom mb-2 pb-1" style="height: fit-content;">
                         <div class="col-1">
                             <h6><?php echo $count ?>.</h6>
                         </div>
@@ -118,8 +118,8 @@ include $this->resolve("partials/_header.php");
                 endforeach ?>
             </div>
             <div class="row justify-content-center">
-                <div class="col-10 d-grid">
-                    <a href="/playlist" class="btn btn-primary">Play</a>
+                <div class="col-10 d-grid virg-normal-font">
+                    <a href="/playlist" class="btn btn-primary ">Play</a>
                 </div>
 
             </div>
