@@ -1,31 +1,52 @@
 
 
 
-    $(function() {
-        $('#example').DataTable({
-            order: [
-                [0, 'desc']
-            ],
-            scrollCollapse: false,
-            scrollY: '350px',
-        });
+$(function() {
+    $('#example').DataTable({
+        order: [
+            [0, 'desc']
+        ],
+        scrollCollapse: false,
+        scrollY: '350px',
     });
+});
 
-    $(function() {
-        $('#example2').DataTable({
-            order: [
-                [1, 'asc']
-            ],
-            scrollCollapse: false,
-            scrollY: '550px',
-        });
+$(function() {
+    $('#example2').DataTable({
+        order: [
+            [1, 'asc']
+        ],
+        scrollCollapse: false,
+        scrollY: '550px',
     });
+});
+
+$(document).on('submit', '#search_act', function (f) {
+
+    f.preventDefault();
+    var data = $(this).serialize;
+    $.ajax({
+        type: 'GET',
+        url: '/spendingplan/addsaa',
+        data:$(this).serialize(),
+        success: function (response) {
+            $("#resultTable").html(response);
+            $("#resMe").load(location.href + " #resMe>*", ""); 
+
+        }
+    })
+})
 
 
 
 
 
 
+
+
+
+
+// Youtube API
 
         var tag = document.createElement('script');
 
@@ -41,8 +62,9 @@
 
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('playersa', {
-                height: '600',
-                width: '1050',
+                height: '750',
+                width: '1550',
+                border: 2,
                 videoId: url,
                 playerVars: {
                     'autoplay': 1,
@@ -78,7 +100,7 @@
             }
             return ID;
 }
-
+// Youtube API
 
 // Live Search Function
 
@@ -104,7 +126,9 @@ $(function(){
 
 })
 
-    
-// Data Table Nr 2
+// Live Search Function
+
+
+
 
 

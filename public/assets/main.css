@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Alegreya&family=Rubik+Doodle+Shadow&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Domine&family=Roboto+Slab&family=Space+Grotesk:wght@500&display=swap');
   .virg-karaoke-font{
     font-family: 'Rubik Doodle Shadow', system-ui;
     color: black;
   }
 
   .virg-normal-font{
-    font-family: 'Alegreya', serif;
+font-family: 'Domine', serif;
   }
 
   /* .virg-background-color{

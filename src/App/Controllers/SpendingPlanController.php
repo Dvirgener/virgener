@@ -17,10 +17,24 @@ class SpendingPlanController
     }
 
 
-    public function viewall(){
+    public function viewall()
+    {
         $allActivity = $this->spendingPlanService->viewAllActivity();
+
         $totalFirstAmount = $this->spendingPlanService->totalAmount;
-        echo $this->view->render("/spendingPlan.php", ['allActivity' => $allActivity,'totalFirstAmount' => $totalFirstAmount]);
+        echo $this->view->render("/financial/spendingPlan.php", ['allActivity' => $allActivity, 'totalFirstAmount' => $totalFirstAmount]);
     }
 
+    public function searchToAddSaa()
+    {
+        $dataa = $this->spendingPlanService->addSaaSearch($_GET);
+        $quarter = $_GET['quarter'];
+
+        echo $this->view->render("/financial/addSaaSearchResult.php", ['result' => $dataa, 'quarter' => $quarter]);
+    }
+
+    public function addSaa()
+    {
+        dd($_POST);
+    }
 }

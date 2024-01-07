@@ -33,6 +33,7 @@ class HomeController
         //     'p' => $pageNum,
         //     's' => $searchTerm
         // ]), $pages);
+
         $_SESSION['playlist'] = [];
         echo $this->view->render("index.php", []);
 

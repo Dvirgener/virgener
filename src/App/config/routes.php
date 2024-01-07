@@ -6,7 +6,7 @@ namespace App\config;
 
 use Framework\App;
 
-use App\Controllers\{HomeController, RegisterUserController, LoginController, TransactionController, ReceiptController, ErrorController, playerController, KaraokeController, playlistController,SpendingPlanController};
+use App\Controllers\{HomeController, RegisterUserController, LoginController, TransactionController, ReceiptController, ErrorController, playerController, KaraokeController, playlistController, SpendingPlanController};
 use App\Middleware\{AuthRequiredMiddleware, GuestOnlyMiddleware};
 
 
@@ -45,6 +45,8 @@ function registerRoutes(App $app)
 
 
     $app->get('/spendingplan', [SpendingPlanController::class, 'viewall'])->add(AuthRequiredMiddleware::class);
+    $app->get('/spendingplan/addsaa', [SpendingPlanController::class, 'searchToAddSaa'])->add(AuthRequiredMiddleware::class);
+    $app->post('/spendingplan/addsaa', [SpendingPlanController::class, 'addSaa'])->add(AuthRequiredMiddleware::class);
 
     $app->setErrorHandler([ErrorController::class, 'notFound']);
 }
