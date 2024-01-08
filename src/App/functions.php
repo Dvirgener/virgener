@@ -105,3 +105,21 @@ function validInvalidForm(?array $errorMsg = [], ?array $oldForm = [], string $f
     $formValid = "is-valid";
     return $formValid;
 }
+
+function bgColor ($saa,$obr,$dv,$aar){
+    $backgroundColor = "";
+    if ($saa != 0){
+        $backgroundColor = "red";
+    }
+    if ($obr != 0){
+        $backgroundColor = "orange";
+    }
+    if ($dv != 0){
+        $backgroundColor = "yellow";
+    }
+    if ($aar != 0){
+        $backgroundColor = "green";
+    }
+    return $backgroundColor;
+    
+}

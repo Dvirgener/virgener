@@ -17,8 +17,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/bootstrapMain.css" />
     <link rel="stylesheet" href="/assets/main.css" />
-    <script src="/assets/javascripts.js"></script>
-    <script src="/assets/ajaxCodes.js"></script>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
@@ -29,6 +28,9 @@
     <script defer src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script defer src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script defer src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+    <script src="/assets/javascripts.js"></script>
+    <script src="/assets/ajaxCodes.js"></script>
 
 
 

@@ -20,9 +20,11 @@ class SpendingPlanController
     public function viewall()
     {
         $allActivity = $this->spendingPlanService->viewAllActivity();
-
+        
         $totalFirstAmount = $this->spendingPlanService->totalAmount;
-        echo $this->view->render("/financial/spendingPlan.php", ['allActivity' => $allActivity, 'totalFirstAmount' => $totalFirstAmount]);
+        echo $this->view->render("/financial/spendingPlan.php",
+        ['allActivity' => $allActivity, 
+        'totalFirstAmount' => $totalFirstAmount]);
     }
 
     public function searchToAddSaa()
@@ -35,6 +37,8 @@ class SpendingPlanController
 
     public function addSaa()
     {
-        dd($_POST);
+
+        $this->spendingPlanService->addSaa($_POST,$_FILES['saa_pdf']);
+        redirectTo('/spendingplan');
     }
 }

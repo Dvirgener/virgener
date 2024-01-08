@@ -53,6 +53,7 @@ echo $totalFirstAmount;
                     <th class="text-center">Account Code</th>
                     <th class="text-center">Fund Source</th>
                     <th class="text-center">Activity</th>
+                    <th class="text-center">Sub Ben</th>
                     <th class="text-center">Mode of Implementation</th>
                     <th class="text-center">Mode of Procurement</th>
                     <th class="text-center">1st Quarter</th>
@@ -70,20 +71,17 @@ echo $totalFirstAmount;
                         <td class="text-center"><?php echo e($activity['acct_code']); ?></td>
                         <td class="text-center"><?php echo e($activity['fund_source']); ?></td>
                         <td class="text-center"><?php echo e($activity['activity']); ?></td>
+                        <td class="text-center"><?php echo e($activity['sub_ben']); ?></td>
                         <td class="text-center"><?php echo e($activity['mode_imp']); ?></td>
                         <td class="text-center"><?php echo e($activity['mode_proc']); ?></td>
 
                         <?php
-                        $firststatusColor = "";
-                        if ($activity['first_obr'] !== "") {
-                            if (isset($activity['first_dv'])) {
-                                $firststatusColor = "green";
-                            }
-
-                            $firststatusColor = "orange";
-                        }
+                            $firstBg = bgColor($activity['first_saa'],$activity['first_obr'],$activity['first_dv'],$activity['first_aar']);
+                            $secondBg = bgColor($activity['second_saa'],$activity['second_obr'],$activity['second_dv'],$activity['second_aar']);
+                            $thirBg = bgColor($activity['third_saa'],$activity['third_obr'],$activity['third_dv'],$activity['third_aar']);
+                            $fourthBg = bgColor($activity['fourth_saa'],$activity['fourth_obr'],$activity['fourth_dv'],$activity['fourth_aar']);
                         ?>
-                        <td class="text-center" style="background-color: <?= $firststatusColor ?>;"><?php echo number_format($activity['first_amount'], 2, '.', ','); ?></td>
+                        <td class="text-center" style="background-color: <?= $firstBg ?>;"><?php echo number_format($activity['first_amount'], 2, '.', ','); ?></td>
                         <td class="text-center"><?php echo number_format($activity['second_amount'], 2, '.', ','); ?></td>
                         <td class="text-center"><?php echo number_format($activity['third_amount'], 2, '.', ','); ?></td>
                         <td class="text-center"><?php echo number_format($activity['fourth_amount'], 2, '.', ','); ?></td>

@@ -61,7 +61,7 @@
                 </form>
 
                 <div class="col-8">
-                    <form action="/spendingplan/addsaa" method="POST">
+                    <form action="/spendingplan/addsaa" method="POST" enctype="multipart/form-data">
 
                         <div class="row mb-2">
                             <?php include $this->resolve("partials/_token.php"); ?>
@@ -72,7 +72,7 @@
                         </div>
                         <div class="row mb-2">
                             <div class="col">
-                                <input type="file" class="form-control">
+                                <input type="file" class="form-control" id="saa_pdf" name="saa_pdf" accept=".pdf">
                             </div>
 
                         </div>
@@ -83,6 +83,7 @@
                                         <th style="width: 20px;">Check</th>
                                         <th style="width: 50px;">Acct Code</th>
                                         <th style="width: 150px;">Activity</th>
+                                        <th style="width: 150px;">Sub Ben</th>
                                         <th style="width: 50px;">Amount</th>
                                     </tr>
                                 </thead>
