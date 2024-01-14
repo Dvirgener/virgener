@@ -47,7 +47,7 @@ include $this->resolve("partials/_header.php");
         </div>
         <div class="col-12 col-md-6">
             <div class="row mb-3">
-                <h1>SONG LIST</h1>
+                <h1 style="color:blue">SONG LIST</h1>
             </div>
             <div class="row d-flex justify-content-center border-start border-end">
                 <table id="example" class="table table-striped text-start virg-normal-font table-light" style="width:100%">

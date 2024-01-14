@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS users(
     number_rank bigint(20) NOT NULL,
     serial_number bigint(20) unsigned NOT NULL,
     position varchar(255) NOT NULL,
-    classification varchar(255) NOT NULL,
+    section varchar(255) NOT NULL,
+    authority varchar(255) NOT NULL,
     status varchar(255) NOT NULL,
     remarks varchar(255) NOT NULL,
     picture varchar(255) NOT NULL,
@@ -75,7 +76,13 @@ CREATE TABLE IF NOT EXISTS table_of_activities(
 
 CREATE TABLE IF NOT EXISTS saa_table (
     id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-    saa_number varchar(255),
+    saa_desc varchar(500) NOT NULL,
+    saa_quarter varchar(255) NOT NULL,
+    saa_number varchar(255) NOT NULL,
+    saa_acct_code varchar(255) NOT NULL,
+    saa_amount decimal(20,2) NOT NULL,
+    saa_date datetime NOT NULL,
+    saa_remarks varchar(255) NOT NULL,
     saa_file varchar(255),
     saa_origFile varchar(255),
     saa_type varchar(255),
@@ -86,3 +93,39 @@ CREATE TABLE IF NOT EXISTS saa_table (
     PRIMARY KEY(id)
 );
 
+
+-- -- id
+-- added to
+-- subject
+-- type
+-- added by
+-- status
+-- initial remarks
+-- files
+-- final remarks
+-- complied by
+-- compliance file
+-- timeliness
+-- date added
+-- date of last update
+-- target date
+
+-- id
+-- work id
+-- remarks
+-- files
+-- updated by
+-- date updated
+
+-- id
+-- work id
+-- title
+-- assigned to
+-- created at
+
+-- id 
+-- sub work id
+-- remarks
+-- files
+-- updated by
+-- date updated

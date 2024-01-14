@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Framework\{TemplateEngine, Database, Container};
 use App\config\paths;
-use App\Services\{ValidatorService, UserService, TransactionService, FileService, MusicService, storeMusicHere,SpendingPlanService};
+use App\Services\{ValidatorService, UserService, TransactionService, FileService, MusicService, storeMusicHere, SpendingPlanService, ProfileService};
 
 return [
     // * 7. return an arrow function with the class name as key and function that create a new instance of the class as value
@@ -39,8 +39,10 @@ return [
     SpendingPlanService::class => function (container $container) {
         $db = $container->get(Database::class);
         return new SpendingPlanService($db);
+    },
+    ProfileService::class => function (container $container) {
+        $db = $container->get(Database::class);
+        return new ProfileService($db);
     }
-
-
 
 ];

@@ -11,4 +11,5 @@ class paths
     public const SOURCE = __DIR__ . "/../../";
     public const ROOT = __DIR__ . "/../../../";
     public const STORAGE_UPLOADS_SAA = __DIR__ . "/../../../storage/SaaFiles";
+    public const STORAGE_UPLOADS_PROFPIC = __DIR__ . "/../../../storage/ProfPic";
 }

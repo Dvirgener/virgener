@@ -9,17 +9,19 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body" id="addSaaModalBody">
-                <form action="" method="GET" id="search_act" name="search_act">
+                <form action="" method="POST" id="search_act" name="search_act">
                     <div class="row">
                         <div class="col-4">
                             <div class="row" id="resMe">
                                 <div class="col">
                                     <?php
+
                                     $staffArray = [];
                                     foreach ($allActivity as $staff) {
                                         $staffArray[] = $staff['reviewing_staff'];
                                     }
                                     $staffArray = array_unique($staffArray);
+
                                     $acctCodeArray = [];
                                     foreach ($allActivity as $staff) {
                                         $acctCodeArray[] = $staff['acct_code'];
@@ -27,21 +29,30 @@
                                     $acctCodeArray = array_unique($acctCodeArray);
                                     sort($acctCodeArray);
                                     ?>
+
                                     <label for="acct_code" class="form-label">Account Code:</label>
-                                    <select name="acct_code" id="acct_code" class="form-select">
+                                    <select name="acct_code" id="acct_code" class="form-select" required>
+
                                         <option value=""></option>
                                         <?php foreach ($acctCodeArray as $acctCode) : ?>
-                                            *+ <option value="<?= $acctCode ?>"><?= $acctCode ?></option>
+                                            <option value="<?= $acctCode ?>"><?= $acctCode ?></option>
                                         <?php endforeach ?>
 
                                     </select>
+
+
+
                                     <label for="reviewing_staff" class="form-label mt-2">Reviewing Staff:</label>
                                     <select name="reviewing_staff" id="reviewing_staff" class="form-select" required>
+
                                         <option value=""></option>
                                         <?php foreach ($staffArray as $staff) : ?>
                                             <option value="<?= $staff ?>"><?= $staff ?></option>
                                         <?php endforeach ?>
+
                                     </select>
+
+
                                     <label for="" class="form-label mt-2">Quarter:</label>
                                     <select name="quarter" id="quarter" class="form-select" required>
                                         <option value=""></option>
@@ -50,6 +61,8 @@
                                         <option value="3">3rd Quarter</option>
                                         <option value="4">4th Quarter</option>
                                     </select>
+
+
                                 </div>
                             </div>
                             <div class="row mt-2">
@@ -61,18 +74,42 @@
                 </form>
 
                 <div class="col-8">
-                    <form action="/spendingplan/addsaa" method="POST" enctype="multipart/form-data">
+                    <form action="/spendingplan/addsaa" method="POST" enctype="multipart/form-data" id="saa_adder">
 
+                        <div class="row mb-2">
+                            <div class="col">
+                                <label for="act_desc" class="form-label">Activity Description:</label>
+                                <input type="text" class="form-control" name="act_desc" id="act_desc" required>
+                            </div>
+                        </div>
                         <div class="row mb-2">
                             <?php include $this->resolve("partials/_token.php"); ?>
                             <div class="col">
                                 <label for="saa_nr" class="form-label">SAA Number:</label>
-                                <input type="text" class="form-control" name="saa_nr" id="saa_nr">
+                                <input type="text" class="form-control" name="saa_nr" id="saa_nr" required>
+                            </div>
+                            <div class="col">
+                                <label for="saa_date" class="form-label">SAA Date:</label>
+                                <input type="date" class="form-control" name="saa_date" id="saa_date" required>
                             </div>
                         </div>
                         <div class="row mb-2">
                             <div class="col">
-                                <input type="file" class="form-control" id="saa_pdf" name="saa_pdf" accept=".pdf">
+                                <label for="saa_remarks">Note:</label>
+                                <textarea name="saa_remarks" id="saa_remarks" cols="10" rows="4" class="form-control" required></textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col">
+                                <input type="file" class="form-control" id="saa_pdf" name="saa_pdf" accept=".pdf" required>
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col">
+
+                                <input class="form-check-input" type="checkbox" name="checkall" id="checkall" value="">
+                                <label for="checkall" class="form-label">Check All</label>
                             </div>
 
                         </div>

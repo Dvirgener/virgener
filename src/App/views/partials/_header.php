@@ -52,19 +52,34 @@
                 </a>
 
                 <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item ">
-                            <a class="nav-link active" href="/spendingplan">Spending Plan</a>
-                        </li>
-                        <li class="nav-item ">
-                            <a class="nav-link active" href="/karaoke">Karaoke</a>
-                        </li>
-                    </ul>
+                    <?php if (isset($_SESSION['user']) && $_SESSION['user']['authority'] !== "karaoke") : ?>
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item ">
+                                <a class="nav-link active" href="/profile">Profile</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link active" href="/spendingplan">Spending Plan</a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link active" href="/karaoke">Karaoke</a>
+                            </li>
+                        </ul>
+                    <?php else : ?>
+                        <ul class="navbar-nav me-auto">
+
+                            <li class="nav-item ">
+                                <a class="nav-link active" href="/spendingplan"></a>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link active" href="/karaoke"></a>
+                            </li>
+                        </ul>
+                    <?php endif ?>
                     <div>
                         <ul class="d-flex justify-content-end navbar-nav me-auto">
                             <?php if (isset($_SESSION['user'])) : ?>
                                 <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="#">Settings</a>
+                                    <a class="nav-link active" aria-current="page" href="/settings">Settings</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link active" aria-current="page" href="/logout">Logout</a>

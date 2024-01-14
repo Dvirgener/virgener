@@ -5,7 +5,17 @@ declare(strict_types=1);
 namespace App\Services;
 
 use Framework\Validator;
-use Framework\Rules\{RequiredRule, EmailRule, MinRule, InRule, URLRule, PasswordMatchRule, LengthMaxRule, NumericRule, DateFormatRule};
+use Framework\Rules\{
+    RequiredRule,
+    EmailRule,
+    MinRule,
+    InRule,
+    URLRule,
+    PasswordMatchRule,
+    LengthMaxRule,
+    NumericRule,
+    DateFormatRule
+};
 
 class ValidatorService
 {
@@ -25,27 +35,22 @@ class ValidatorService
         $this->validator->add('dateFormat', new DateFormatRule());
     }
 
+    // * Validation for Register User
     public function validateRegister(array $formData)
     {
         $this->validator->validate($formData, [
             'firstName' => ['required'],
-            'email' => ['required','email'],
-            'password' => ['required','password'],
-            'confirmPassword' => ['required','password'],
+            'email' => ['required', 'email'],
+            'password' => ['required', 'password'],
+            'confirmPassword' => ['required', 'password'],
             'lastName' => ['required'],
-            'rank' => ['required','in:1,2,3,4,5,6,7,8,9,10,11,12'],
-            'position' => ['required','in:OIC,Assistant OIC,NCOIC,Personnel'],
-            'serialNumber' => ['required','numeric']
-            // 'age' => ['required', 'min:18'],
-            // 'country' => ['required', 'in:USA,Canada,Mexico'],
-            // 'socialMediaURL' => ['required', 'url'],
-            // 'password' => ['required', 'password'],
-            // 'confirmPassword' => ['required', 'password'],
-            // 'tos' => ['required']
-
+            'rank' => ['required', 'in:1,2,3,4,5,6,7,8,9,10,11,12'],
+            'position' => ['required', 'in:OIC,Assistant OIC,NCOIC,Personnel'],
+            'serialNumber' => ['required', 'numeric']
         ]);
     }
 
+    // * Validation for Login User
     public function validateLogin(array $formData)
     {
         $this->validator->validate(
@@ -67,5 +72,14 @@ class ValidatorService
                 'date' => ['required', 'dateFormat:Y-m-d']
             ]
         );
+    }
+
+    public function validateSearchActivityForm(array $formData)
+    {
+        $this->validator->validate($formData, [
+            'acct_code' => ['required'],
+            'reviewing_staff' => ['required'],
+            'quarter' => ['required'],
+        ]);
     }
 }

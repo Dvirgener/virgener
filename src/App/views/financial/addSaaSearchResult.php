@@ -1,7 +1,7 @@
 <?php foreach ($result as $res) : ?>
     <tr>
         <td style="width: 20px;">
-            <input class="form-check-input" type="checkbox" name="activitiesId[]" id="activitiesId[]" value="<?= $res['id']; ?>">
+            <input class="form-check-input " type="checkbox" name="activitiesId[]" id="activitiesId[]" value="<?= $res['id']; ?>">
         </td>
         <td>
             <?= $res['acct_code']; ?>
@@ -36,4 +36,4 @@
         </td>
     </tr>
 <?php endforeach; ?>
-
+<input type="hidden" name="acct_code" id="acct_code" value="<?= $acct_code ?>">

@@ -14,6 +14,7 @@ class UserService
     {
     }
 
+    // * Check if an email is Taken
     public function isEmailTaken(string $email)
     {
         $emailCount = $this->db->query("SELECT COUNT(*) FROM users WHERE email = :email", ['email' => $email])->count();
@@ -23,6 +24,7 @@ class UserService
         }
     }
 
+    // * register a user if there has no validation error
     public function registerUser(array $form)
     {
         switch ($form['rank']) {
@@ -67,8 +69,8 @@ class UserService
         $password = password_hash($form['password'], PASSWORD_BCRYPT, ['cost => 12']);
 
         $this->db->query(
-            "INSERT INTO users (email, password, first_name, last_name, actual_rank, number_rank, serial_number, position)
-            VALUES (:email,:password,:first_name,:last_name,:actual_rank,:number_rank,:serial_number,:position)",
+            "INSERT INTO users (email, password, first_name, last_name, actual_rank, number_rank, serial_number, position, authority)
+            VALUES (:email,:password,:first_name,:last_name,:actual_rank,:number_rank,:serial_number,:position,:authority)",
             [
                 'email' => $form['email'],
                 'password' => $password,
@@ -77,15 +79,15 @@ class UserService
                 'actual_rank' => $actual_rank,
                 'number_rank' => $form['rank'],
                 'serial_number' => $form['serialNumber'],
-                'position' => $form['position']
+                'position' => $form['position'],
+                'authority' => "karaoke"
             ]
         );
 
         session_regenerate_id();
-
-        $_SESSION['user'] = $this->db->id();
     }
 
+    // * Login user to the app
     public function loginUser(array $formData)
     {
         $password = password_hash($formData['password'], PASSWORD_BCRYPT);
@@ -103,9 +105,10 @@ class UserService
 
         session_regenerate_id();
 
-        $_SESSION['user'] = $user['id'];
+        $_SESSION['user'] = $user;
     }
 
+    // * Logout User
     public function logout()
     {
         // unset($_SESSION['user']);

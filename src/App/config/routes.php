@@ -6,7 +6,7 @@ namespace App\config;
 
 use Framework\App;
 
-use App\Controllers\{HomeController, RegisterUserController, LoginController, TransactionController, ReceiptController, ErrorController, playerController, KaraokeController, playlistController, SpendingPlanController};
+use App\Controllers\{HomeController, RegisterUserController, LoginController, TransactionController, ReceiptController, ErrorController, playerController, KaraokeController, playlistController, SpendingPlanController, ProfileController};
 use App\Middleware\{AuthRequiredMiddleware, GuestOnlyMiddleware};
 
 
@@ -47,6 +47,16 @@ function registerRoutes(App $app)
     $app->get('/spendingplan', [SpendingPlanController::class, 'viewall'])->add(AuthRequiredMiddleware::class);
     $app->get('/spendingplan/addsaa', [SpendingPlanController::class, 'searchToAddSaa'])->add(AuthRequiredMiddleware::class);
     $app->post('/spendingplan/addsaa', [SpendingPlanController::class, 'addSaa'])->add(AuthRequiredMiddleware::class);
+    $app->get('/spendingplan/viewsaa', [SpendingPlanController::class, 'viewSaa'])->add(AuthRequiredMiddleware::class);
+    $app->get('/spendingplan/deletesaa', [SpendingPlanController::class, 'deleteSaa'])->add(AuthRequiredMiddleware::class);
+
+    $app->get('/profile', [ProfileController::class, 'viewProfile'])->add(AuthRequiredMiddleware::class);
+    $app->get('/profile/workdetail', [ProfileController::class, 'viewWork'])->add(AuthRequiredMiddleware::class);
+    $app->get('/settings', [ProfileController::class, 'userSettings'])->add(AuthRequiredMiddleware::class);
+    $app->post('/settings', [ProfileController::class, 'updateUser'])->add(AuthRequiredMiddleware::class);
+    $app->get('/profile/{profilePic}', [ProfileController::class, 'renderProfPic'])->add(AuthRequiredMiddleware::class);
+
+
 
     $app->setErrorHandler([ErrorController::class, 'notFound']);
 }
