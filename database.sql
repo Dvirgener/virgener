@@ -93,39 +93,46 @@ CREATE TABLE IF NOT EXISTS saa_table (
     PRIMARY KEY(id)
 );
 
+CREATE TABLE IF NOT EXISTS work (
+    id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+    subject varchar(255) NOT NULL,
+    instructions varchar(500) NOT NULL,
+    assigned_to varchar (255) NOT NULL,
+    added_by bigint(20) unsigned NOT NULL,
+    status varchar(255) NOT NULL,
+    created_at date NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    updated_at date NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    date_target date NOT NULL,
+    date_complied date NOT NULL,
+    complied_by bigint(20) NOT NULL,
+    files varchar(255),
+    PRIMARY KEY (id)
+);
 
--- -- id
--- added to
--- subject
--- type
--- added by
--- status
--- initial remarks
--- files
--- final remarks
--- complied by
--- compliance file
--- timeliness
--- date added
--- date of last update
--- target date
+CREATE TABLE IF NOT EXISTS sub_work (
+    id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+    main_id bigint(20) unsigned NOT NULL,
+    sub_subject varchar(500) NOT NULL,
+    assigned_to varchar (255) NOT NULL,
+    status varchar(255) NOT NULL,
+    created_at date NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    PRIMARY KEY (id),
+    FOREIGN KEY (main_id) REFERENCES work (id)
+);
 
--- id
--- work id
--- remarks
--- files
--- updated by
--- date updated
 
--- id
--- work id
--- title
--- assigned to
--- created at
 
--- id 
--- sub work id
--- remarks
--- files
--- updated by
--- date updated
+CREATE TABLE IF NOT EXISTS updates (
+    id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+    main_id bigint(20) unsigned NOT NULL,
+    sub_id bigint(20) unsigned NOT NULL,
+    remarks varchar (510) NOT NULL,
+    files varchar(510) NOT NULL,
+    final varchar(255) NOT NULL DEFAULT 'NO',
+    updated_by varchar(255) NOT NULL,
+    created_at date NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    PRIMARY KEY (id),
+    FOREIGN KEY (main_id) REFERENCES work (id)
+);
+
+

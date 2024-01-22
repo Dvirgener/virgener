@@ -45,6 +45,7 @@ function formErrorMessaage(array $array, string $field)
     }
 }
 
+
 function validInvalidForm(?array $errorMsg = [], ?array $oldForm = [], string $field)
 {
     if (empty($errorMsg)) {
@@ -106,20 +107,24 @@ function validInvalidForm(?array $errorMsg = [], ?array $oldForm = [], string $f
     return $formValid;
 }
 
-function bgColor ($saa,$obr,$dv,$aar){
+function bgColor($saa, $obr, $dv, $aar)
+{
     $backgroundColor = "";
-    if ($saa != 0){
+    if ($saa != 0) {
         $backgroundColor = "red";
     }
-    if ($obr != 0){
+    if ($obr != 0) {
         $backgroundColor = "orange";
     }
-    if ($dv != 0){
+    if ($dv != 0) {
         $backgroundColor = "yellow";
     }
-    if ($aar != 0){
+    if ($aar != 0) {
         $backgroundColor = "green";
     }
     return $backgroundColor;
-    
+}
+
+function fileUpload($fileData)
+{
 }

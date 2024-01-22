@@ -52,9 +52,28 @@ function registerRoutes(App $app)
 
     $app->get('/profile', [ProfileController::class, 'viewProfile'])->add(AuthRequiredMiddleware::class);
     $app->get('/profile/workdetail', [ProfileController::class, 'viewWork'])->add(AuthRequiredMiddleware::class);
+    $app->get('/profile/workdetail/viewfile', [ProfileController::class, 'viewFile'])->add(AuthRequiredMiddleware::class);
     $app->get('/settings', [ProfileController::class, 'userSettings'])->add(AuthRequiredMiddleware::class);
     $app->post('/settings', [ProfileController::class, 'updateUser'])->add(AuthRequiredMiddleware::class);
+
     $app->get('/profile/{profilePic}', [ProfileController::class, 'renderProfPic'])->add(AuthRequiredMiddleware::class);
+    $app->get('/profile/file/{file}', [ProfileController::class, 'renderFile'])->add(AuthRequiredMiddleware::class);
+
+    $app->post('/profile/addwork', [ProfileController::class, 'addwork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/profile/editwork', [ProfileController::class, 'saveEditWork'])->add(AuthRequiredMiddleware::class);
+    $app->get('/editwork', [ProfileController::class, 'editWork'])->add(AuthRequiredMiddleware::class);
+    $app->get('/deletework', [ProfileController::class, 'deleteWork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/confirmdeletework', [ProfileController::class, 'confirmDeleteWork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/addsubwork', [ProfileController::class, 'addSubWork'])->add(AuthRequiredMiddleware::class);
+    $app->get('/editsubwork', [ProfileController::class, 'editSubWork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/editsubwork', [ProfileController::class, 'saveEditSubWork'])->add(AuthRequiredMiddleware::class);
+    $app->get('/deletesubwork', [ProfileController::class, 'deleteSubWork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/confirmdeletesubwork', [ProfileController::class, 'confirmDeleteSubWork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/updatework', [ProfileController::class, 'updateWork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/updatesubwork', [ProfileController::class, 'updateSubWork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/complysubwork', [ProfileController::class, 'complySubWork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/complywork', [ProfileController::class, 'complyWork'])->add(AuthRequiredMiddleware::class);
+
 
 
 

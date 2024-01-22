@@ -2,242 +2,225 @@
 include $this->resolve("partials/_header.php");
 
 ?>
-<section class="m-2">
-    <div class="row m-2">
-        <div class="col-3">
-            <div class="row">
-                <h3 class="text-center">USER PROFILE</h3>
-            </div>
-            <div class="row text-center border shadow-lg rounded px-2 mx-2 justify-content-center align-content-start" style="height: 830px;">
-                <div class="row-fluid justify-content-center mt-2 ">
-                    <img class="border rounded" src="/profile/<?php echo $user['picture'] ?>" alt="" style=" border-radius:10px; height:200px; width:200px">
-                    <img src="C:/xampp/htdocs/virgener/storage/ProfPic/aw.png" alt="">
-                </div>
-                <div class="row text-center mt-2">
-                    <span class="fw-bold fs-5"><?= $fullName ?></span>
-                </div>
-                <div class="row text-center mt-2">
-                    <?php
-                    $statusBG = "red";
-                    if ($user['status'] == "ON DUTY") {
-                        $statusBG = "green";
-                    }
+<section class="mt-4">
 
-                    ?>
-                    <span>Duty Status: <span class="fw-bold" style="color:<?= $statusBG ?>"><?php echo $user['status'] ?></span></span>
-                </div>
-                <div class="row text-center mt-2">
-                    <div class="row">
-                        <u class="">Active Work Queue</u>
-                    </div>
-                    <div class="row">
-                        <h5 class="fw-bold">6</h5>
-                    </div>
-                    <div class="row">
-                        <u class="">For Update</u>
-                    </div>
-                    <div class="row">
-                        <h5 class="fw-bold">3</h5>
-                    </div>
-                    <div class="row">
-                        <u class="">Deadline</u>
-                    </div>
-                    <div class="row">
-                        <h5 class="fw-bold">2</h5>
-                    </div>
-                </div>
-                <div class="row mb-4 text-center">
-                    <div class="row mb-2 ps-4">
-                        <span class="fw-bold">Office Designation:</span>
-                    </div>
-                    <div class="row overflow-y-scroll me-5" style="height:70px ">
-                        <?php
-                        $section = unserialize($user['section']);
-                        foreach ($finalSec as $key => $value) :
-                        ?>
-                            <div class=" row text-start">
-                                <span><span class="fw-bold"><?= $key ?></span> - <?= $value ?></span>
-                            </div>
-                        <?php endforeach ?>
-                    </div>
-                </div>
-                <div class="row text-center justify-content-center">
-                    <div class="row mb-3 px-4">
-                        <button class="btn btn-primary buttonzoom clicked" id="myworkqueuebut" value="myworkqueuebut">Add Work Queue</button>
-                    </div>
-                    <div class="row mb-3 px-4">
-                        <button class="btn btn-primary buttonzoom clicked" id="myworkqueuebut" value="myworkqueuebut">Duty Status</button>
-                    </div>
-                    <div class="row mb-3 px-4">
-                        <button class="btn btn-primary buttonzoom clicked" id="myworkqueuebut" value="myworkqueuebut">Add Work Queue</button>
-                    </div>
-                </div>
-            </div>
+    <div class="row mx-3">
+        <div class="col-4">
+            <?php
+            include $this->resolve("partials/_profile.php");
+            ?>
         </div>
-        <div class="col-9 ">
-            <div class="row">
-                <h3 class="text-center">WORK DETAILS</h3>
+
+        <div class="col-8">
+            <div class="row ms-2 text-center fw-bold">
+                <h2>WORK DETAILS</h2>
+            </div>
+            <div class="row border-bottom border-dark border-2 mx-2 mb-3">
+
             </div>
             <div class="row">
-                <div class="col-6">
-                    <div class="row border shadow-lg rounded px-2 mx-2 justify-content-center overflow-y-scroll overflow-x-hidden" style="height: 830px;">
-                        <div class="row mb-2" style="height:fit-content;">
-                            <div class="col-7">
-                                <div class="row mb-2">
-                                    <div class="col">
-                                        <label for="" class="form-label fs-5">Subject:</label>
-                                        <input class="form-control" type="text" disabled value="This is Jus a Sample Work Queue">
-                                    </div>
-                                </div>
-                                <div class="row mb-2">
-                                    <div class="col-6">
-                                        <label for="" class="form-label fs-5">Added by:</label>
-                                        <input class="form-control" type="text" disabled value="Sgt Naya PAF">
-                                    </div>
-                                    <div class="col-6">
-                                        <label for="" class="form-label fs-5">Work Type:</label>
-                                        <input class="form-control" type="text" disabled value="Routine">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <label for="" class="form-label fs-5">Remarks:</label>
-                                        <textarea class="form-control" name="" id="" cols="20" rows="5" disabled>This is a text sample of a remarks</textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-5">
-                                <div class="row">
-                                    <span class="fs-5">Added to:</span>
-                                </div>
-                                <div class="row overflow-y-scroll" style="height: 320px;">
-                                    <?php for ($y = 1; $y < 5; $y++) : ?>
-                                        <div class="row mb-2">
-                                            <div class="col-4">
-                                                <img class="border view_personnel_work img-fluid " type="button" id="view_personnel_work" src="data:image/jpeg;base64,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" onerror="this.src='../pictures/generic/imageplaceholder.png';" alt="" style=" height: 60px; width: 60px;">
-                                            </div>
-                                            <div class="col-8 d-grid align-items-center">
-                                                <span>Sgt Naya PAF</span>
-                                            </div>
-                                        </div>
-                                    <?php endfor ?>
-                                </div>
+                <div class="col-6 d-grid">
+                    <div class="row mx-2 text-center">
+                        <h4>MAIN WORK</h4>
+                    </div>
+                    <div class="row overflow-y-scroll overflow-x-hidden align-content-start pe-0" style="height:560px; width:100%">
+                        <div class="row mb-2 position-sticky">
+                            <div class="col">
+                                <label for="" class="form-label fs-6 fw-bold">SUBJECT:</label>
+                                <input class="form-control" type="text" disabled value="<?= $workDetails['subject'] ?>">
                             </div>
                         </div>
-                        <div class="row mb-2" style="height:fit-content;">
-                            <div class="col-4">
-                                <label for="" class="form-label fs-5">Date Added:</label>
-                                <input class="form-control" type="text" disabled value="24-January-2024">
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <label for="" class="form-label fs-6 fw-bold">ADDED BY:</label>
+                                <input class="form-control" type="text" disabled value="<?= $workDetails['added_by_name'] ?>">
                             </div>
-                            <div class="col-4">
-                                <label for="" class="form-label fs-5">Last Update:</label>
-                                <input class="form-control" type="text" disabled value="25-January-2024">
-                            </div>
-                            <div class="col-4">
-                                <label for="" class="form-label fs-5">Target Date:</label>
-                                <input class="form-control" type="text" disabled value="29-January-2024">
+                            <div class="col-6">
+                                <label for="" class="form-label fs-6 fw-bold">WORK TYPE:</label>
+                                <input class="form-control" type="text" disabled value="Routine">
                             </div>
                         </div>
-                        <div class="row justify-content-between">
+                        <div class="row mb-2">
+                            <div class="col">
+                                <label for="" class="form-label fs-6 fw-bold">INSTRUCTIONS / REMARKS:</label>
+                                <textarea class="form-control" name="" id="" cols="20" rows="5" disabled><?= $workDetails['instructions'] ?></textarea>
+                            </div>
+                        </div>
+                        <div class="row justify-content-between ps-2">
                             <div class="col-4">
                                 <div class="row">
-                                    <span for="" class="form-label fs-5">File Reference/s:</span>
+                                    <span for="" class="form-label fs-6 fw-bold">FILE REFERENCE/S:</span>
                                 </div>
-                                <div class="row overflow-y-scroll text-center" style="height: 100px;">
-                                    <div class="row mb-2">
-                                        <div class="col">
-                                            <button class="btn btn-secondary" type="button" value="">File Number 1</button>
+                                <div class="row overflow-y-scroll text-center d-flex justify-content-center" style="height: 100px;">
+                                    <?php $fileNr = 1;
+                                    foreach ($workDetails['files'] as $file) : ?>
+                                        <div class="row mb-2 d-flex justify-content-center align-items-start">
+                                            <div class="col d-grid">
+                                                <button class="btn btn-secondary viewFileBut" type="button" value="<?= $file ?>">File Number <?= $fileNr ?></button>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="row mb-2">
-                                        <div class="col">
-                                            <button class="btn btn-secondary" type="button" value="">File Number 2</button>
-                                        </div>
-                                    </div>
-                                    <div class="row mb-2">
-                                        <div class="col">
-                                            <button class="btn btn-secondary" type="button" value="">File Number 3</button>
-                                        </div>
-                                    </div>
+                                    <?php $fileNr += 1;
+                                    endforeach ?>
                                 </div>
                             </div>
                             <div class="col-8">
-                                <div class="row">
-                                    <span for="" class="form-label fs-5">Actions:</span>
+                                <div class="row text-start">
+                                    <span for="" class="form-label fs-6 fw-bold">ACTION:</span>
                                 </div>
-                                <div class="row mt-2">
-                                    <div class="row mb-3 justify-content-center text-center">
-                                        <div class="col-6 mb-2 d-grid">
-                                            <button class="btn btn-success" type="button" value="" disabled>Comply</button>
-                                        </div>
-                                        <div class="col-6 mb-2 d-grid">
-                                            <button class="btn btn-secondary" type="button" value="">Update</button>
-                                        </div>
-                                        <div class="col-6 d-grid">
-                                            <button class="btn btn-primary" type="button" value="">Edit</button>
-                                        </div>
-                                        <div class="col-6 d-grid">
-                                            <button class="btn btn-danger" type="button" value="">Delete</button>
-                                        </div>
+                                <div class="row-fluid mt-2">
+                                    <div class="row mb-3 justify-content-between text-center">
+                                        <?php if ($workDetails['added_by'] == $_SESSION['user']['id']) : ?>
+                                            <div class="col-6 mb-2 d-grid">
+                                                <?php if ($workDetails['subWorkComplied']) : ?>
+                                                    <button class="btn btn-success complyWorkBut" type="button" value="<?= $workDetails['id'] ?>">COMPLY</button>
+                                                <?php else : ?>
+                                                    <button disabled class="btn btn-success complyWorkBut" type="button" value="<?= $workDetails['id'] ?>">COMPLY</button>
+                                                <?php endif ?>
+                                            </div>
+                                            <div class="col-6 mb-2 d-grid">
+                                                <button class="btn btn-secondary updateWorkBut" type="button" value="<?= $workDetails['id'] ?>">UPDATE</button>
+                                            </div>
+
+                                            <div class="col-6 d-grid">
+                                                <button class="btn btn-primary editWorkBut" type="button" value="<?= $workDetails['id'] ?>">EDIT</button>
+                                            </div>
+                                            <div class="col-6 d-grid">
+                                                <button class="btn btn-danger deleteWorkBut" type="button" value="<?= $workDetails['id'] ?>">DELETE</button>
+                                            </div>
+                                        <?php else : ?>
+                                            <div class="row mb-2 justify-content-center">
+                                                <div class="col-8 d-grid text-center">
+                                                    <?php if ($workDetails['subWorkComplied']) : ?>
+                                                        <button class="btn btn-success complyWorkBut" type="button" value="<?= $workDetails['id'] ?>">COMPLY</button>
+                                                    <?php else : ?>
+                                                        <button disabled class="btn btn-success complyWorkBut" type="button" value="<?= $workDetails['id'] ?>">COMPLY</button>
+                                                    <?php endif ?>
+                                                </div>
+
+                                            </div>
+                                            <div class="row justify-content-center">
+                                                <div class="col-8 d-grid">
+                                                    <button class="btn btn-secondary updateWorkBut" type="button" value="<?= $workDetails['id'] ?>">UPDATE</button>
+                                                </div>
+                                            </div>
+                                        <?php endif ?>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row mb-2" style="height:fit-content;">
+                            <div class="col-4">
+                                <label for="" class="form-label fs-6 fw-bold">DATE ADDED:</label>
+                                <input class="form-control" type="text" disabled value="<?= $workDetails['created_at'] ?>">
+                            </div>
+                            <div class="col-4">
+                                <label for="" class="form-label fs-6 fw-bold">LAST UPDATE:</label>
+                                <input class="form-control" type="text" disabled value="<?= $workDetails['updated_at'] ?>">
+                            </div>
+                            <div class="col-4">
+                                <label for="" class="form-label fs-6 fw-bold">TARGET DATE:</label>
+                                <input class="form-control" type="text" disabled value="<?= $workDetails['date_target'] ?>">
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <span class="fw-bold">ASSIGNED TO:</span>
                         </div>
                         <div class="row">
-                            <div class="row">
-                                <span for="" class="form-label fs-5">Sub Work:</span>
+                            <?php foreach ($workDetails['detailedAssignee'] as $assigned) : ?>
+                                <div class="col-4">
+                                    <div class="row mb-3 align-content-start">
+                                        <div class="col-5">
+                                            <img class="border view_personnel_work img-fluid " type="button" id="view_personnel_work" src="/profile/<?= $assigned['picture'] ?>" onerror="this.src='../pictures/generic/imageplaceholder.png';" alt="" style=" height: 50px; width: 50px;">
+                                        </div>
+                                        <div class="col-7 d-grid align-items-center">
+                                            <span class="" style="font-size:small;"><?= $assigned['name'] ?></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach ?>
+                        </div>
+
+                        <div class="row">
+                            <div class="row mb-3 d-flex align-items-center">
+                                <div class="col-3 ">
+                                    <span for="" class="form-label fs-6 fw-bold">SUB WORK:</span>
+                                </div>
+                                <div class="col-9">
+                                    <?php if ($workDetails['added_by'] == $_SESSION['user']['id']) : ?>
+                                        <button class="btn btn-outline-primary" id="addSubWorkBut" name="addSubWorkBut">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 20 18">
+                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
+                                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
+                                            </svg>
+                                            ADD
+                                        </button>
+                                    <?php endif ?>
+                                </div>
                             </div>
                             <div class="row-fluid">
-                                <div class="row overflow-y-scroll pe-5 overflow-x-hidden align-content-start" style="height: 300px;">
+                                <div class="row-fluid overflow-y-scroll ps-1 overflow-x-hidden align-content-start mb-5" style="height: 410px;">
                                     <div class="row mb-2">
-                                        <div class="col">
-                                            <div class="row">
-                                                <?php for ($zf = 0; $zf < 5; $zf++) : ?>
-
-                                                    <div class="row border shadow-lg rounded mx-4 mb-2" style="height: fit-content;">
-                                                        <div class="row">
-                                                            <div class="col">
-                                                                <span class="fs-5 fw-bold">This is just a sample Sub-work</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <span>Assigned to:</span>
-                                                        </div>
-                                                        <div class="row d-flex mb-2">
-                                                            <div class="col">Sgt Naya PAF</div>
-                                                            <div class="col">Sgt Naya PAF</div>
-                                                            <div class="col">Sgt Naya PAF</div>
-                                                            <div class="col">Sgt Naya PAF</div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-3 mb-2 d-grid">
-                                                                <button class="btn btn-success" type="button" value="" disabled>Comply</button>
-                                                            </div>
-                                                            <div class="col-3 mb-2 d-grid">
-                                                                <button class="btn btn-secondary" type="button" value="">Update</button>
-                                                            </div>
-                                                            <div class="col-3 mb-2 d-grid">
-                                                                <button class="btn btn-primary" type="button" value="">Edit</button>
-                                                            </div>
-                                                            <div class="col-3 mb-2 d-grid">
-                                                                <button class="btn btn-danger" type="button" value="">Delete</button>
-                                                            </div>
+                                        <div class="row">
+                                            <?php foreach ($subWorkDetails as $subwork) : ?>
+                                                <div class="row-fluid border shadow rounded mx-2 mb-2" style="height: fit-content;">
+                                                    <div class="row mb-2">
+                                                        <span class="fw-bold">SUBJECT: <span class="fw-bold" style="color:red"><?= $subwork['comp']['bg'] ?></span></span>
+                                                    </div>
+                                                    <div class="row border-bottom mx-2 mb-2">
+                                                        <div class="col">
+                                                            <span class="fs-5"><?= $subwork['sub_subject'] ?></span>
                                                         </div>
                                                     </div>
-                                                <?php endfor ?>
-                                            </div>
+                                                    <div class="row mb-1">
+                                                        <span class="fw-bold">ASSIGNED TO:</span>
+                                                    </div>
+                                                    <div class="row d-flex mb-2 mx-2">
+                                                        <?php foreach ($subwork['assignedNames'] as $names) : ?>
+                                                            <div class="col-4" style="font-size: small;">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 20 19">
+                                                                    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" />
+                                                                </svg>
+                                                                <?= $names ?>
+                                                            </div>
+                                                        <?php endforeach ?>
+                                                    </div>
+                                                    <div class="row d-flex justify-content-start">
+                                                        <?php if ($workDetails['added_by'] == $_SESSION['user']['id']) : ?>
+                                                            <div class="col-3 mb-2 d-grid">
+                                                                <button class="btn btn-success complySubWorkBut" type="button" value="<?= $subwork['id'] ?>" <?= $subwork['authBut'] ?> <?= $subwork['comp']['compBut'] ?>>Comply</button>
+                                                            </div>
+                                                            <div class="col-3 mb-2 d-grid">
+                                                                <button class="btn btn-secondary updateSubWorkBut" type="button" value="<?= $subwork['id'] ?>" <?= $subwork['authBut'] ?> <?= $subwork['comp']['compBut'] ?>>Update</button>
+                                                            </div>
+                                                            <div class="col-3 mb-2 d-grid">
+                                                                <button class="btn btn-primary editSubWork" type="button" value="<?= $subwork['id'] ?>">Edit</button>
+                                                            </div>
+                                                            <div class="col-3 mb-2 d-grid">
+                                                                <button class="btn btn-danger deleteSubWorkBut" type="button" value="<?= $subwork['id'] ?>">Delete</button>
+                                                            </div>
+                                                        <?php else : ?>
+                                                            <div class="col mb-2 d-grid">
+                                                                <button class="btn btn-success complySubWorkBut" type="button" value="<?= $subwork['id'] ?>" <?= $subwork['authBut'] ?> <?= $subwork['comp']['compBut'] ?>>Comply</button>
+                                                            </div>
+                                                            <div class="col mb-2 d-grid">
+                                                                <button class="btn btn-secondary updateSubWorkBut" type="button" value="<?= $subwork['id'] ?>" <?= $subwork['authBut'] ?> <?= $subwork['comp']['compBut'] ?>>Update</button>
+                                                            </div>
+                                                        <?php endif ?>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach ?>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
                 <div class="col-6">
-                    <div class="row border shadow-lg rounded ps-1 mx-2 justify-content-center overflow-y-scroll overflow-x-hidden" style="height: 770px;">
-
+                    <div class="row mx-2 text-center">
+                        <h4>UPDATES</h4>
+                    </div>
+                    <div class="row me-2 overflow-y-scroll overflow-x-hidden rounded align-content-start" style="height:560px">
                         <div class="row pt-4 align-content-start">
                             <div class="row ps-2 d-grid align-items-start">
                                 <div class="row mb-2">
@@ -289,115 +272,66 @@ include $this->resolve("partials/_header.php");
                                 </div>
                             </div>
 
-                            <div class="row mt-3 ps-2 d-grid align-items-start">
-                                <div class="row mb-2">
-                                    <div class="col-2">
-                                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample1" aria-expanded="false" aria-controls="collapseExample1">
-                                            View
-                                        </button>
-                                    </div>
-                                    <div class="col-6 d-flex align-items-center">
-                                        <span class="fs-6 fw-bold">This is a sample Sub Work:</span>
-                                    </div>
 
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="collapse border rounded" id="collapseExample1">
-                                    <div class="row overflow-y-scroll overflow-x-hidden pe-4" style="height: 400px;">
-                                        <?php for ($z = 0; $z < 5; $z++) : ?>
-                                            <div class="row border shadow-lg rounded ms-2 ps-3 pt-2 mb-3" style="height: fit-content;">
-                                                <div class="row border-bottom pb-2 mb-2">
-                                                    <p>This is just a Sample Remarks</p>
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <span>File/s:</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="row mb-2 text-center justify-content-center">
-                                                        <div class="col-4 d-grid">
-                                                            <button class="btn btn-secondary" type="button" value="">1</button>
-                                                        </div>
-                                                        <div class="col-4 d-grid">
-                                                            <button class="btn btn-secondary" type="button" value="">1</button>
-                                                        </div>
-                                                        <div class="col-4 d-grid">
-                                                            <button class="btn btn-secondary" type="button" value="">1</button>
-                                                        </div>
-                                                    </div>
-                                                    <span>Updated by: Sgt Naya PAF</span>
-                                                </div>
-                                                <div class="row mb-2">
-                                                    <span>Date: 24 January 2024</span>
-                                                </div>
-                                            </div>
-                                        <?php endfor ?>
+                            <?php $id = 1;
+                            foreach ($subWorkDetails as $sub_work) : ?>
+                                <div class="row mt-3 ps-2 d-grid align-items-start">
+                                    <div class="row mb-2">
+                                        <div class="col-2">
+                                            <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample<?= $id ?>" aria-expanded="false" aria-controls="collapseExample<?= $id ?>">
+                                                View
+                                            </button>
+                                        </div>
+                                        <div class="col-6 d-flex align-items-center">
+                                            <span class="fs-6 fw-bold"><?= $sub_work['sub_subject'] ?></span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-
-                            <div class="row mt-3 ps-2 d-grid align-items-start">
-                                <div class="row mb-2">
-                                    <div class="col-2">
-                                        <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2">
-                                            View
-                                        </button>
-                                    </div>
-                                    <div class="col-6 d-flex align-items-center">
-                                        <span class="fs-6 fw-bold">Procurement of CG's Gift and memento:</span>
-                                    </div>
-
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="collapse border rounded" id="collapseExample2">
-                                    <div class="row overflow-y-scroll overflow-x-hidden pe-4" style="height: 400px;">
-                                        <?php for ($z = 0; $z < 5; $z++) : ?>
-                                            <div class="row border shadow-lg rounded ms-2 ps-3 pt-2 mb-3" style="height: fit-content;">
-                                                <div class="row border-bottom pb-2 mb-2">
-                                                    <p>This is just a Sample Remarks</p>
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <span>File/s:</span>
+                                <div class="row">
+                                    <div class="collapse border rounded" id="collapseExample<?= $id ?>">
+                                        <div class="row overflow-y-scroll overflow-x-hidden pe-4" style="height: 400px;">
+                                            <?php for ($z = 0; $z < 5; $z++) : ?>
+                                                <div class="row border shadow-lg rounded ms-2 ps-3 pt-2 mb-3" style="height: fit-content;">
+                                                    <div class="row border-bottom pb-2 mb-2">
+                                                        <p>This is just a Sample Remarks</p>
+                                                        <div class="row">
+                                                            <div class="col">
+                                                                <span>File/s:</span>
+                                                            </div>
                                                         </div>
+                                                        <div class="row mb-2 text-center justify-content-center">
+                                                            <div class="col-4 d-grid">
+                                                                <button class="btn btn-secondary" type="button" value="">1</button>
+                                                            </div>
+                                                            <div class="col-4 d-grid">
+                                                                <button class="btn btn-secondary" type="button" value="">1</button>
+                                                            </div>
+                                                            <div class="col-4 d-grid">
+                                                                <button class="btn btn-secondary" type="button" value="">1</button>
+                                                            </div>
+                                                        </div>
+                                                        <span>Updated by: Sgt Naya PAF</span>
                                                     </div>
-                                                    <div class="row mb-2 text-center justify-content-center">
-                                                        <div class="col-4 d-grid">
-                                                            <button class="btn btn-secondary" type="button" value="">1</button>
-                                                        </div>
-                                                        <div class="col-4 d-grid">
-                                                            <button class="btn btn-secondary" type="button" value="">1</button>
-                                                        </div>
-                                                        <div class="col-4 d-grid">
-                                                            <button class="btn btn-secondary" type="button" value="">1</button>
-                                                        </div>
+                                                    <div class="row mb-2">
+                                                        <span>Date: 24 January 2024</span>
                                                     </div>
-                                                    <span>Updated by: Sgt Naya PAF</span>
                                                 </div>
-                                                <div class="row mb-2">
-                                                    <span>Date: 24 January 2024</span>
-                                                </div>
-                                            </div>
-                                        <?php endfor ?>
+                                            <?php endfor ?>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            <?php
+                                $id += 1;
+                            endforeach ?>
                         </div>
 
                     </div>
-                    <div class="row px-4 mt-4">
-                        <a class="btn btn-primary" href="/profile">BACK</a>
-                    </div>
                 </div>
             </div>
-
         </div>
-
-
     </div>
 </section>
-
 <?php
+include $this->resolve("partials/_modals.php");
 include $this->resolve("partials/_footer.php");
 ?>
