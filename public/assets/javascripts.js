@@ -15,6 +15,18 @@ $(function() {
 });
 // Data table for Unit Activities
 
+// Data table for Unit Activities
+$(function() {
+    $('#workHistory').DataTable({
+        order: [
+            [0, 'asc']
+        ],
+        scrollCollapse: false,
+        scrollY: '470px',
+    });
+});
+// Data table for Unit Activities
+
 // search for activities on add SAA buttonc
 $(document).on('submit', '#search_act', function (f) {
 
@@ -120,6 +132,17 @@ $(document).on('click', '.viewWorkBut', function () {
     window.location.href = "/profile/workdetail?id=" + id;
 });
 // function Delete Saa Details
+
+
+// function Delete Saa Details
+$(document).on('click', '.viewWorkButHistory', function () {
+
+    var id = $(this).val();
+    window.location.href = "/history/workdetail?id=" + id;
+});
+// function Delete Saa Details
+
+
 
 
 // * view File Modal

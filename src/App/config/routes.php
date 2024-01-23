@@ -75,6 +75,11 @@ function registerRoutes(App $app)
     $app->post('/complywork', [ProfileController::class, 'complyWork'])->add(AuthRequiredMiddleware::class);
 
 
+    $app->get('/history', [ProfileController::class, 'workHistory'])->add(AuthRequiredMiddleware::class);
+    $app->get('/history/workdetail', [ProfileController::class, 'viewWorkHistory'])->add(AuthRequiredMiddleware::class);
+
+    $app->get('/office/history', [ProfileController::class, 'officeHistory'])->add(AuthRequiredMiddleware::class);
+
 
 
     $app->setErrorHandler([ErrorController::class, 'notFound']);

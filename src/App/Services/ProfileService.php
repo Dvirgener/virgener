@@ -299,13 +299,15 @@ class ProfileService
         $formattedDate = "{$formData['addworktargetdate']}) 00:00:00";
 
         $this->db->query(
-            "INSERT INTO work (subject, instructions, assigned_to, added_by, status, date_target, files) 
-                    VALUES (:subject, :instructions, :assigned_to, :added_by, :status, :date_target, :files)",
+            "INSERT INTO work (subject, instructions, assigned_to, type, added_by, added_from, status, date_target, files) 
+                    VALUES (:subject, :instructions, :assigned_to, :type, :added_by, :added_from, :status, :date_target, :files)",
             [
                 'subject' => $formData['subject'],
                 'instructions' => $formData['addworkintremarks'],
                 'assigned_to' => $assigned,
+                'type' => $formData['addworktype'],
                 'added_by' => $_SESSION['user']['id'],
+                'added_from' => $formData['addedfrom'],
                 'status' => "UNCOMPLIED",
                 'date_target' => $formattedDate,
                 'files' => $filetosave
@@ -379,10 +381,10 @@ class ProfileService
         }
     }
 
-    public function getDirectedWork($id)
+    public function getDirectedWork($id, $status)
     {
         $id = (string) $id;
-        $allwork = $this->db->query("SELECT * FROM work WHERE status = 'UNCOMPLIED'")->findAll();
+        $allwork = $this->db->query("SELECT * FROM work WHERE status = :status", ['status' => $status])->findAll();
         $myWork = [];
         foreach ($allwork as $work) {
             $assigned = unserialize($work['assigned_to']);
@@ -410,9 +412,13 @@ class ProfileService
                         $work['style'] = "background-color:red; color:white";
                     }
                 }
-
+                if ($status == "COMPLIED") {
+                    $compliedBy = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $work['complied_by']])->find();
+                    $work['complied_by'] = $compliedBy['actual_rank'] . " " . $compliedBy['last_name'] . " PAF";
+                }
                 $addedByName = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $work['added_by']])->find();
                 $work['added_by'] = $addedByName['actual_rank'] . " " . $addedByName['last_name'] . " PAF";
+
 
                 $myWork[] = $work;
             }
@@ -547,21 +553,66 @@ class ProfileService
         } else {
             $work['files'] = unserialize($work['files']);
         }
+
         $addedBy = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $work['added_by']])->find();
         $work['added_by_name'] = $addedBy['actual_rank'] . " " . $addedBy['last_name'] . "" . " PAF";
+        $finalSubWorkList = [];
         foreach ($work['assigned_to'] as $id) {
             $user = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $id])->find();
             $name = $user['actual_rank'] . " " . $user['last_name'] . "" . " PAF";
             $work['detailedAssignee'][] = ['picture' => $user['picture'], 'name' => $name, 'id' => $user['id']];
         }
+
+        $workUpdates = $this->db->query("SELECT * FROM updates WHERE main_id = :main_id and sub_id = 0", ['main_id' => $workId])->findAll();
+        $detailedWorkUpdates = [];
+        foreach ($workUpdates as $workUpdate) {
+            $details = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => (int) $workUpdate['updated_by']])->find();
+            $workUpdate['updated_by'] = $details['actual_rank'] . " " . $details['last_name'] . " PAF";
+            if ($workUpdate['files'] == "") {
+                $workUpdate['files'] = [];
+            } else {
+                $workUpdate['files'] = unserialize($workUpdate['files']);
+            }
+            $workUpdate['complied'] = "";
+            if ($workUpdate['final'] == "YES") {
+                $workUpdate['complied'] = "OK!";
+            }
+            $detailedWorkUpdates[] = $workUpdate;
+        }
+
+        $work['updates'] = $detailedWorkUpdates;
+
+
         $sub_work = $this->db->query("SELECT * FROM sub_work WHERE main_id = :id", ['id' => $workId])->findall();
         $work['subWorkComplied'] = true;
         $checkSubWorkComplied = [];
         foreach ($sub_work as $subStatus) {
+
+            $subWorkUpdates = $this->db->query("SELECT * FROM updates WHERE sub_id = :sub_id", ['sub_id' => $subStatus['id']])->findAll();
+            $detailedUpdates = [];
+            foreach ($subWorkUpdates as $subWorkUpdate) {
+                $details = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => (int) $subWorkUpdate['updated_by']])->find();
+                $subWorkUpdate['updated_by'] = $details['actual_rank'] . " " . $details['last_name'] . " PAF";
+                if ($subWorkUpdate['files'] == "") {
+                    $subWorkUpdate['files'] = [];
+                } else {
+                    $subWorkUpdate['files'] = unserialize($subWorkUpdate['files']);
+                }
+                $subWorkUpdate['complied'] = "";
+                if ($subWorkUpdate['final'] == "YES") {
+                    $subWorkUpdate['complied'] = "OK!";
+                }
+                $detailedUpdates[] = $subWorkUpdate;
+            }
+
+            $subStatus['updates'] = $detailedUpdates;
+
+            // * CHECK IF A SUB WORK IS ALREADY COMPLIED.
             $subStatus['comp'] = ['bg' => "", 'compBut' => ""];
             if ($subStatus['status'] == "COMPLIED") {
                 $subStatus['comp'] = ['bg' => ' OK!', 'compBut' => "disabled"];
             }
+
             if (!empty($subStatus['assigned_to'])) {
                 $subAssigned = unserialize($subStatus['assigned_to']);
                 $assignedName = [];
@@ -581,15 +632,19 @@ class ProfileService
                 $subStatus['assignedNames'] = [];
                 $finalSubWorkList[] = $subStatus;
             }
+
             if ($subStatus['status'] == "UNCOMPLIED") {
                 $checkSubWorkComplied[] = $subStatus['status'];
             }
         }
+
         if (in_array("UNCOMPLIED", $checkSubWorkComplied)) {
             $work['subWorkComplied'] = false;
         }
         // dd($finalSubWorkList);
         $sub_work = $finalSubWorkList;
+
+
         $workdetails['work'] = $work;
         $workdetails['sub_work'] = $sub_work;
         return $workdetails;
@@ -831,14 +886,37 @@ class ProfileService
                 'updated_by' => $_SESSION['user']['id']
             ]
         );
+
+        $targetDate = $this->db->query("SELECT date_target FROM work WHERE id = :id", ['id' => $formData['IdToComply']])->find();
+        $targetDate = $targetDate['date_target'];
         $dateToday = date('Y-m-d');
+
+        $timeliness = "No TD";
+        if ($targetDate != "0000-00-00") {
+            $targetDate = strtotime($targetDate);
+            $dateToday = strtotime($dateToday);
+            $interval = $targetDate - $dateToday;
+            $daysinterval = floor($interval / (60 * 60 * 24));
+            if ($daysinterval >= 1) {
+                $timeliness = "Early";
+            }
+            if ($daysinterval == 0) {
+                $timeliness = "On Time";
+            }
+            if ($daysinterval < 0) {
+                $timeliness = "Late";
+            }
+        }
+
+
         $this->db->query(
-            "UPDATE work SET status = :status, updated_at = :updated_at, date_complied = :date_complied, complied_by = :complied_by WHERE id =:id",
+            "UPDATE work SET status = :status, updated_at = :updated_at, date_complied = :date_complied, complied_by = :complied_by, timeliness = :timeliness WHERE id =:id",
             [
                 'status' => "COMPLIED",
                 'updated_at' => $dateToday,
                 'date_complied' => $dateToday,
                 'complied_by' => $_SESSION['user']['id'],
+                'timeliness' => $timeliness,
                 'id' => $formData['IdToComply']
             ]
         );

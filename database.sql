@@ -98,13 +98,16 @@ CREATE TABLE IF NOT EXISTS work (
     subject varchar(255) NOT NULL,
     instructions varchar(500) NOT NULL,
     assigned_to varchar (255) NOT NULL,
+    type varchar (255) NOT NULL,
     added_by bigint(20) unsigned NOT NULL,
+    added_from varchar(255) NOT NULL,
     status varchar(255) NOT NULL,
     created_at date NOT NULL DEFAULT CURRENT_TIMESTAMP(),
     updated_at date NOT NULL DEFAULT CURRENT_TIMESTAMP(),
     date_target date NOT NULL,
     date_complied date NOT NULL,
     complied_by bigint(20) NOT NULL,
+    timeliness varchar(255) NOT NULL,
     files varchar(255),
     PRIMARY KEY (id)
 );

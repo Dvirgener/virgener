@@ -8,7 +8,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="hidden" id="addedfrom" name="addedfrom" value="directed">
+                    <input type="hidden" id="addedfrom" name="addedfrom" value="Directed">
                     <?php
                     include $this->resolve("partials/_token.php");
                     ?>
@@ -57,17 +57,18 @@
                                 <div class="row">
                                     <div class="row mb-2">
                                         <label for="subject" class="form-label">Subject:</label>
-                                        <input type="text" class="form-control ms-2" id="subject" name="subject">
+                                        <input type="text" class="form-control ms-2" id="subject" name="subject" required>
                                     </div>
                                     <div class="row mb-2">
                                         <label class="form-label" for="addworktype">Type:</label>
-                                        <select class="form-select ms-2" aria-label="Default select example" name="addworktype" id="addworktype">
+                                        <select class="form-select ms-2" aria-label="Default select example" name="addworktype" id="addworktype" required>
                                             <option value="" selected></option>
                                             <option value="Compliance">Compliance</option>
                                             <option value="Errand">Errand</option>
-                                            <option value="Errand">Financial</option>
-                                            <option value="Errand">Request</option>
-                                            <option value="Follow up">Follow up </option>
+                                            <option value="Financial">Financial</option>
+                                            <option value="Request">Request</option>
+                                            <option value="Follow up">Follow up</option>
+                                            <option value="Routine">Routine</option>
                                         </select>
                                     </div>
                                 </div>
@@ -85,7 +86,7 @@
                         </div>
                         <div class="row mb-2">
                             <label class="form-label" for="addworkintremarks">Work Instructions / Remarks:</label>
-                            <textarea class="form-control ms-2" name="addworkintremarks" id="addworkintremarks" rows="4"></textarea>
+                            <textarea class="form-control ms-2" name="addworkintremarks" id="addworkintremarks" rows="4" required></textarea>
                         </div>
                         <div class="row mb-2">
                             <div class="row">

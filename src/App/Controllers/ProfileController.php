@@ -25,7 +25,7 @@ class ProfileController
         $addedWorkCount = $this->profileService->checkAddedWorkNumbers($_SESSION['user']['id']);
 
         // * Work Panel
-        $directedWork = $this->profileService->getDirectedWork($_SESSION['user']['id']);
+        $directedWork = $this->profileService->getDirectedWork($_SESSION['user']['id'], "UNCOMPLIED");
         $sectionWork = [];
         $addedWork = $this->profileService->getAddedWork($_SESSION['user']['id']);
 
@@ -204,5 +204,78 @@ class ProfileController
     {
         $this->profileService->complyWork($_POST, $_FILES);
         redirectTo('/profile');
+    }
+
+    public function workHistory()
+    {
+        // * Profile Panel
+        $user = $this->profileService->getUserDetails($_SESSION['user']['id']);
+        $fullName = $this->profileService->userFullNameSN;
+        $workCount = $this->profileService->checkWorkNumbers($_SESSION['user']['id']);
+        $addedWorkCount = $this->profileService->checkAddedWorkNumbers($_SESSION['user']['id']);
+        $juniors = $this->profileService->fetchAllJuniors($_SESSION['user']['serial_number'], $_SESSION['user']['number_rank']);
+
+        // * Work Panel
+        $directedWork = $this->profileService->getDirectedWork($_SESSION['user']['id'], "COMPLIED");
+        $sectionWork = [];
+        $addedWork = $this->profileService->getAddedWork($_SESSION['user']['id']);
+
+
+        echo $this->view->render(
+            "/profile/workhistory.php",
+            [
+                'user' => $user,
+                'fullName' => $fullName,
+                'juniors' => $juniors,
+                'directedWork' => $directedWork,
+                'sectionWork' => $sectionWork,
+                'addedWork' => $addedWork,
+                'addedWorkCount' => $addedWorkCount,
+                'workCount' => $workCount
+            ]
+        );
+    }
+
+    public function viewWorkHistory()
+    {
+        // * Profile Panel
+        $user = $this->profileService->getUserDetails($_SESSION['user']['id']);
+        $fullName = $this->profileService->userFullNameSN;
+        $workCount = $this->profileService->checkWorkNumbers($_SESSION['user']['id']);
+        $addedWorkCount = $this->profileService->checkAddedWorkNumbers($_SESSION['user']['id']);
+
+        // * Add Work Modal
+        $juniors = $this->profileService->fetchAllJuniors($_SESSION['user']['serial_number'], $_SESSION['user']['number_rank']);
+
+        // * View One Work
+        $workArray = $this->profileService->workDetails($_GET['id']);
+
+        if (empty($workArray['sub_work'])) {
+            $workArray['sub_work'] = [];
+        }
+
+        echo $this->view->render(
+            "/profile/workcueHistory.php",
+            [
+                'user' => $user,
+                'fullName' => $fullName,
+                'workCount' => $workCount,
+                'addedWorkCount' => $addedWorkCount,
+                'workDetails' => $workArray['work'],
+                'subWorkDetails' => $workArray['sub_work'],
+                'juniors' => $juniors
+
+
+            ]
+        );
+    }
+
+    public function officeHistory()
+    {
+
+        echo $this->view->render(
+            "/profile/officeWorkHistory.php",
+            []
+        );
     }
 }

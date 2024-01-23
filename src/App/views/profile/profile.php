@@ -28,7 +28,7 @@ include $this->resolve("partials/_header.php");
                         <?php foreach ($directedWork as $work) : ?>
                             <button type="button" class="card shadow m-2 buttonzoom viewWorkBut" style="height:fit-content; width: 100%; <?= $work['style'] ?>" value="<?= $work['id'] ?>">
                                 <div class="row">
-                                    <h5 class="text-start fw-bold "><?= $work['subject'] ?></h5>
+                                    <h5 class="text-start fw-bold text-wrap"><?= $work['subject'] ?></h5>
                                 </div>
                                 <div class="row">
                                     <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 20 20">

@@ -1,6 +1,5 @@
 <?php
 include $this->resolve("partials/_header.php");
-
 ?>
 <section class="mt-4">
 
@@ -12,20 +11,18 @@ include $this->resolve("partials/_header.php");
         </div>
 
         <div class="col-8">
-
             <div class="row ms-2 text-center fw-bold">
                 <div class="col-11">
-                    <h2>WORK DETAILS</h2>
+                    <h2>COMPLIED WORK DETAILS</h2>
                 </div>
                 <div class="col-1">
-                    <a class="btn btn-secondary" href="/profile">
+                    <a class="btn btn-secondary" href="/history">
                         BACK
                     </a>
 
                 </div>
 
             </div>
-
             <div class="row border-bottom border-dark border-2 mx-2 mb-3">
 
             </div>
@@ -76,61 +73,45 @@ include $this->resolve("partials/_header.php");
                             </div>
                             <div class="col-8">
                                 <div class="row text-start">
-                                    <span for="" class="form-label fs-6 fw-bold">ACTION:</span>
+                                    <span for="" class="form-label fs-6 fw-bold">TIMELINESS:</span>
                                 </div>
-                                <div class="row-fluid mt-2">
-                                    <div class="row mb-3 justify-content-between text-center">
-                                        <?php if ($workDetails['added_by'] == $_SESSION['user']['id']) : ?>
-                                            <div class="col-6 mb-2 d-grid">
-                                                <?php if ($workDetails['subWorkComplied']) : ?>
-                                                    <button class="btn btn-success complyWorkBut" type="button" value="<?= $workDetails['id'] ?>">COMPLY</button>
-                                                <?php else : ?>
-                                                    <button disabled class="btn btn-success complyWorkBut" type="button" value="<?= $workDetails['id'] ?>">COMPLY</button>
-                                                <?php endif ?>
-                                            </div>
-                                            <div class="col-6 mb-2 d-grid">
-                                                <button class="btn btn-secondary updateWorkBut" type="button" value="<?= $workDetails['id'] ?>">UPDATE</button>
-                                            </div>
-
-                                            <div class="col-6 d-grid">
-                                                <button class="btn btn-primary editWorkBut" type="button" value="<?= $workDetails['id'] ?>">EDIT</button>
-                                            </div>
-                                            <div class="col-6 d-grid">
-                                                <button class="btn btn-danger deleteWorkBut" type="button" value="<?= $workDetails['id'] ?>">DELETE</button>
-                                            </div>
-                                        <?php else : ?>
-                                            <div class="row mb-2 justify-content-center">
-                                                <div class="col-8 d-grid text-center">
-                                                    <?php if ($workDetails['subWorkComplied']) : ?>
-                                                        <button class="btn btn-success complyWorkBut" type="button" value="<?= $workDetails['id'] ?>">COMPLY</button>
-                                                    <?php else : ?>
-                                                        <button disabled class="btn btn-success complyWorkBut" type="button" value="<?= $workDetails['id'] ?>">COMPLY</button>
-                                                    <?php endif ?>
-                                                </div>
-
-                                            </div>
-                                            <div class="row justify-content-center">
-                                                <div class="col-8 d-grid">
-                                                    <button class="btn btn-secondary updateWorkBut" type="button" value="<?= $workDetails['id'] ?>">UPDATE</button>
-                                                </div>
-                                            </div>
-                                        <?php endif ?>
+                                <div class="row d-flex mt-2 mx-2 justify-content-center align-items-start pt-3" style="height: 100%;">
+                                    <?php
+                                    $style = "";
+                                    switch ($workDetails['timeliness']) {
+                                        case "Early":
+                                            $style = "style='background-color: green; color:white'";
+                                            break;
+                                        case "On time":
+                                            $style = "style='background-color: skyblue; color:black'";
+                                            break;
+                                        case "Late":
+                                            $style = "style='background-color: red; color:white'";
+                                            break;
+                                    }
+                                    ?>
+                                    <div class="col text-center align-items-center" <?= $style ?>>
+                                        <span class="fw-bold fs-4 text-decoration-underline"><?= $workDetails['timeliness'] ?></span>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="row mb-2" style="height:fit-content;">
-                            <div class="col-4">
+                            <div class="col-6">
                                 <label for="" class="form-label fs-6 fw-bold">DATE ADDED:</label>
                                 <input class="form-control" type="text" disabled value="<?= $workDetails['created_at'] ?>">
                             </div>
-                            <div class="col-4">
+                            <div class="col-6">
                                 <label for="" class="form-label fs-6 fw-bold">LAST UPDATE:</label>
                                 <input class="form-control" type="text" disabled value="<?= $workDetails['updated_at'] ?>">
                             </div>
-                            <div class="col-4">
+                            <div class="col-6">
                                 <label for="" class="form-label fs-6 fw-bold">TARGET DATE:</label>
                                 <input class="form-control" type="text" disabled value="<?= $workDetails['date_target'] ?>">
+                            </div>
+                            <div class="col-6">
+                                <label for="" class="form-label fs-6 fw-bold">DATE COMPLIED:</label>
+                                <input class="form-control" type="text" disabled value="<?= $workDetails['date_complied'] ?>">
                             </div>
                         </div>
                         <div class="row mb-2">
@@ -156,17 +137,6 @@ include $this->resolve("partials/_header.php");
                                 <div class="col-3 ">
                                     <span for="" class="form-label fs-6 fw-bold">SUB WORK:</span>
                                 </div>
-                                <div class="col-9">
-                                    <?php if ($workDetails['added_by'] == $_SESSION['user']['id']) : ?>
-                                        <button class="btn btn-outline-primary" id="addSubWorkBut" name="addSubWorkBut">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 20 18">
-                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4" />
-                                            </svg>
-                                            ADD
-                                        </button>
-                                    <?php endif ?>
-                                </div>
                             </div>
                             <div class="row-fluid">
                                 <div class="row-fluid overflow-y-scroll ps-1 overflow-x-hidden align-content-start mb-5" style="height: 410px;">
@@ -175,7 +145,7 @@ include $this->resolve("partials/_header.php");
                                             <?php foreach ($subWorkDetails as $subwork) : ?>
                                                 <div class="row-fluid border shadow rounded mx-2 mb-2" style="height: fit-content;">
                                                     <div class="row mb-2">
-                                                        <span class="fw-bold">SUBJECT: <span class="fw-bold" style="color:red"><?= $subwork['comp']['bg'] ?></span></span>
+                                                        <span class="fw-bold">SUBJECT:</span>
                                                     </div>
                                                     <div class="row border-bottom mx-2 mb-2">
                                                         <div class="col">
@@ -194,29 +164,6 @@ include $this->resolve("partials/_header.php");
                                                                 <?= $names ?>
                                                             </div>
                                                         <?php endforeach ?>
-                                                    </div>
-                                                    <div class="row d-flex justify-content-start">
-                                                        <?php if ($workDetails['added_by'] == $_SESSION['user']['id']) : ?>
-                                                            <div class="col-3 mb-2 d-grid">
-                                                                <button class="btn btn-success complySubWorkBut" type="button" value="<?= $subwork['id'] ?>" <?= $subwork['authBut'] ?> <?= $subwork['comp']['compBut'] ?>>Comply</button>
-                                                            </div>
-                                                            <div class="col-3 mb-2 d-grid">
-                                                                <button class="btn btn-secondary updateSubWorkBut" type="button" value="<?= $subwork['id'] ?>" <?= $subwork['authBut'] ?> <?= $subwork['comp']['compBut'] ?>>Update</button>
-                                                            </div>
-                                                            <div class="col-3 mb-2 d-grid">
-                                                                <button class="btn btn-primary editSubWork" type="button" value="<?= $subwork['id'] ?>">Edit</button>
-                                                            </div>
-                                                            <div class="col-3 mb-2 d-grid">
-                                                                <button class="btn btn-danger deleteSubWorkBut" type="button" value="<?= $subwork['id'] ?>">Delete</button>
-                                                            </div>
-                                                        <?php else : ?>
-                                                            <div class="col mb-2 d-grid">
-                                                                <button class="btn btn-success complySubWorkBut" type="button" value="<?= $subwork['id'] ?>" <?= $subwork['authBut'] ?> <?= $subwork['comp']['compBut'] ?>>Comply</button>
-                                                            </div>
-                                                            <div class="col mb-2 d-grid">
-                                                                <button class="btn btn-secondary updateSubWorkBut" type="button" value="<?= $subwork['id'] ?>" <?= $subwork['authBut'] ?> <?= $subwork['comp']['compBut'] ?>>Update</button>
-                                                            </div>
-                                                        <?php endif ?>
                                                     </div>
                                                 </div>
                                             <?php endforeach ?>
@@ -293,7 +240,6 @@ include $this->resolve("partials/_header.php");
                                             <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample<?= $id ?>" aria-expanded="false" aria-controls="collapseExample<?= $id ?>">
                                                 View
                                             </button>
-                                            <?= $sub_work['comp']['bg'] ?>
                                         </div>
                                         <div class="col-9 d-flex align-items-center">
                                             <span class="fs-6 fw-bold"><?= $sub_work['sub_subject'] ?></span>
