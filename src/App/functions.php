@@ -32,7 +32,6 @@ function redirectTo(string $path)
     exit;
 }
 
-
 function formErrorMessaage(array $array, string $field)
 {
 
@@ -44,7 +43,6 @@ function formErrorMessaage(array $array, string $field)
 <?php
     }
 }
-
 
 function validInvalidForm(?array $errorMsg = [], ?array $oldForm = [], string $field)
 {

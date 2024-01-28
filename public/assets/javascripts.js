@@ -58,7 +58,7 @@ $(document).on('click', '#checkall', function () {
 let id = 1;
 $(document).on('click', '#addSub', function () {
     id++;
-    $('.subWorkGroup').append('<div class="row mb-2" id="id'+id+'"><div class="col-11"><input class="form-control" type="text" id="sub[]" name="sub[]"></div><div class="col-1"><button type="button" class="btn btn-danger removeDiv" id="'+id+'">&times</button></div></div>');
+    $('.subWorkGroup').append('<div class="row mb-2" id="id'+id+'"><div class="col-10 col-md-11"><input class="form-control" type="text" id="sub[]" name="sub[]"></div><div class="col-2 col-md-1"><button type="button" class="btn btn-danger removeDiv" id="'+id+'">&times</button></div></div>');
 
     $(document).on('click', '.removeDiv', function () {
         var butToRemove = $(this).attr("id");

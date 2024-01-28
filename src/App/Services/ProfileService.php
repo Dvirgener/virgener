@@ -17,6 +17,12 @@ class ProfileService
     {
     }
 
+    private function nameOfId($id)
+    {
+        $user = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $id])->find();
+        return $name = $user['actual_rank'] . " " . $user['last_name'] . " PAF";
+    }
+
     public function getUserDetails($id)
     {
         $userDetails = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $id])->find();
@@ -546,83 +552,104 @@ class ProfileService
 
     public function workDetails($workId)
     {
+        // * Select all work queue from DB with the ID variable
         $work = $this->db->query("SELECT * FROM work WHERE id = :id", ['id' => $workId])->find();
-        $work['assigned_to'] = unserialize($work['assigned_to']);
-        if (($work['files']) == "") {
-            $work['files'] = [];
-        } else {
-            $work['files'] = unserialize($work['files']);
-        }
 
-        $addedBy = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $work['added_by']])->find();
-        $work['added_by_name'] = $addedBy['actual_rank'] . " " . $addedBy['last_name'] . "" . " PAF";
-        $finalSubWorkList = [];
+        // * unserialized assigned users and assign names to Ids
+        $work['assigned_to'] = unserialize($work['assigned_to']);
         foreach ($work['assigned_to'] as $id) {
             $user = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $id])->find();
             $name = $user['actual_rank'] . " " . $user['last_name'] . "" . " PAF";
             $work['detailedAssignee'][] = ['picture' => $user['picture'], 'name' => $name, 'id' => $user['id']];
         }
 
-        $workUpdates = $this->db->query("SELECT * FROM updates WHERE main_id = :main_id and sub_id = 0", ['main_id' => $workId])->findAll();
+        // * Check if the work has files uploaded or not
+        if (($work['files']) == "") {
+            $work['files'] = [];
+        } else {
+            $work['files'] = unserialize($work['files']);
+        }
+
+        // * assign name to the work added
+        $work['added_by_name'] = $this->nameOfId($work['added_by']);
+
+        // * Array for the list of subwork with details
+        $finalSubWorkList = [];
+
+        // * Search the DB for all work updates on the work queue
+        $workUpdates = $this->db->query("SELECT * FROM updates WHERE main_id = :main_id", ['main_id' => $workId])->findAll();
+        // * array for detailed work updates
         $detailedWorkUpdates = [];
+
+        // *Scan Each work updates for details
         foreach ($workUpdates as $workUpdate) {
-            $details = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => (int) $workUpdate['updated_by']])->find();
-            $workUpdate['updated_by'] = $details['actual_rank'] . " " . $details['last_name'] . " PAF";
+            // * Assign name for the person who made the update
+            $workUpdate['updated_by'] = $this->nameOfId($workUpdate['updated_by']);
+
+            // * Check if it came from a sub work queue
+
+            if ($workUpdate['sub_id'] != 0) {
+                $subSubject = $this->db->query("SELECT sub_subject FROM sub_work WHERE id = :id", ['id' => $workUpdate['sub_id']])->find();
+                $workUpdate['sub_id'] = $subSubject['sub_subject'];
+            }
+
+            // * Check if the update has a file uploaded
             if ($workUpdate['files'] == "") {
                 $workUpdate['files'] = [];
             } else {
                 $workUpdate['files'] = unserialize($workUpdate['files']);
             }
+            // * Check if the update is a final update or what you call compliance remarks
             $workUpdate['complied'] = "";
             if ($workUpdate['final'] == "YES") {
-                $workUpdate['complied'] = "OK!";
+                $workUpdate['complied'] = "Compliance Remarks!";
             }
+
+            // * format date to be readable
+            $date = date_create($workUpdate['created_at']);
+            $workUpdate['created_at'] = date_format($date, "d F Y");
+
+
+            // * add the work update to the array
             $detailedWorkUpdates[] = $workUpdate;
         }
 
+        // * sort all the updates by Date
+        $keys = array_column($detailedWorkUpdates, 'created_at');
+        array_multisort($keys, SORT_ASC, $detailedWorkUpdates);
+
+        // * assign the detailed work updates to the updates array
         $work['updates'] = $detailedWorkUpdates;
 
-
+        // * Check for sub work of this Work Queue
         $sub_work = $this->db->query("SELECT * FROM sub_work WHERE main_id = :id", ['id' => $workId])->findall();
+
+        // * Variable for subwork complied
         $work['subWorkComplied'] = true;
         $checkSubWorkComplied = [];
+
+        // * scan each subwork created
         foreach ($sub_work as $subStatus) {
 
-            $subWorkUpdates = $this->db->query("SELECT * FROM updates WHERE sub_id = :sub_id", ['sub_id' => $subStatus['id']])->findAll();
-            $detailedUpdates = [];
-            foreach ($subWorkUpdates as $subWorkUpdate) {
-                $details = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => (int) $subWorkUpdate['updated_by']])->find();
-                $subWorkUpdate['updated_by'] = $details['actual_rank'] . " " . $details['last_name'] . " PAF";
-                if ($subWorkUpdate['files'] == "") {
-                    $subWorkUpdate['files'] = [];
-                } else {
-                    $subWorkUpdate['files'] = unserialize($subWorkUpdate['files']);
-                }
-                $subWorkUpdate['complied'] = "";
-                if ($subWorkUpdate['final'] == "YES") {
-                    $subWorkUpdate['complied'] = "OK!";
-                }
-                $detailedUpdates[] = $subWorkUpdate;
-            }
-
-            $subStatus['updates'] = $detailedUpdates;
-
-            // * CHECK IF A SUB WORK IS ALREADY COMPLIED.
+            // * Check if a sub work is already Complied.
             $subStatus['comp'] = ['bg' => "", 'compBut' => ""];
             if ($subStatus['status'] == "COMPLIED") {
                 $subStatus['comp'] = ['bg' => ' OK!', 'compBut' => "disabled"];
             }
 
+            //  * Check if sub work assignee is not empty
             if (!empty($subStatus['assigned_to'])) {
                 $subAssigned = unserialize($subStatus['assigned_to']);
                 $assignedName = [];
+
+                // * variable for disabling / enabling comply button
                 $authBut = "disabled";
                 if (in_array($_SESSION['user']['id'], $subAssigned)) {
                     $authBut = "";
                 }
+                // * assign names for each assigned user
                 foreach ($subAssigned as $id) {
-                    $details = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $id])->find();
-                    $assignedName[] = $details['actual_rank'] . " " . $details['last_name'] . " PAF";
+                    $assignedName[] = $this->nameOfId($id);
                 }
                 $subStatus['assignedNames'] = $assignedName;
                 $subStatus['authBut'] = $authBut;
@@ -633,18 +660,17 @@ class ProfileService
                 $finalSubWorkList[] = $subStatus;
             }
 
-            if ($subStatus['status'] == "UNCOMPLIED") {
-                $checkSubWorkComplied[] = $subStatus['status'];
-            }
+            // * assign sub Work to an array
+            $checkSubWorkComplied[] = $subStatus['status'];
         }
 
+        // * Check if there's still a sub work with an UNCOMPLIED remark
         if (in_array("UNCOMPLIED", $checkSubWorkComplied)) {
             $work['subWorkComplied'] = false;
         }
-        // dd($finalSubWorkList);
         $sub_work = $finalSubWorkList;
 
-
+        // * add work and sub work details to an array before you hit return
         $workdetails['work'] = $work;
         $workdetails['sub_work'] = $sub_work;
         return $workdetails;

@@ -41,16 +41,15 @@
 <body class="virg-normal-font">
     <!-- Start Header -->
     <header class="container-fluid">
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
             <div class="container-fluid">
-                <a class="navbar-brand text-center virg-karaoke-font border-end pe-2" href="/">
-                    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-house-fill" viewBox="0 0 16 16">
-                        <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293z" />
-                        <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6Z" />
-                    </svg> -->
+                <a class="navbar-brand text-center virg-karaoke-font fs-6" href="/">
                     Online Work Queue System
                 </a>
-
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
                 <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
                     <?php if (isset($_SESSION['user']) && $_SESSION['user']['authority'] !== "karaoke") : ?>
                         <ul class="navbar-nav me-auto">
@@ -69,7 +68,6 @@
                         </ul>
                     <?php else : ?>
                         <ul class="navbar-nav me-auto">
-
                             <li class="nav-item ">
                                 <a class="nav-link active" href="/spendingplan"></a>
                             </li>
@@ -91,21 +89,14 @@
                                 <li class="nav-item border-end">
                                     <a class="nav-link active" aria-current="page" href="/login">Login</a>
                                 </li>
-
                                 <li class="nav-item">
                                     <a class="nav-link active" aria-current="page" href="/register">Register</a>
                                 </li>
                             <?php endif ?>
                         </ul>
                     </div>
-
                 </div>
-
             </div>
         </nav>
-
-
-
-
     </header>
     <!-- End Header -->
