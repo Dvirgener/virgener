@@ -22,6 +22,8 @@ class HomeController
         if ($_SESSION['user']['authority'] === "karaoke") {
             redirectTo('/karaoke');
         }
-        echo $this->view->render("index.php", []);
+
+        $allWorkQueue = $this->transactionService->allWorkQueue();
+        echo $this->view->render("index.php", ['allWorkQueue' => $allWorkQueue]);
     }
 }

@@ -17,6 +17,13 @@ class ProfileService
     {
     }
 
+    // * function to fetch all users from DB
+    public function fetchAllUsers()
+    {
+        return $this->db->query("SELECT * FROM users")->findAll();
+    }
+
+    // * Private functions to be used inside this class. to reduce redundant codes
     private function nameOfId($id)
     {
         $user = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $id])->find();
@@ -29,7 +36,6 @@ class ProfileService
 
         $this->userFullName = $userDetails['actual_rank'] . " " . $userDetails['first_name'] . " " . $userDetails['last_name'] . " PAF";
         $this->userFullNameSN = $userDetails['actual_rank'] . " " . $userDetails['first_name'] . " " . $userDetails['last_name'] . " " . $userDetails['serial_number'] . " PAF";
-
 
         if ($userDetails['section'] != "") {
             $section = unserialize($userDetails['section']);
@@ -212,10 +218,7 @@ class ProfileService
         }
     }
 
-    public function fetchAllUsers()
-    {
-        return $this->db->query("SELECT * FROM users")->findAll();
-    }
+
 
     public function fetchAllJuniors($serialNumber, $rank, $workId = NULL): array
     {

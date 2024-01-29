@@ -38,6 +38,10 @@ class Database
     {
         return $this->stmt->fetchColumn();
     }
+    public function countRow()
+    {
+        return $this->stmt->fetchAll();
+    }
 
     public function find()
     {

@@ -2,7 +2,7 @@
     <div class="border p-2 bg-light border-2 border-dark shadow rounded-4">
         <div class="row">
             <div class="col-12 col-md-4 text-center text-md-start">
-                <img class="border-dark border-2 rounded-4" src="/profile/<?php echo $user['picture'] ?>" alt="" style=" border-radius:10px; height:200px; width:200px">
+                <img class="border-dark border-2 rounded-4" src="/profile/<?php echo $user['picture'] ?>" alt="" style=" border-radius:10px; height:100%; width:100%">
             </div>
             <div class="col-12 col-md-8 text-center text-md-start">
                 <div class="row">
