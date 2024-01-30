@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Framework\{TemplateEngine, Database, Container};
 use App\config\paths;
-use App\Services\{ValidatorService, UserService, TransactionService, FileService, MusicService, storeMusicHere, SpendingPlanService, ProfileService};
+use App\Services\{ValidatorService, UserService, HomeService, FileService, MusicService, storeMusicHere, SpendingPlanService, ProfileService};
 
 return [
     // * 7. return an arrow function with the class name as key and function that create a new instance of the class as value
@@ -17,16 +17,16 @@ return [
             'port' => $_ENV['DB_PORT'],
             'dbname' => $_ENV['DB_NAME']
         ],
-        $_ENV['DB_USER'],
+        $_ENV['DB_USER'], 
         $_ENV['DB_PASS']
     ),
     UserService::class => function (container $container) {
         $db = $container->get(Database::class);
         return new UserService($db);
     },
-    TransactionService::class => function (container $container) {
+    HomeService::class => function (container $container) {
         $db = $container->get(Database::class);
-        return new TransactionService($db);
+        return new HomeService($db);
     },
     FileService::class => function (container $container) {
         $db = $container->get(Database::class);

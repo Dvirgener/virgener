@@ -30,6 +30,7 @@ class ProfileService
         return $name = $user['actual_rank'] . " " . $user['last_name'] . " PAF";
     }
 
+    // * Getting user details from DB for use of _profile partials
     public function getUserDetails($id)
     {
         $userDetails = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $id])->find();
@@ -72,9 +73,9 @@ class ProfileService
         return $userDetails;
     }
 
+    // * Function for updating the Profile pic of the user
     public function updateUserProfilePic(?array $fileData)
     {
-        // dd($fileData['profilePic']['name']);
         if ($fileData['profilePic']['name'] !== "") {
             $file = $fileData['profilePic'];
             if (!$file || $file['error'] !== UPLOAD_ERR_OK) {
@@ -82,38 +83,30 @@ class ProfileService
                     'receipt' => ["Failed to upload File!"]
                 ]);
             }
-
             $maxFileSizeMB = 10 * 1024 * 1024;
-
             if ($file['size'] > $maxFileSizeMB) {
                 throw new ValidationException(['receipt' => ["File upload is too large!"]]);
             }
-
             $originalFileName = $file['name'];
-
             if (!preg_match('/^[A-Za-z0-9\s._-]+$/', $originalFileName)) {
                 throw new ValidationException(['receipt' => ["Invalid Filename!"]]);
             }
-
             $clientMimeType = $file['type'];
             $allowedMimeTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-
             if (!in_array($clientMimeType, $allowedMimeTypes)) {
                 throw new ValidationException(['receipt' => ["Invalid File Type!"]]);
             }
-
             $fileExtension = pathinfo($file['name'], PATHINFO_EXTENSION);
             $newFileName = bin2hex(random_bytes(16)) . "." . $fileExtension;
             $uploadpath = paths::STORAGE_UPLOADS_PROFPIC . "/" . $newFileName;
-
             if (!move_uploaded_file($file['tmp_name'], $uploadpath)) {
                 throw new ValidationException(['receipt' => ["Failed to upload file!"]]);
             }
-
             $this->db->query("UPDATE users SET picture = :picture WHERE id = :id", ['picture' => $newFileName, 'id' => $_SESSION['user']['id']]);
         }
     }
 
+    // * Function for Updating the User's Details in the DB
     public function updateUserDetail($form)
     {
         switch ($form['rank']) {
@@ -218,15 +211,13 @@ class ProfileService
         }
     }
 
-
-
+    // * Fetch all Juniors of the Logged-in user in the DB
     public function fetchAllJuniors($serialNumber, $rank, $workId = NULL): array
     {
         if ($workId != NULL) {
             $assignedUsers = $this->db->query("SELECT assigned_to FROM work WHERE id = :id", ['id' => $workId])->find();
             $assignedUsers = unserialize($assignedUsers['assigned_to']);
         }
-
         $allusers = $this->db->query("SELECT * FROM users")->findAll();
         $juniors = [];
         foreach ($allusers as $user) {
@@ -237,7 +228,6 @@ class ProfileService
                         $user['check'] = "checked";
                     }
                 }
-
                 $juniors[] = $user;
                 continue;
             }
@@ -251,11 +241,15 @@ class ProfileService
                 $juniors[] = $user;
             }
         }
-
         $keys = array_column($juniors, 'serial_number');
         array_multisort($keys, SORT_DESC, $juniors);
         return $juniors;
     }
+
+
+
+
+
 
     public function readProfPic(array $params)
     {
@@ -264,7 +258,6 @@ class ProfileService
         if (!file_exists($filePath)) {
             redirectTo('/');
         }
-
         header("content-disposition: inline;filename={acwdcwa}");
         header("content-type: {.jpg,.jpeg,.png}");
         readfile($filePath);
@@ -272,7 +265,7 @@ class ProfileService
 
     public function readFile($params)
     {
-        $filePath = paths::STORAGE_UPLOADS_WORKREF . '/' . $params['file'];
+        $filePath = paths::STORAGE_UPLOADS_FILEREFERENCE . '/' . $params['file'];
 
         if (!file_exists($filePath)) {
             redirectTo('/');
@@ -294,7 +287,7 @@ class ProfileService
             foreach ($files_array as $tmp_folder => $file_name) {
                 $fileExtension = pathinfo($file_name, PATHINFO_EXTENSION);
                 $newFileName = bin2hex(random_bytes(16)) . "." . $fileExtension;
-                $uploadpath = paths::STORAGE_UPLOADS_WORKREF . "/" . $newFileName;
+                $uploadpath = paths::STORAGE_UPLOADS_FILEREFERENCE . "/" . $newFileName;
 
                 if (!move_uploaded_file($tmp_folder, $uploadpath)) {
                     throw new ValidationException(['receipt' => ["Failed to upload file!"]]);
@@ -355,7 +348,7 @@ class ProfileService
 
                 $fileExtension = pathinfo($file_name, PATHINFO_EXTENSION);
                 $newFileName = bin2hex(random_bytes(16)) . "." . $fileExtension;
-                $uploadpath = paths::STORAGE_UPLOADS_WORKREF . "/" . $newFileName;
+                $uploadpath = paths::STORAGE_UPLOADS_FILEREFERENCE . "/" . $newFileName;
                 if (!move_uploaded_file($tmp_folder, $uploadpath)) {
                     throw new ValidationException(['receipt' => ["Failed to upload file!"]]);
                 }
@@ -400,24 +393,14 @@ class ProfileService
             if (in_array($id, $assigned)) {
                 $work['style'] = "background-color:none; color:black";
 
-                $dateadded = $work['updated_at'];
-                $datetoday = date('Y-m-d');
-                $dateadded = strtotime($dateadded);
-                $datetoday = strtotime($datetoday);
-                $interval = $datetoday - $dateadded;
-                $daysinterval = floor($interval / (60 * 60 * 24));
-                if ($daysinterval >= 1) {
+                $res = checkUpdate($work['updated_at']);
+                if ($res) {
                     $work['style'] = "background-color:orange; color:black";
                 }
 
                 if ($work['date_target'] != "0000-00-00") {
-                    $dateadded = $work['date_target'];
-                    $datetoday = date('Y-m-d');
-                    $dateadded = strtotime($dateadded);
-                    $datetoday = strtotime($datetoday);
-                    $interval = $dateadded - $datetoday;
-                    $daysinterval = floor($interval / (60 * 60 * 24));
-                    if ($daysinterval <= 1) {
+                    $res = checkDeadline($work['date_target']);
+                    if ($res) {
                         $work['style'] = "background-color:red; color:white";
                     }
                 }
@@ -427,8 +410,6 @@ class ProfileService
                 }
                 $addedByName = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $work['added_by']])->find();
                 $work['added_by'] = $addedByName['actual_rank'] . " " . $addedByName['last_name'] . " PAF";
-
-
                 $myWork[] = $work;
             }
         }
@@ -769,7 +750,7 @@ class ProfileService
             foreach ($files_array as $tmp_folder => $file_name) {
                 $fileExtension = pathinfo($file_name, PATHINFO_EXTENSION);
                 $newFileName = bin2hex(random_bytes(16)) . "." . $fileExtension;
-                $uploadpath = paths::STORAGE_UPLOADS_WORKREF . "/" . $newFileName;
+                $uploadpath = paths::STORAGE_UPLOADS_FILEREFERENCE . "/" . $newFileName;
 
                 if (!move_uploaded_file($tmp_folder, $uploadpath)) {
                     throw new ValidationException(['receipt' => ["Failed to upload file!"]]);
@@ -808,7 +789,7 @@ class ProfileService
             foreach ($files_array as $tmp_folder => $file_name) {
                 $fileExtension = pathinfo($file_name, PATHINFO_EXTENSION);
                 $newFileName = bin2hex(random_bytes(16)) . "." . $fileExtension;
-                $uploadpath = paths::STORAGE_UPLOADS_WORKREF . "/" . $newFileName;
+                $uploadpath = paths::STORAGE_UPLOADS_FILEREFERENCE . "/" . $newFileName;
 
                 if (!move_uploaded_file($tmp_folder, $uploadpath)) {
                     throw new ValidationException(['receipt' => ["Failed to upload file!"]]);
@@ -849,7 +830,7 @@ class ProfileService
             foreach ($files_array as $tmp_folder => $file_name) {
                 $fileExtension = pathinfo($file_name, PATHINFO_EXTENSION);
                 $newFileName = bin2hex(random_bytes(16)) . "." . $fileExtension;
-                $uploadpath = paths::STORAGE_UPLOADS_WORKREF . "/" . $newFileName;
+                $uploadpath = paths::STORAGE_UPLOADS_FILEREFERENCE . "/" . $newFileName;
 
                 if (!move_uploaded_file($tmp_folder, $uploadpath)) {
                     throw new ValidationException(['receipt' => ["Failed to upload file!"]]);
@@ -895,7 +876,7 @@ class ProfileService
             foreach ($files_array as $tmp_folder => $file_name) {
                 $fileExtension = pathinfo($file_name, PATHINFO_EXTENSION);
                 $newFileName = bin2hex(random_bytes(16)) . "." . $fileExtension;
-                $uploadpath = paths::STORAGE_UPLOADS_WORKREF . "/" . $newFileName;
+                $uploadpath = paths::STORAGE_UPLOADS_FILEREFERENCE . "/" . $newFileName;
 
                 if (!move_uploaded_file($tmp_folder, $uploadpath)) {
                     throw new ValidationException(['receipt' => ["Failed to upload file!"]]);

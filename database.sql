@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS users(
     actual_rank varchar(255) NOT NULL,
     number_rank bigint(20) NOT NULL,
     serial_number bigint(20) unsigned NOT NULL,
+    classification varchar(255) NOT NULL,
     position varchar(255) NOT NULL,
     section varchar(255) NOT NULL,
     authority varchar(255) NOT NULL,

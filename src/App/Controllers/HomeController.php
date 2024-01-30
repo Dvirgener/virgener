@@ -6,13 +6,13 @@ namespace App\Controllers;
 
 use Framework\TemplateEngine;
 use App\config\paths;
-use App\Services\{TransactionService, musicPlaylist};
+use App\Services\{HomeService};
 
 
 class HomeController
 {
 
-    public function __construct(private TemplateEngine $view, private TransactionService $transactionService)
+    public function __construct(private TemplateEngine $view, private HomeService $HomeService)
     {
     }
 
@@ -23,7 +23,11 @@ class HomeController
             redirectTo('/karaoke');
         }
 
-        $allWorkQueue = $this->transactionService->allWorkQueue();
-        echo $this->view->render("index.php", ['allWorkQueue' => $allWorkQueue]);
+        $allWorkQueue = $this->HomeService->allWorkQueue();
+        $allTimeliness = $this->HomeService->timelinessNumbers();
+        $active = $this->HomeService->activeWorkNumbers();
+        $updatesToday = $this->HomeService->updatesToday();
+        $users = $this->HomeService->allUsers();
+        echo $this->view->render("index.php", ['allWorkQueue' => $allWorkQueue,'users' => $users,'timeliness' => $allTimeliness,'active' =>$active,'updatesToday' => $updatesToday]);
     }
 }

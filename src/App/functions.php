@@ -126,3 +126,33 @@ function bgColor($saa, $obr, $dv, $aar)
 function fileUpload($fileData)
 {
 }
+
+// * This function checks if the work queue requires updates
+function checkUpdate ($date):bool
+{
+    $dateToday = date('Y-m-d');
+    $dateUpdated = strtotime($date);
+    $datetoday = strtotime($dateToday);
+    $interval = $datetoday - $dateUpdated;
+    $daysInterval = floor($interval / (60 * 60 * 24));
+    $forUpdate = false;
+    if ($daysInterval >= 1){
+    $forUpdate = true;
+    }
+    return $forUpdate;
+}
+
+// * This function checks if the work queue is Due for Deadline
+function checkDeadline ($date):bool
+{
+    $dateToday = date('Y-m-d');
+    $dateDeadline = strtotime($date);
+    $dateToday = strtotime($dateToday);
+    $interval = $dateDeadline - $dateToday;
+    $daysInterval = floor($interval / (60 * 60 * 24));
+    $deadline = false;
+    if ($daysInterval <= 1){
+    $deadline = true;
+    }
+    return $deadline;
+}
