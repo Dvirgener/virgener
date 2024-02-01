@@ -561,7 +561,7 @@ class ProfileService
         $finalSubWorkList = [];
 
         // * Search the DB for all work updates on the work queue
-        $workUpdates = $this->db->query("SELECT * FROM updates WHERE main_id = :main_id", ['main_id' => $workId])->findAll();
+        $workUpdates = $this->db->query("SELECT * FROM updates WHERE main_id = :main_id ORDER BY id ASC", ['main_id' => $workId])->findAll();
         // * array for detailed work updates
         $detailedWorkUpdates = [];
 
@@ -599,11 +599,12 @@ class ProfileService
         }
 
         // * sort all the updates by Date
-        $keys = array_column($detailedWorkUpdates, 'created_at');
-        array_multisort($keys, SORT_ASC, $detailedWorkUpdates);
+        // $keys = array_column($detailedWorkUpdates, 'created_at');
+        // array_multisort($keys, SORT_ASC, $detailedWorkUpdates);
 
         // * assign the detailed work updates to the updates array
         $work['updates'] = $detailedWorkUpdates;
+        // dd($work['updates']);
 
         // * Check for sub work of this Work Queue
         $sub_work = $this->db->query("SELECT * FROM sub_work WHERE main_id = :id", ['id' => $workId])->findall();

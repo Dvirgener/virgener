@@ -1,5 +1,6 @@
 <?php
 include $this->resolve("partials/_header.php");
+
 ?>
 
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -162,26 +163,31 @@ include $this->resolve("partials/_header.php");
                                 <div class="tab-content" id="pills-tabContent">
 
                                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
-                                    <?php for($ax=0; $ax<=4; $ax++):?>
+                                    <?php foreach($recentlyAdded as $work):?>
                                         <div class="row mb-2 border">
-                                            <div class="col-9 border">
-                                                <div class="row">
-                                                    <span class="fw-bold">This is a Sample Work Queue</span>
-                                                    <span class="">Assigned to:</span>
-                                                    <div class="col-3">pic</div>
-                                                    <div class="col-3">pic</div>
-                                                    <div class="col-3">pic</div>
-                                                    <div class="col-3">pic</div>
+                                            <div class="col-9 my-1">
+                                                <div class="row d-flex align-items-center justify-content-start">
+                                                    <span class="fw-bold ">Subject: <?=$work['subject']?></span>
                                                 </div>
                                                 <div class="row">
-                                                    <span class="fst-italic fw-bold">- Sgt Naya</span>
+                                                    <span>Added to:</span>
+                                                </div>
+                                                <div class="row mb-1">
+                                                <?php foreach($work['assignment'] as $assigned):?>
+                                                <div class="col-1 me-2">
+                                                <img class="border-dark border-2 rounded-1 border" src="/profile/<?php echo $assigned[1]['picture']?>" alt="" style=" border-radius:10px; height:50px; width:50px">
+                                                </div>
+                                                <?php endforeach?>
+                                                </div>
+                                                <div class="row">
+                                                    <span>Added by: <span class="fst-italic fw-bold"><?=$work['added_by']?></span></span>
                                                 </div>
                                             </div>
-                                            <div class="col-3 d-flex align-items-center justify-content-center border">
+                                            <div class="col-3 my-1 d-flex align-items-center justify-content-center">
                                                 <a href="#" class="btn btn-secondary">View</a>
                                             </div>
                                         </div>
-                                        <?php endfor?>
+                                        <?php endforeach?>
                                     </div>
 
                                     <div class="tab-pane fade" id="pills-complied" role="tabpanel" aria-labelledby="pills-complied-tab" tabindex="0">

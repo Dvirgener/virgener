@@ -28,6 +28,15 @@ class HomeController
         $active = $this->HomeService->activeWorkNumbers();
         $updatesToday = $this->HomeService->updatesToday();
         $users = $this->HomeService->allUsers();
-        echo $this->view->render("index.php", ['allWorkQueue' => $allWorkQueue,'users' => $users,'timeliness' => $allTimeliness,'active' =>$active,'updatesToday' => $updatesToday]);
+        $recentlyAdded = $this->HomeService->RecentlyAdded();
+        echo $this->view->render("index.php", 
+        [
+            'allWorkQueue' => $allWorkQueue,
+            'users' => $users,
+            'timeliness' => $allTimeliness,
+            'active' =>$active,
+            'updatesToday' => $updatesToday,
+            'recentlyAdded' => $recentlyAdded
+        ]);
     }
 }

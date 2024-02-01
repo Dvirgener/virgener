@@ -37,14 +37,13 @@ class HomeService
         return ['active' => $activeWork, 'update' => $forFollowUp, 'deadline' => $deadline];
     }
 
-    // * This function is for all the work queue created in DB (PIE CHART)
-    public function allWorkQueue()
+    // * Private functions to be used inside this class. to reduce redundant codes
+    private function nameOfId(int $id)
     {
-        $allUncomplied = $this->db->query("SELECT COUNT(*) as count FROM work WHERE status = 'UNCOMPLIED'")->find();
-        $allPending = $this->db->query("SELECT COUNT(*) as count FROM work WHERE status = 'PENDING'")->find();
-        $allComplied = $this->db->query("SELECT COUNT(*) as count FROM work WHERE status = 'COMPLIED'")->find();
-        $all = $allUncomplied['count'] + $allPending['count'] + $allComplied['count'];
-        return ['uncomplied' => $allUncomplied['count'], 'pending'=>$allPending['count'],'complied' => $allComplied['count'],'all' => $all];
+        $user = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $id])->find();
+        $name = $user['actual_rank'] . " " . $user['last_name'] . " PAF";
+        $picture = $user['picture'];
+        return ['name' => $name, 'picture' => $picture];
     }
 
     // * This function is for rendering the Work Details of individual personnel registered
@@ -63,6 +62,16 @@ class HomeService
         $keys = array_column($users, 'numberRank');
         array_multisort($keys, SORT_DESC, $users);
         return $users;
+    }
+
+    // * This function is for all the work queue created in DB (PIE CHART)
+    public function allWorkQueue()
+    {
+        $allUncomplied = $this->db->query("SELECT COUNT(*) as count FROM work WHERE status = 'UNCOMPLIED'")->find();
+        $allPending = $this->db->query("SELECT COUNT(*) as count FROM work WHERE status = 'PENDING'")->find();
+        $allComplied = $this->db->query("SELECT COUNT(*) as count FROM work WHERE status = 'COMPLIED'")->find();
+        $all = $allUncomplied['count'] + $allPending['count'] + $allComplied['count'];
+        return ['uncomplied' => $allUncomplied['count'], 'pending'=>$allPending['count'],'complied' => $allComplied['count'],'all' => $all];
     }
 
     // * This function is for all the work queue complied in DB (PIE CHART)
@@ -85,29 +94,22 @@ class HomeService
         $activeCount = 0;
         foreach($workQueues as $work){
             $activeCount +=1;
-
             if ($work['date_target'] != "0000-00-00") {
                 if (checkDeadline($work['date_target'])) {
                     $activeNearDeadline+=1;
                     continue;
                 }
             }
-
             if (checkUpdate($work['updated_at'])) {
                 $activeForUpdate+=1;
                 continue;
             }
-
             $activeUpdated +=1;
-
-            
         }
-
         return ['active' => $activeCount, 'forUpdate' => $activeForUpdate,'nearDeadline' => $activeNearDeadline,'updated' => $activeUpdated];
-
     }
 
-
+    // * Function for returning queues that were updated today
     public function updatesToday ():array{
         $today = date('Y-m-d');
 
@@ -130,6 +132,7 @@ class HomeService
 
             $update['remarks'] = $updates['remarks'];
 
+            // * Updated by name
             $updatedBy = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $updates['updated_by']])->find();
             $update['name'] = $updatedBy['actual_rank']. " ". $updatedBy['last_name']. " PAF";
 
@@ -139,8 +142,31 @@ class HomeService
             }
             $updatesArray[] = $update;
         }
-
         return $updatesArray;
+    }
+
+
+    public function RecentlyAdded():array{
+        $allActiveWorkQueue = $this->db->query("SELECT * FROM work WHERE status = 'UNCOMPLIED' ORDER BY created_at DESC LIMIT 12")->findAll();
+
+        $returnArray = [];
+
+        foreach($allActiveWorkQueue as $workQueue){
+            $workQueue['assignment'] = [];
+            $name = $this->nameOfId($workQueue['added_by']);
+            $workQueue['added_by'] = $name['name'];
+            $assignedUsers = unserialize($workQueue['assigned_to']); 
+
+            foreach($assignedUsers as $users){
+                $userNameAndPic = $this->nameOfId((int) $users);
+                $user = [$users, $userNameAndPic];
+                $workQueue['assignment'][] = $user;
+            }
+
+            $returnArray[] = $workQueue;
+        }
+
+        return $returnArray;
     }
 
 
