@@ -29,14 +29,16 @@ class HomeController
         $updatesToday = $this->HomeService->updatesToday();
         $users = $this->HomeService->allUsers();
         $recentlyAdded = $this->HomeService->RecentlyAdded();
-        echo $this->view->render("index.php", 
-        [
-            'allWorkQueue' => $allWorkQueue,
-            'users' => $users,
-            'timeliness' => $allTimeliness,
-            'active' =>$active,
-            'updatesToday' => $updatesToday,
-            'recentlyAdded' => $recentlyAdded
-        ]);
+        echo $this->view->render(
+            "index.php",
+            [
+                'allWorkQueue' => $allWorkQueue,
+                'users' => $users,
+                'timeliness' => $allTimeliness,
+                'active' => $active,
+                'updatesToday' => $updatesToday,
+                'recentlyAdded' => $recentlyAdded
+            ]
+        );
     }
 }

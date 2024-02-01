@@ -89,9 +89,16 @@ include $this->resolve("partials/_header.php");
                                             <div class="col-12 col-md-6 mb-2 d-grid">
                                                 <button class="btn btn-primary editWorkBut" type="button" value="<?= $workDetails['id'] ?>">EDIT</button>
                                             </div>
-                                            <div class="col-12 col-md-6 d-grid">
+                                            <div class="col-12 col-md-6 mb-2 d-grid">
                                                 <button class="btn btn-danger deleteWorkBut" type="button" value="<?= $workDetails['id'] ?>">DELETE</button>
                                             </div>
+                                            <?php if ($workDetails['status'] == "PENDING") : ?>
+                                                <div class="col-12 col-md-12 d-grid">
+                                                    <button class="btn btn-success approveBut" type="button" value="<?= $workDetails['id'] ?>">APPROVE / RETURN</button>
+                                                </div>
+                                            <?php endif ?>
+
+
                                         <?php else : ?>
                                             <div class="row mb-2 justify-content-center">
                                                 <div class="col-12 col-md-6 d-grid text-center">
@@ -168,11 +175,18 @@ include $this->resolve("partials/_header.php");
                                             <span class="fw-bold"><?= $update['created_at'] ?></span>
                                         </div>
                                         <div class="col-8">
-                                            <?php if ($update['sub_id'] != 0) : ?>
-                                                <div class="row border-bottom">
-                                                    <span><span class="fw-bold">Sub Work: </span><?= $update['sub_id'] ?><span style="font-size: small; color:green;" class="fst-italic"> <?= $update['complied'] ?></span></span>
-                                                </div>
+                                            <?php if ($update['final'] == "YES") : ?>
+                                                <?php if ($update['sub_id'] != 0) : ?>
+                                                    <div class="row border-bottom">
+                                                        <span><span class="fw-bold">Sub Work: </span><?= $update['sub_id'] ?><span style="font-size: small; color:green;" class="fst-italic"> <?= $update['complied'] ?></span></span>
+                                                    </div>
+                                                <?php else : ?>
+                                                    <div class="row border-bottom">
+                                                        <span class="fst-italic" style="font-size: small; color:green;">Main work <?= $update['complied'] ?></span>
+                                                    </div>
+                                                <?php endif ?>
                                             <?php endif ?>
+
                                             <div class="row mb-1">
                                                 <span><?= $update['remarks'] ?></span>
                                                 <span class="fst-italic">- <?= $update['updated_by'] ?></span>

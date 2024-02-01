@@ -13,23 +13,24 @@ class HomeService
     }
 
     // * Private function to fetch number of Work Queue per Personnel
-    private function workNumbers($id):array {
+    private function workNumbers($id): array
+    {
         $allActiveWork = $this->db->query("SELECT * FROM work WHERE status = 'UNCOMPLIED'")->findAll();
         $activeWork = 0;
         $forFollowUp = 0;
         $deadline = 0;
-        foreach($allActiveWork as $work){
+        foreach ($allActiveWork as $work) {
             $work['assigned_to'] = unserialize($work['assigned_to']);
-            if (in_array($id,$work['assigned_to'])){
-                $activeWork +=1;
+            if (in_array($id, $work['assigned_to'])) {
+                $activeWork += 1;
                 $res = checkUpdate($work['updated_at']);
                 if ($res) {
-                    $forFollowUp +=1;
+                    $forFollowUp += 1;
                 }
                 if ($work['date_target'] != "0000-00-00") {
                     $res = checkDeadline($work['date_target']);
                     if ($res) {
-                        $deadline+=1;
+                        $deadline += 1;
                     }
                 }
             }
@@ -47,11 +48,12 @@ class HomeService
     }
 
     // * This function is for rendering the Work Details of individual personnel registered
-    public function allUsers(){
+    public function allUsers()
+    {
         $DbUsers = $this->db->query("SELECT * FROM users WHERE classification = 'EP'")->findAll();
         $users = [];
-        foreach ($DbUsers as $user){
-            $individual['name'] = $user['actual_rank']." ".$user['first_name']." ".$user['last_name']." ".$user['serial_number']." PAF";
+        foreach ($DbUsers as $user) {
+            $individual['name'] = $user['actual_rank'] . " " . $user['first_name'] . " " . $user['last_name'] . " " . $user['serial_number'] . " PAF";
             $individual['status'] = $user['status'];
             $individual['picture'] = $user['picture'];
             $individual['workNumbers'] = $this->workNumbers($user['id']);
@@ -71,7 +73,7 @@ class HomeService
         $allPending = $this->db->query("SELECT COUNT(*) as count FROM work WHERE status = 'PENDING'")->find();
         $allComplied = $this->db->query("SELECT COUNT(*) as count FROM work WHERE status = 'COMPLIED'")->find();
         $all = $allUncomplied['count'] + $allPending['count'] + $allComplied['count'];
-        return ['uncomplied' => $allUncomplied['count'], 'pending'=>$allPending['count'],'complied' => $allComplied['count'],'all' => $all];
+        return ['uncomplied' => $allUncomplied['count'], 'pending' => $allPending['count'], 'complied' => $allComplied['count'], 'all' => $all];
     }
 
     // * This function is for all the work queue complied in DB (PIE CHART)
@@ -81,7 +83,7 @@ class HomeService
         $allOnTime = $this->db->query("SELECT COUNT(*) as count FROM work WHERE status = 'COMPLIED' and timeliness = 'On Time'")->find();
         $allLate = $this->db->query("SELECT COUNT(*) as count FROM work WHERE status = 'COMPLIED' and timeliness = 'Late'")->find();
         $allNoTD = $this->db->query("SELECT COUNT(*) as count FROM work WHERE status = 'COMPLIED' and timeliness = 'No TD'")->find();
-        return ['early' => $allEarly['count'], 'onTime'=>$allOnTime['count'],'late' => $allLate['count'],'noTD' => $allNoTD['count']];
+        return ['early' => $allEarly['count'], 'onTime' => $allOnTime['count'], 'late' => $allLate['count'], 'noTD' => $allNoTD['count']];
     }
 
     // * This function is for all the work queue complied in DB (PIE CHART)
@@ -92,53 +94,54 @@ class HomeService
         $activeNearDeadline = 0;
         $activeUpdated = 0;
         $activeCount = 0;
-        foreach($workQueues as $work){
-            $activeCount +=1;
+        foreach ($workQueues as $work) {
+            $activeCount += 1;
             if ($work['date_target'] != "0000-00-00") {
                 if (checkDeadline($work['date_target'])) {
-                    $activeNearDeadline+=1;
+                    $activeNearDeadline += 1;
                     continue;
                 }
             }
             if (checkUpdate($work['updated_at'])) {
-                $activeForUpdate+=1;
+                $activeForUpdate += 1;
                 continue;
             }
-            $activeUpdated +=1;
+            $activeUpdated += 1;
         }
-        return ['active' => $activeCount, 'forUpdate' => $activeForUpdate,'nearDeadline' => $activeNearDeadline,'updated' => $activeUpdated];
+        return ['active' => $activeCount, 'forUpdate' => $activeForUpdate, 'nearDeadline' => $activeNearDeadline, 'updated' => $activeUpdated];
     }
 
     // * Function for returning queues that were updated today
-    public function updatesToday ():array{
+    public function updatesToday(): array
+    {
         $today = date('Y-m-d');
 
-        $updatesToday = $this->db->query("SELECT * FROM updates WHERE created_at = :created_at ORDER BY id DESC",['created_at'=> $today])->findAll();
+        $updatesToday = $this->db->query("SELECT * FROM updates WHERE created_at = :created_at ORDER BY id DESC", ['created_at' => $today])->findAll();
 
         $updatesArray = [];
-        foreach ($updatesToday as $updates){
+        foreach ($updatesToday as $updates) {
 
             $update['id'] = $updates['id'];
             // * Main Work Subject
-            $mainWork = $this->db->query("SELECT subject FROM work WHERE id =:id",['id' => $updates['main_id']])->find();
+            $mainWork = $this->db->query("SELECT subject FROM work WHERE id =:id", ['id' => $updates['main_id']])->find();
             $update['mainWork'] = $mainWork['subject'];
 
             // * Check For Sub Work and Assign Sub Subject
             $update['subWork'] = "";
-            if ($updates['sub_id'] != 0){
-                $subWork = $this->db->query("SELECT sub_subject FROM sub_work WHERE id =:id",['id' => $updates['sub_id']])->find();
-                $update['subWork'] = "(".$subWork['sub_subject'].")";
+            if ($updates['sub_id'] != 0) {
+                $subWork = $this->db->query("SELECT sub_subject FROM sub_work WHERE id =:id", ['id' => $updates['sub_id']])->find();
+                $update['subWork'] = "(" . $subWork['sub_subject'] . ")";
             }
 
             $update['remarks'] = $updates['remarks'];
 
             // * Updated by name
             $updatedBy = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $updates['updated_by']])->find();
-            $update['name'] = $updatedBy['actual_rank']. " ". $updatedBy['last_name']. " PAF";
+            $update['name'] = $updatedBy['actual_rank'] . " " . $updatedBy['last_name'] . " PAF";
 
             $update['compliance'] = "";
-            if ($updates['final'] == 'YES'){
-            $update['compliance'] = "Compliance remarks!";
+            if ($updates['final'] == 'YES') {
+                $update['compliance'] = "Compliance remarks!";
             }
             $updatesArray[] = $update;
         }
@@ -146,18 +149,19 @@ class HomeService
     }
 
 
-    public function RecentlyAdded():array{
+    public function RecentlyAdded(): array
+    {
         $allActiveWorkQueue = $this->db->query("SELECT * FROM work WHERE status = 'UNCOMPLIED' ORDER BY created_at DESC LIMIT 12")->findAll();
 
         $returnArray = [];
 
-        foreach($allActiveWorkQueue as $workQueue){
+        foreach ($allActiveWorkQueue as $workQueue) {
             $workQueue['assignment'] = [];
             $name = $this->nameOfId($workQueue['added_by']);
             $workQueue['added_by'] = $name['name'];
-            $assignedUsers = unserialize($workQueue['assigned_to']); 
+            $assignedUsers = unserialize($workQueue['assigned_to']);
 
-            foreach($assignedUsers as $users){
+            foreach ($assignedUsers as $users) {
                 $userNameAndPic = $this->nameOfId((int) $users);
                 $user = [$users, $userNameAndPic];
                 $workQueue['assignment'][] = $user;
@@ -168,8 +172,4 @@ class HomeService
 
         return $returnArray;
     }
-
-
-
-
 }

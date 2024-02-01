@@ -246,11 +246,6 @@ class ProfileService
         return $juniors;
     }
 
-
-
-
-
-
     public function readProfPic(array $params)
     {
         $filePath = paths::STORAGE_UPLOADS_PROFPIC . '/' . $params['profilePic'];
@@ -420,34 +415,25 @@ class ProfileService
     {
 
         $id = (string) $id;
-        $allwork = $this->db->query("SELECT * FROM work WHERE status = 'UNCOMPLIED' AND added_by = :id", ['id' => $id])->findAll();
+        $allwork = $this->db->query("SELECT * FROM work WHERE status != 'COMPLIED' AND added_by = :id", ['id' => $id])->findAll();
         $myWork = [];
         foreach ($allwork as $work) {
             $assigned = unserialize($work['assigned_to']);
             $work['style'] = "background-color:none; color:black";
-            $dateadded = $work['updated_at'];
-            $datetoday = date('Y-m-d');
-            $dateadded = strtotime($dateadded);
-            $datetoday = strtotime($datetoday);
-            $interval = $datetoday - $dateadded;
-            $daysinterval = floor($interval / (60 * 60 * 24));
-            if ($daysinterval >= 1) {
+
+            $res = checkUpdate($work['updated_at']);
+            if ($res) {
                 $work['style'] = "background-color:orange; color:black";
             }
-
             if ($work['date_target'] != "0000-00-00") {
-                $dateadded = $work['date_target'];
-                $datetoday = date('Y-m-d');
-                $dateadded = strtotime($dateadded);
-                $datetoday = strtotime($datetoday);
-                $interval = $dateadded - $datetoday;
-                $daysinterval = floor($interval / (60 * 60 * 24));
-                if ($daysinterval <= 1) {
+                $res = checkDeadline($work['date_target']);
+                if ($res) {
                     $work['style'] = "background-color:red; color:white";
                 }
             }
             $myWork[] = $work;
         }
+        // dd($myWork);
         return $myWork;
     }
 
@@ -462,25 +448,13 @@ class ProfileService
             $assigned = unserialize($work['assigned_to']);
             if (in_array($id, $assigned)) {
                 $currentWork += 1;
-
-                $dateadded = $work['updated_at'];
-                $datetoday = date('Y-m-d');
-                $dateadded = strtotime($dateadded);
-                $datetoday = strtotime($datetoday);
-                $interval = $datetoday - $dateadded;
-                $daysinterval = floor($interval / (60 * 60 * 24));
-                if ($daysinterval >= 1) {
+                $res = checkUpdate($work['updated_at']);
+                if ($res) {
                     $unupdatedWork += 1;
                 }
-
                 if ($work['date_target'] != "0000-00-00") {
-                    $dateadded = $work['date_target'];
-                    $datetoday = date('Y-m-d');
-                    $dateadded = strtotime($dateadded);
-                    $datetoday = strtotime($datetoday);
-                    $interval = $dateadded - $datetoday;
-                    $daysinterval = floor($interval / (60 * 60 * 24));
-                    if ($daysinterval <= 1) {
+                    $res = checkDeadline($work['date_target']);
+                    if ($res) {
                         $endangeredWork += 1;
                     }
                 }
@@ -504,24 +478,14 @@ class ProfileService
             if ($id == $work['added_by']) {
                 $currentWork += 1;
 
-                $dateadded = $work['updated_at'];
-                $datetoday = date('Y-m-d');
-                $dateadded = strtotime($dateadded);
-                $datetoday = strtotime($datetoday);
-                $interval = $datetoday - $dateadded;
-                $daysinterval = floor($interval / (60 * 60 * 24));
-                if ($daysinterval >= 1) {
+
+                $res = checkUpdate($work['updated_at']);
+                if ($res) {
                     $unupdatedWork += 1;
                 }
-
                 if ($work['date_target'] != "0000-00-00") {
-                    $dateadded = $work['date_target'];
-                    $datetoday = date('Y-m-d');
-                    $dateadded = strtotime($dateadded);
-                    $datetoday = strtotime($datetoday);
-                    $interval = $dateadded - $datetoday;
-                    $daysinterval = floor($interval / (60 * 60 * 24));
-                    if ($daysinterval <= 1) {
+                    $res = checkDeadline($work['date_target']);
+                    if ($res) {
                         $endangeredWork += 1;
                     }
                 }
@@ -593,18 +557,12 @@ class ProfileService
             $date = date_create($workUpdate['created_at']);
             $workUpdate['created_at'] = date_format($date, "d F Y");
 
-
             // * add the work update to the array
             $detailedWorkUpdates[] = $workUpdate;
         }
 
-        // * sort all the updates by Date
-        // $keys = array_column($detailedWorkUpdates, 'created_at');
-        // array_multisort($keys, SORT_ASC, $detailedWorkUpdates);
-
         // * assign the detailed work updates to the updates array
         $work['updates'] = $detailedWorkUpdates;
-        // dd($work['updates']);
 
         // * Check for sub work of this Work Queue
         $sub_work = $this->db->query("SELECT * FROM sub_work WHERE main_id = :id", ['id' => $workId])->findall();
@@ -923,7 +881,7 @@ class ProfileService
         $this->db->query(
             "UPDATE work SET status = :status, updated_at = :updated_at, date_complied = :date_complied, complied_by = :complied_by, timeliness = :timeliness WHERE id =:id",
             [
-                'status' => "COMPLIED",
+                'status' => "PENDING",
                 'updated_at' => $dateToday,
                 'date_complied' => $dateToday,
                 'complied_by' => $_SESSION['user']['id'],
