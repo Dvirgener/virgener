@@ -297,7 +297,7 @@ include $this->resolve("partials/_header.php");
                             <div class="row border border-3 border align-content-start mb-2">
                                 <div class="col-9">
                                     <div class="row">
-                                        <span class="fw-bold"><?=$update['mainWork']?>  <span><?=$update['subWork']?></span><span class=" fst-italic" style="color:green"><?=$update['compliance']?></span> </span>
+                                        <span class="fw-bold"><?=$update['mainWork']?>  <span><?=$update['subWork']?></span> <span class=" fst-italic" style="color:green"><?=$update['compliance']?></span> </span>
                                     </div>
                                     <div class="row">
                                         <span><?=$update['remarks']?></span>
