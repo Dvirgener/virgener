@@ -50,14 +50,15 @@ include $this->resolve("partials/_header.php");
                     </div>
                     <div class="row mx-2 py-4 pe-2 overflow-y-scroll overflow-x-hidden rounded align-content-start" style="height:560px">
                         <?php foreach ($addedWork as $work) : ?>
-                            <button type="button" class="btn btn-light buttonzoom viewWorkBut border border-2" style="margin-bottom: 2px; height:fit-content; width: 100%; <?= $work['style'] ?>" value="<?= $work['id'] ?>">
+                            <button type="button" class="btn btn-light buttonzoom viewAddedWorkBut border border-2" style="margin-bottom: 2px; height:fit-content; width: 100%; <?= $work['style'] ?>" value="<?= $work['id'] ?>">
                                 <div class="row">
                                     <h5 class="text-start fw-bold fs-6"><?= $work['subject'] ?>
-                                        <?php if ($work['status'] == "PENDING") : ?>
-                                            <span class="fst-italic text-normal" style="color:green;">(Pending)</span>
-                                        <?php endif ?>
-
                                     </h5>
+                                </div>
+                                <div class="row">
+                                    <?php if ($work['status'] == "PENDING") : ?>
+                                        <span class="fst-italic text-start" style="color:green;">(Complied! Pending Approval)</span>
+                                    <?php endif ?>
                                 </div>
                                 <div class="row text-start">
 

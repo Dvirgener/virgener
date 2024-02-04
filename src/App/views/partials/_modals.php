@@ -486,3 +486,20 @@
     </div>
 </div>
 <!-- COMPLY WORK MODAL -->
+
+<!-- CONFIRM COMPLIANCE MODAL -->
+<div class="modal fade" id="confirmWorkModal" tabindex="-1" aria-labelledby="confirmWorkModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="confirmWorkModalLabel">Confirm Compliance</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="row my-3" id="approveOrNotDiv">
+
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- CONFIRM COMPLIANCE MODAL -->

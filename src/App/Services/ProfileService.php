@@ -422,15 +422,18 @@ class ProfileService
             $work['style'] = "background-color:none; color:black";
 
             $res = checkUpdate($work['updated_at']);
-            if ($res) {
-                $work['style'] = "background-color:orange; color:black";
-            }
-            if ($work['date_target'] != "0000-00-00") {
-                $res = checkDeadline($work['date_target']);
+            if ($work['status'] != "PENDING") {
                 if ($res) {
-                    $work['style'] = "background-color:red; color:white";
+                    $work['style'] = "background-color:orange; color:black";
+                }
+                if ($work['date_target'] != "0000-00-00") {
+                    $res = checkDeadline($work['date_target']);
+                    if ($res) {
+                        $work['style'] = "background-color:red; color:white";
+                    }
                 }
             }
+
             $myWork[] = $work;
         }
         // dd($myWork);
@@ -889,5 +892,19 @@ class ProfileService
                 'id' => $formData['IdToComply']
             ]
         );
+    }
+
+    public function confirmCompliance($id)
+    {
+        $this->db->query("UPDATE work SET status = :status WHERE id = :id", ['status' => "COMPLIED", 'id' => $id]);
+    }
+
+    public function returnCompliance($id)
+    {
+        $lastUpdate = $this->db->query("SELECT * FROM updates WHERE main_id = :main_id ORDER BY id DESC LIMIT 1", ['main_id' => $id])->find();
+
+        $this->db->query("DELETE FROM updates WHERE id = :id", ['id' => $lastUpdate['id']]);
+
+        $this->db->query("UPDATE work SET status = :status WHERE id = :id", ['status' => "UNCOMPLIED", 'id' => $id]);
     }
 }

@@ -148,10 +148,120 @@ class HomeService
         return $updatesArray;
     }
 
-
+    // * Function for returning queues that are recently added (12 queues)
     public function RecentlyAdded(): array
     {
         $allActiveWorkQueue = $this->db->query("SELECT * FROM work WHERE status = 'UNCOMPLIED' ORDER BY created_at DESC LIMIT 12")->findAll();
+
+        $returnArray = [];
+
+        foreach ($allActiveWorkQueue as $workQueue) {
+            $workQueue['assignment'] = [];
+            $name = $this->nameOfId($workQueue['added_by']);
+            $workQueue['added_by'] = $name['name'];
+            $assignedUsers = unserialize($workQueue['assigned_to']);
+
+            foreach ($assignedUsers as $users) {
+                $userNameAndPic = $this->nameOfId((int) $users);
+                $user = [$users, $userNameAndPic];
+                $workQueue['assignment'][] = $user;
+            }
+
+            $returnArray[] = $workQueue;
+        }
+
+        return $returnArray;
+    }
+
+    // * Function for returning queues that are recently Complied (10 queues)
+    public function recentlyComplied(): array
+    {
+        $allActiveWorkQueue = $this->db->query("SELECT * FROM work WHERE status = 'COMPLIED' ORDER BY created_at DESC LIMIT 10")->findAll();
+
+        $returnArray = [];
+
+        foreach ($allActiveWorkQueue as $workQueue) {
+            $workQueue['assignment'] = [];
+            $name = $this->nameOfId($workQueue['added_by']);
+            $workQueue['added_by'] = $name['name'];
+            $assignedUsers = unserialize($workQueue['assigned_to']);
+
+            foreach ($assignedUsers as $users) {
+                $userNameAndPic = $this->nameOfId((int) $users);
+                $user = [$users, $userNameAndPic];
+                $workQueue['assignment'][] = $user;
+            }
+
+            $returnArray[] = $workQueue;
+        }
+
+        return $returnArray;
+    }
+
+    // * Function for returning queues that are for follow up and needs to be updated
+    public function followUp(): array
+    {
+        $allActiveWorkQueue = $this->db->query("SELECT * FROM work WHERE status = 'UNCOMPLIED'")->findAll();
+
+        $returnArray = [];
+
+        foreach ($allActiveWorkQueue as $workQueue) {
+            $workQueue['assignment'] = [];
+            $name = $this->nameOfId($workQueue['added_by']);
+            $workQueue['added_by'] = $name['name'];
+            $assignedUsers = unserialize($workQueue['assigned_to']);
+
+            foreach ($assignedUsers as $users) {
+                $userNameAndPic = $this->nameOfId((int) $users);
+                $user = [$users, $userNameAndPic];
+                $workQueue['assignment'][] = $user;
+            }
+
+            if (checkUpdate($workQueue['updated_at'])) {
+                if ($workQueue['date_target'] != "0000-00-00") {
+                    if (checkDeadline($workQueue['date_target'])) {
+                        continue;
+                    }
+                }
+                $returnArray[] = $workQueue;
+            }
+        }
+
+        return $returnArray;
+    }
+
+    // * Function for returning queuest that are near the deadline set
+    public function deadline(): array
+    {
+        $allActiveWorkQueue = $this->db->query("SELECT * FROM work WHERE status = 'UNCOMPLIED'")->findAll();
+
+        $returnArray = [];
+
+        foreach ($allActiveWorkQueue as $workQueue) {
+            $workQueue['assignment'] = [];
+            $name = $this->nameOfId($workQueue['added_by']);
+            $workQueue['added_by'] = $name['name'];
+            $assignedUsers = unserialize($workQueue['assigned_to']);
+
+            foreach ($assignedUsers as $users) {
+                $userNameAndPic = $this->nameOfId((int) $users);
+                $user = [$users, $userNameAndPic];
+                $workQueue['assignment'][] = $user;
+            }
+            if ($workQueue['date_target'] != "0000-00-00") {
+                if (checkDeadline($workQueue['date_target'])) {
+                    $returnArray[] = $workQueue;
+                }
+            }
+        }
+
+        return $returnArray;
+    }
+
+    // * Function for returning queues that are complied but is pending approval of the adder
+    public function pending(): array
+    {
+        $allActiveWorkQueue = $this->db->query("SELECT * FROM work WHERE status = 'PENDING'")->findAll();
 
         $returnArray = [];
 

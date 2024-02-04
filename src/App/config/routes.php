@@ -6,7 +6,7 @@ namespace App\config;
 
 use Framework\App;
 
-use App\Controllers\{HomeController, RegisterUserController, LoginController, TransactionController, ReceiptController, ErrorController, playerController, KaraokeController, playlistController, SpendingPlanController, ProfileController};
+use App\Controllers\{HomeController, RegisterUserController, LoginController, TransactionController, ReceiptController, ErrorController, playerController, KaraokeController, playlistController, SpendingPlanController, ProfileController, dppController};
 use App\Middleware\{AuthRequiredMiddleware, GuestOnlyMiddleware};
 
 
@@ -52,6 +52,7 @@ function registerRoutes(App $app)
 
     $app->get('/profile', [ProfileController::class, 'viewProfile'])->add(AuthRequiredMiddleware::class);
     $app->get('/profile/workdetail', [ProfileController::class, 'viewWork'])->add(AuthRequiredMiddleware::class);
+    $app->get('/profile/added/workdetail', [ProfileController::class, 'viewAddedWork'])->add(AuthRequiredMiddleware::class);
     $app->get('/profile/workdetail/viewfile', [ProfileController::class, 'viewFile'])->add(AuthRequiredMiddleware::class);
     $app->get('/settings', [ProfileController::class, 'userSettings'])->add(AuthRequiredMiddleware::class);
     $app->post('/settings', [ProfileController::class, 'updateUser'])->add(AuthRequiredMiddleware::class);
@@ -74,11 +75,17 @@ function registerRoutes(App $app)
     $app->post('/complysubwork', [ProfileController::class, 'complySubWork'])->add(AuthRequiredMiddleware::class);
     $app->post('/complywork', [ProfileController::class, 'complyWork'])->add(AuthRequiredMiddleware::class);
 
+    $app->get('/confirmwork', [ProfileController::class, 'confirmWork'])->add(AuthRequiredMiddleware::class);
+    $app->get('/confirmcompliance', [ProfileController::class, 'confirmCompliance'])->add(AuthRequiredMiddleware::class);
+    $app->get('/returncompliance', [ProfileController::class, 'returnCompliance'])->add(AuthRequiredMiddleware::class);
+
 
     $app->get('/history', [ProfileController::class, 'workHistory'])->add(AuthRequiredMiddleware::class);
     $app->get('/history/workdetail', [ProfileController::class, 'viewWorkHistory'])->add(AuthRequiredMiddleware::class);
 
     $app->get('/office/history', [ProfileController::class, 'officeHistory'])->add(AuthRequiredMiddleware::class);
+
+    $app->get('/section/dpp', [dppController::class, 'dppProfile'])->add(AuthRequiredMiddleware::class);
 
 
 

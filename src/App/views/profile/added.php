@@ -74,23 +74,24 @@ include $this->resolve("partials/_header.php");
                                 </div>
                                 <div class="row-fluid mt-2">
                                     <div class="row mb-3 justify-content-between text-center">
-
-                                        <div class="row mb-2 justify-content-center">
-                                            <div class="col-12 col-md-6 d-grid text-center">
-                                                <?php if ($workDetails['subWorkComplied']) : ?>
-                                                    <button class="btn btn-success complyWorkBut" type="button" value="<?= $workDetails['id'] ?>">COMPLY</button>
-                                                <?php else : ?>
-                                                    <button disabled class="btn btn-success complyWorkBut" type="button" value="<?= $workDetails['id'] ?>">COMPLY</button>
+                                        <?php if ($workDetails['added_by'] == $_SESSION['user']['id']) : ?>
+                                            <div class="row justify-content-center">
+                                                <div class="col-12 col-md-6 mb-2 d-grid">
+                                                    <button class="btn btn-primary editWorkBut" type="button" value="<?= $workDetails['id'] ?>">EDIT</button>
+                                                </div>
+                                                <div class="col-12 col-md-6 mb-2 d-grid">
+                                                    <button class="btn btn-danger deleteWorkBut" type="button" value="<?= $workDetails['id'] ?>">DELETE</button>
+                                                </div>
+                                            </div>
+                                            <div class="row justify-content-center">
+                                                <?php if ($workDetails['status'] == "PENDING") : ?>
+                                                    <div class="col-12 col-md-12 d-grid">
+                                                        <button class="btn btn-success approveBut" type="button" value="<?= $workDetails['id'] ?>">APPROVE / RETURN</button>
+                                                    </div>
                                                 <?php endif ?>
                                             </div>
 
-                                        </div>
-                                        <div class="row justify-content-center">
-                                            <div class="col-12 col-md-6 d-grid">
-                                                <button class="btn btn-secondary updateWorkBut" type="button" value="<?= $workDetails['id'] ?>">UPDATE</button>
-                                            </div>
-                                        </div>
-
+                                        <?php endif ?>
                                     </div>
                                 </div>
                             </div>
@@ -234,14 +235,14 @@ include $this->resolve("partials/_header.php");
                                                     <?php endforeach ?>
                                                 </div>
                                                 <div class="row d-flex justify-content-start">
-
-                                                    <div class="col mb-2 d-grid">
-                                                        <button class="btn btn-success complySubWorkBut" type="button" value="<?= $subwork['id'] ?>" <?= $subwork['authBut'] ?> <?= $subwork['comp']['compBut'] ?>>Comply</button>
-                                                    </div>
-                                                    <div class="col mb-2 d-grid">
-                                                        <button class="btn btn-secondary updateSubWorkBut" type="button" value="<?= $subwork['id'] ?>" <?= $subwork['authBut'] ?> <?= $subwork['comp']['compBut'] ?>>Update</button>
-                                                    </div>
-
+                                                    <?php if ($workDetails['added_by'] == $_SESSION['user']['id']) : ?>
+                                                        <div class="col mb-2 d-grid">
+                                                            <button class="btn btn-primary editSubWork" type="button" value="<?= $subwork['id'] ?>">Edit</button>
+                                                        </div>
+                                                        <div class="col mb-2 d-grid">
+                                                            <button class="btn btn-danger deleteSubWorkBut" type="button" value="<?= $subwork['id'] ?>">Delete</button>
+                                                        </div>
+                                                    <?php endif ?>
                                                 </div>
                                             </div>
                                         <?php endforeach ?>

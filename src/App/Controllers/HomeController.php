@@ -29,6 +29,11 @@ class HomeController
         $updatesToday = $this->HomeService->updatesToday();
         $users = $this->HomeService->allUsers();
         $recentlyAdded = $this->HomeService->RecentlyAdded();
+        $recentlyComplied = $this->HomeService->recentlyComplied();
+        $followUp = $this->HomeService->followUp();
+        $deadline = $this->HomeService->deadline();
+        $pending = $this->HomeService->pending();
+
         echo $this->view->render(
             "index.php",
             [
@@ -37,7 +42,11 @@ class HomeController
                 'timeliness' => $allTimeliness,
                 'active' => $active,
                 'updatesToday' => $updatesToday,
-                'recentlyAdded' => $recentlyAdded
+                'recentlyAdded' => $recentlyAdded,
+                'recentlyComplied' => $recentlyComplied,
+                'followUp' => $followUp,
+                'deadline' => $deadline,
+                'pending' => $pending
             ]
         );
     }

@@ -81,6 +81,40 @@ class ProfileController
         );
     }
 
+    public function viewAddedWork()
+    {
+        // * Profile Panel
+        $user = $this->profileService->getUserDetails($_SESSION['user']['id']);
+        $fullName = $this->profileService->userFullNameSN;
+        $workCount = $this->profileService->checkWorkNumbers($_SESSION['user']['id']);
+        $addedWorkCount = $this->profileService->checkAddedWorkNumbers($_SESSION['user']['id']);
+
+        // * Add Work Modal
+        $juniors = $this->profileService->fetchAllJuniors($_SESSION['user']['serial_number'], $_SESSION['user']['number_rank']);
+
+        // * View One Work
+        $workArray = $this->profileService->workDetails($_GET['id']);
+
+        if (empty($workArray['sub_work'])) {
+            $workArray['sub_work'] = [];
+        }
+
+        echo $this->view->render(
+            "/profile/added.php",
+            [
+                'user' => $user,
+                'fullName' => $fullName,
+                'workCount' => $workCount,
+                'addedWorkCount' => $addedWorkCount,
+                'workDetails' => $workArray['work'],
+                'subWorkDetails' => $workArray['sub_work'],
+                'juniors' => $juniors
+
+
+            ]
+        );
+    }
+
     public function renderProfPic(array $params)
     {
         $this->profileService->readProfPic($params);
@@ -277,5 +311,22 @@ class ProfileController
             "/profile/officeWorkHistory.php",
             []
         );
+    }
+
+    public function confirmWork()
+    {
+        echo $this->view->render("/profile/confirmWork.php", ['id' => $_GET['id']]);
+    }
+
+    public function confirmCompliance()
+    {
+        $this->profileService->confirmCompliance($_GET['id']);
+        redirectTo("/profile");
+    }
+
+    public function returnCompliance()
+    {
+        $this->profileService->returnCompliance($_GET['id']);
+        redirectTo("/profile");
     }
 }

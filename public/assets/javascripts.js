@@ -125,13 +125,21 @@ $(document).on('click', '.delete_saa_but', function () {
 
 
 
-// function Delete Saa Details
+// function for viewing work queues from user profile
 $(document).on('click', '.viewWorkBut', function () {
-
     var id = $(this).val();
     window.location.href = "/profile/workdetail?id=" + id;
 });
-// function Delete Saa Details
+// function for viewing work queues from user profile
+
+
+// function for viewing Added Work Queue
+$(document).on('click', '.viewAddedWorkBut', function () {
+    var id = $(this).val();
+    window.location.href = "/profile/added/workdetail?id=" + id;
+});
+// function for viewing Added Work Queue
+
 
 
 // function Delete Saa Details
@@ -281,3 +289,51 @@ $(document).on('click', '.complyWorkBut', function () {
 });
 
 
+// * Delete Work Modal
+$(document).on('click', '.approveBut', function () {
+    var id = $(this).val();
+        //ajax code    
+    $.ajax({
+        type: "GET",
+        url: "/confirmwork?id=" + id,
+        // response code
+        success: function (response) {
+            $("#approveOrNotDiv").html(response);
+            $('#confirmWorkModal').modal('show');
+
+        }
+        // response code
+    })
+    // ajax code
+});
+
+// * Confirm Work Compliancel
+$(document).on('click', '#confCompliance', function () {
+
+    var id = $(this).val();
+        //ajax code    
+    $.ajax({
+        type: "GET",
+        url: "/confirmcompliance?id=" + id,
+
+        success: function (response) {
+        window.location.href = "/profile";  
+        }
+    })
+    // ajax code
+});
+
+$(document).on('click', '#returnCompliance', function () {
+
+    var id = $(this).val();
+        //ajax code    
+    $.ajax({
+        type: "GET",
+        url: "/returncompliance?id=" + id,
+
+        success: function (response) {
+        window.location.href = "/profile";  
+        }
+    })
+    // ajax code
+});
