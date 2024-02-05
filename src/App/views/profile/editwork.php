@@ -52,7 +52,8 @@
                 <option value="Errand">Errand</option>
                 <option value="Errand">Financial</option>
                 <option value="Errand">Request</option>
-                <option value="Follow up">Follow up </option>
+                <option value="Follow up">Follow up</option>
+                <option value="Procurement">Procurement</option>
             </select>
         </div>
     </div>

@@ -12,10 +12,11 @@ class dppService
     {
     }
 
-    public function addProcurement()
+    public function addProcurement($formData)
     {
-        $procActivity = "Procurement of Echos";
-        $procAmount = 23;
+        $procActivity = $formData['activity'];
+        $procAmount = $formData['amount'];
+        $quarter = $formData['quarter'];
 
         $allDL = $this->db->query("SELECT * FROM users WHERE classification = 'EP'")->findAll();
         foreach ($allDL as $user) {
@@ -26,7 +27,7 @@ class dppService
         }
         $serializedUsers = serialize($users);
 
-        $instructions = "Process the Procurement of this activity amounting to {$procAmount} for the 1st Quarter of CY-2024";
+        $instructions = "Process the Procurement of this activity amounting to {$procAmount} for the {$quarter} of CY-2024";
 
         $this->db->query(
             "INSERT INTO work (subject,instructions,assigned_to,type,added_by,added_from,status)

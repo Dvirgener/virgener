@@ -19,11 +19,16 @@ class dppController
     public function dppProfile()
     {
 
-        $this->dppService->addProcurement();
+
 
         echo $this->view->render(
             "/dpp/dpp.php",
             []
         );
+    }
+
+    public function addProcurement(){
+        $this->dppService->addProcurement($_POST);
+        redirectTo($_SERVER['HTTP_REFERER']);
     }
 }

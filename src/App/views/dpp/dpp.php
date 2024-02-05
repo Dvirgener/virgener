@@ -16,22 +16,45 @@ include $this->resolve("partials/_header.php");
                     <span class="h3">ADD PROCUREMENT</span>
                 </div>
                 <div class="row">
-                    <form action="">
+                    <form action="/section/dpp/addproc" method="POST">
+                    <?php
+                    include $this->resolve("partials/_token.php");
+                    ?>
                         <div class="row">
                             <label>Procurement Activity:</label>
                         </div>
-                        <div class="row">
+                        <div class="row mb-2">
                             <div class="col-6">
-                                <input type="text" class="form-control">
+                                <input type="text" class="form-control" name="activity">
                             </div>
                         </div>
                         <div class="row">
                             <label>Amount:</label>
                         </div>
-                        <div class="row">
+                        <div class="row mb-2">
                             <div class="col-6">
-                                <input type="text" class="form-control">
+                                <input type="float" class="form-control" name="amount">
                             </div>
+                        </div>
+                        <div class="row">
+                            <label>Quarter:</label>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-6">
+                                <select name="quarter" id="" class="form-select">
+                                    <option value="1st Quarter">1st Quarter</option>
+                                    <option value="2nd Quarter">2nd Quarter</option>
+                                    <option value="3rd Quarter">3rd Quarter</option>
+                                    <option value="4th Quarter">4th Quarter</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-4">
+                            <button class="btn btn-primary" type="submit">ADD PROCUREMENT</button>
+                            </div>
+                            
                         </div>
                     </form>
                 </div>

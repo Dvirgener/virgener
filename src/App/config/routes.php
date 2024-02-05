@@ -86,6 +86,7 @@ function registerRoutes(App $app)
     $app->get('/office/history', [ProfileController::class, 'officeHistory'])->add(AuthRequiredMiddleware::class);
 
     $app->get('/section/dpp', [dppController::class, 'dppProfile'])->add(AuthRequiredMiddleware::class);
+    $app->post('/section/dpp/addproc', [dppController::class, 'addProcurement'])->add(AuthRequiredMiddleware::class);
 
 
 
