@@ -30,36 +30,18 @@
                         </div>
                         <div class="row overflow-y-scroll mb-2">
                             <?php foreach ($juniors as $junior) : ?>
-                                <!-- //* Display for CP -->
-                                <div class="col-6 d-inline d-md-none">
-                                    <div class="row">
-                                        <div class="col-3 d-flex align-items-center">
-                                            <input class="form-check-input form-check-required ms-3" id="addto[]" name="addto[]" type="checkbox" value="<?= $junior['id'] ?>" required>
-                                        </div>
-                                        <div class="col-7">
-                                            <div class="row">
-                                                <div class="">
-                                                    <img src="/profile/<?php echo $junior['picture'] ?>" style="height:100%; width:100%" alt="">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <label for="" class="text-center" style="font-size: small;"><?php echo $junior['actual_rank'] . " " . $junior['last_name'] . " " . " PAF" ?></label>
-                                    </div>
-                                </div>
                                 <!-- //* Display for Browser -->
-                                <div class="col-6 col-md-4 mb-2 d-none d-md-inline">
+                                <div class="col-12 col-md-4 mb-2" id="allJuniorBrowser">
                                     <div class="row">
                                         <div class="col-2 d-flex align-items-center">
                                             <input class="form-check-input form-check-required ms-3" id="addto[]" name="addto[]" type="checkbox" value="<?= $junior['id'] ?>" required>
                                         </div>
                                         <div class="col-10">
                                             <div class="row">
-                                                <div class="col-10 col-md-4">
+                                                <div class="col-3 col-md-4">
                                                     <img src="/profile/<?php echo $junior['picture'] ?>" style="height:100%; width:100%" alt="">
                                                 </div>
-                                                <div class="col-12 col-md-8 d-flex align-items-center">
+                                                <div class="col-9 col-md-8 d-flex align-items-center">
                                                     <label for=""><?php echo $junior['actual_rank'] . " " . $junior['last_name'] . " " . " PAF" ?></label>
                                                 </div>
                                             </div>
@@ -87,6 +69,7 @@
                                         <option value="Request">Request</option>
                                         <option value="Follow up">Follow up</option>
                                         <option value="Routine">Routine</option>
+                                        <option value="Procurement">Procurement</option>
                                     </select>
                                 </div>
                             </div>
@@ -138,6 +121,99 @@
 </div>
 <!-- Add Work Modal -->
 
+<!-- EDIT WORK MODAL -->
+<div class="modal fade" id="editWorkModal" tabindex="-1" aria-labelledby="editWorkModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editWorkModalLabel">Edit Work Queue</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/profile/details/edit/save" enctype="multipart/form-data" method="POST" id="editWorkForm">
+                <?php
+                include $this->resolve("partials/_token.php");
+                ?>
+                <div class="modal-body">
+                    <input type="hidden" id="addedfrom" name="addedfrom" value="directed">
+                    <div class="row" id="editWorkFormDiv">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" id="saveEdit">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- EDIT WORK MODAL -->
+
+<!-- DELETE WORK MODAL -->
+<div class="modal fade" id="deleteWorkModal" tabindex="-1" aria-labelledby="deleteWorkModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteWorkModalLabel">Confirm Delete?</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/profile/details/delete" method="POST" id="deleteWorkForm">
+                <div class="modal-body ">
+                    <?php
+                    include $this->resolve("partials/_token.php");
+                    ?>
+                    <div class="row d-flex justify-content-center align-items-center">
+                        <input type="hidden" id="idToDelete" name="idToDelete" value="">
+                        <div class="col-6 d-flex justify-content-center">
+                            <button class="btn btn-primary" type="submit" name="confDelete" id="confDelete">Delete</button>
+                        </div>
+                        <div class="col-6 d-flex justify-content-center">
+                            <button class="btn btn-secondary" type="button" id="cancelDelete" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- DELETE WORK MODAL -->
+
+<!-- DELETE SUB WORK MODAL -->
+<div class="modal fade" id="deleteSubWorkModal" tabindex="-1" aria-labelledby="deleteSubWorkModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="deleteSubWorkModalLabel">Delete Sub Work Queue</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/profile/details/delete/sub" method="POST" id="deleteSubWorkForm">
+
+            </form>
+        </div>
+    </div>
+</div>
+<!-- DELETE SUB WORK MODAL -->
+
+<!-- EDIT SUBWORK MODAL -->
+<div class="modal fade" id="editSubWorkModal" tabindex="-1" aria-labelledby="editSubWorkModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editSubWorkModalLabel">Edit Sub-work</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/profile/details/edit/sub/save" method="POST" id="editSubWorkForm">
+                <div class="modal-body" id="editSubWorkDiv">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- EDIT SUBWORK MODAL -->
+
 <!-- VIEW FILE MODAL -->
 <div class="modal fade" id="viewFileModal" tabindex="-1" aria-labelledby="viewFileModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -159,347 +235,3 @@
     </div>
 </div>
 <!-- VIEW FILE MODAL -->
-
-<!-- EDIT FILE MODAL -->
-<div class="modal fade" id="editWorkModal" tabindex="-1" aria-labelledby="editWorkModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="editWorkModalLabel">Edit Work Queue</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="/profile/editwork" enctype="multipart/form-data" method="POST" id="editWorkForm">
-                <div class="modal-body">
-
-                    <input type="hidden" id="addedfrom" name="addedfrom" value="directed">
-
-                    <?php
-                    include $this->resolve("partials/_token.php");
-                    ?>
-                    <div class="row" id="editWorkFormDiv">
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- EDIT FILE MODAL -->
-
-<!-- DELETE FILE MODAL -->
-<div class="modal fade" id="deleteWorkModal" tabindex="-1" aria-labelledby="deleteWorkModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="deleteWorkModalLabel">Delete Work Queue</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="/confirmdeletework" method="POST" id="deleteWorkForm">
-
-            </form>
-        </div>
-    </div>
-</div>
-<!-- DELETE FILE MODAL -->
-
-<!-- ADD SUBWORK MODAL -->
-<div class="modal fade" id="addSubWorkModal" tabindex="-1" aria-labelledby="addSubWorkModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="addSubWorkModalLabel">Add Sub-work</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="/addsubwork" method="POST" id="addSubWork">
-                <div class="modal-body">
-                    <input type="hidden" id="addedfrom" name="addedfrom" value="directed">
-                    <?php
-                    include $this->resolve("partials/_token.php");
-                    ?>
-                    <div class="row mb-2">
-                        <div class="col">
-                            <input type="hidden" name="mainId" value="<?= $workDetails['id'] ?>">
-                            <label for="addSubSubject" class="form-label fw-bold">SUB WORK SUBJECT:</label>
-                            <input class="form-control" type="text" id="addSubSubject" name="addSubSubject">
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col">
-                            <span class="fw-bold">ASSIGN TO:</span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <?php
-                        foreach ($workDetails['detailedAssignee'] as $assigned) : ?>
-                            <div class="col-4 mb-2">
-                                <div class="row">
-                                    <div class="col-2 d-flex align-items-center">
-                                        <input class="form-check-input ms-3" id="addSubto[]" name="addSubto[]" type="checkbox" value="<?= $assigned['id'] ?>">
-                                    </div>
-                                    <div class="col-10">
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <img src="/profile/<?php echo $assigned['picture'] ?>" style="height:50px; width:50px" alt="">
-                                            </div>
-                                            <div class="col-8 d-flex align-items-center">
-                                                <label for=""><?php echo $assigned['name'] ?></label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <?php endforeach ?>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- ADD SUBWORK MODAL -->
-
-<!-- EDIT SUBWORK MODAL -->
-<div class="modal fade" id="editSubWorkModal" tabindex="-1" aria-labelledby="editSubWorkModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="editSubWorkModalLabel">Edit Sub-work</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="/editsubwork" method="POST" id="editSubWorkForm">
-                <div class="modal-body" id="editSubWorkDiv">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- EDIT SUBWORK MODAL -->
-
-<!-- DELETE SUB WORK MODAL -->
-<div class="modal fade" id="deleteSubWorkModal" tabindex="-1" aria-labelledby="deleteSubWorkModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="deleteSubWorkModalLabel">Delete Sub Work Queue</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="/confirmdeletesubwork" method="POST" id="deleteSubWorkForm">
-
-            </form>
-        </div>
-    </div>
-</div>
-<!-- DELETE FILE MODAL -->
-
-<!-- UPDATE WORK MODAL -->
-<div class="modal fade" id="updateWorkModal" tabindex="-1" aria-labelledby="updateWorkModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="updateWorkModalLabel">Update Work</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="/updatework" method="POST" enctype="multipart/form-data" id="updateWorkForm">
-                <div class="modal-body" id="updateWorkDiv">
-                    <?php
-                    include $this->resolve("partials/_token.php");
-                    ?>
-                    <input type="hidden" name="idToUpdate" id="idToUpdate">
-                    <div class="row mb-1">
-                        <div class="col-8">
-                            <label for="" class="form-label">Remarks:</label>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col">
-                            <textarea class="form-control" name="updateRemarks" id="updateRemarks" cols="15" rows="4" required></textarea>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <div class="col-8">
-                            <label for="" class="form-label">File:</label>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col">
-                            <input class="form-control text-center" type="file" name="updateWorkFiles[]" accept=".jpg,.jpeg,.png,.pdf" multiple>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- UPDATE WORK MODAL -->
-
-<!-- UPDATE SUBWORK MODAL -->
-<div class="modal fade" id="updateSubWorkModal" tabindex="-1" aria-labelledby="updateSubWorkModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="updateSubWorkModalLabel">Update Sub-Work</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="/updatesubwork" method="POST" enctype="multipart/form-data" id="updateSubWorkForm">
-                <div class="modal-body" id="updateWorkDiv">
-                    <?php
-                    include $this->resolve("partials/_token.php");
-                    ?>
-                    <input type="hidden" name="subIdToUpdate" id="subIdToUpdate">
-                    <div class="row mb-1">
-                        <div class="col-8">
-                            <label for="" class="form-label">Remarks:</label>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col">
-                            <textarea class="form-control" name="updateRemarks" id="updateRemarks" cols="15" rows="4" required></textarea>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <div class="col-8">
-                            <label for="" class="form-label">File:</label>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col">
-                            <input class="form-control text-center" type="file" name="updateWorkFiles[]" accept=".jpg,.jpeg,.png,.pdf" multiple>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- UPDATE SUBWORK MODAL -->
-
-<!-- COMPLY SUBWORK MODAL -->
-<div class="modal fade" id="complySubWorkModal" tabindex="-1" aria-labelledby="complySubWorkModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="complySubWorkModalLabel">Comply Sub-Work</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="/complysubwork" method="POST" enctype="multipart/form-data" id="complySubWorkForm">
-                <div class="modal-body" id="updateWorkDiv">
-                    <?php
-                    include $this->resolve("partials/_token.php");
-                    ?>
-                    <input type="hidden" name="subIdToComply" id="subIdToComply">
-                    <div class="row mb-1">
-                        <div class="col-8">
-                            <label for="" class="form-label">Remarks:</label>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col">
-                            <textarea class="form-control" name="complyRemarks" id="complyRemarks" cols="15" rows="4" required></textarea>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <div class="col-8">
-                            <label for="" class="form-label">File:</label>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col">
-                            <input class="form-control text-center" type="file" name="complyWorkFiles[]" accept=".jpg,.jpeg,.png,.pdf" multiple>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- COMPLY SUBWORK MODAL -->
-
-<!-- COMPLY WORK MODAL -->
-<div class="modal fade" id="complyWorkModal" tabindex="-1" aria-labelledby="complyWorkModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="complyWorkModalLabel">Comply Work</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="/complywork" method="POST" enctype="multipart/form-data" id="complyWorkForm">
-                <div class="modal-body" id="updateWorkDiv">
-                    <?php
-                    include $this->resolve("partials/_token.php");
-                    ?>
-                    <input type="hidden" name="IdToComply" id="IdToComply">
-                    <div class="row mb-1">
-                        <div class="col-8">
-                            <label for="" class="form-label">Remarks:</label>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col">
-                            <textarea class="form-control" name="complyRemarks" id="complyRemarks" cols="15" rows="4" required></textarea>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <div class="col-8">
-                            <label for="" class="form-label">File:</label>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col">
-                            <input class="form-control text-center" type="file" name="complyWorkFiles[]" accept=".jpg,.jpeg,.png,.pdf" multiple>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Update</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- COMPLY WORK MODAL -->
-
-<!-- CONFIRM COMPLIANCE MODAL -->
-<div class="modal fade" id="confirmWorkModal" tabindex="-1" aria-labelledby="confirmWorkModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="confirmWorkModalLabel">Confirm Compliance</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="row my-3" id="approveOrNotDiv">
-
-            </div>
-
-        </div>
-    </div>
-</div>
-<!-- CONFIRM COMPLIANCE MODAL -->

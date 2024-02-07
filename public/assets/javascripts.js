@@ -64,10 +64,6 @@ $(document).on('click', '#addSub', function () {
         var butToRemove = $(this).attr("id");
         $('#id' + butToRemove).remove();
     });
-
-
-
-
 });
 
 
@@ -153,23 +149,7 @@ $(document).on('click', '.viewWorkButHistory', function () {
 
 
 
-// * view File Modal
-$(document).on('click', '.viewFileBut', function () {
-    var filename = $(this).val();
-        //ajax code    
-    $.ajax({
-        type: "GET",
-        url: "/profile/workdetail/viewfile?file=" + filename,
-        // response code
-        success: function (response) {
-            $("#viewFiles").html(response);
-            $('#viewFileModal').modal('show');
 
-        }
-        // response code
-    })
-    // ajax code
-});
 
 // * Edit Work Modal
 $(document).on('click', '.editWorkBut', function () {
@@ -290,22 +270,7 @@ $(document).on('click', '.complyWorkBut', function () {
 
 
 // * Delete Work Modal
-$(document).on('click', '.approveBut', function () {
-    var id = $(this).val();
-        //ajax code    
-    $.ajax({
-        type: "GET",
-        url: "/confirmwork?id=" + id,
-        // response code
-        success: function (response) {
-            $("#approveOrNotDiv").html(response);
-            $('#confirmWorkModal').modal('show');
 
-        }
-        // response code
-    })
-    // ajax code
-});
 
 // * Confirm Work Compliancel
 $(document).on('click', '#confCompliance', function () {

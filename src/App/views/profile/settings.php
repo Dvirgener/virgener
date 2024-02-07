@@ -20,7 +20,7 @@ echo $_SESSION['user']['number_rank'];
         <h1 class="text-center">SETTINGS</h1>
     </div>
     <div class="row justify-content-center mt-4">
-        <form action="" method="POST" enctype="multipart/form-data" id="userSettingsForm">
+        <form action="/settings/save" method="POST" enctype="multipart/form-data" id="userSettingsForm">
             <?php include $this->resolve("partials/_token.php"); ?>
             <div class="row d-flex justify-content-center">
                 <div class="col-12 col-md-3">

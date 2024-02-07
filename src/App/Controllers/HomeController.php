@@ -6,19 +6,22 @@ namespace App\Controllers;
 
 use Framework\TemplateEngine;
 use App\config\paths;
-use App\Services\{HomeService};
+use App\Services\{HomeService, ProfileService};
 
 
 class HomeController
 {
 
-    public function __construct(private TemplateEngine $view, private HomeService $HomeService)
+    public function __construct(private TemplateEngine $view, private HomeService $HomeService, private ProfileService $profileService)
     {
     }
 
     public function home()
     {
+        // * Reset the session playlist array
         $_SESSION['playlist'] = [];
+
+        // * redirect users to karaoke page if they are not authorized to use this page
         if ($_SESSION['user']['authority'] === "karaoke") {
             redirectTo('/karaoke');
         }
@@ -47,6 +50,25 @@ class HomeController
                 'followUp' => $followUp,
                 'deadline' => $deadline,
                 'pending' => $pending
+            ]
+        );
+    }
+
+    public function renderUserProfile(array $params)
+    {
+        // * Profile Panel
+        $user = $this->profileService->getUserDetails($params['id']);
+        $fullName = $this->profileService->userFullNameSN;
+        $workCount = $this->profileService->checkWorkNumbers($params['id']);
+        $addedWorkCount = $this->profileService->checkAddedWorkNumbers($params['id']);
+        echo $this->view->render(
+            "/profile/profile.php",
+            [
+                'user' => $user,
+                'fullName' => $fullName,
+                'addedWorkCount' => $addedWorkCount,
+                'workCount' => $workCount,
+                'viewedFrom' => "dashboard"
             ]
         );
     }

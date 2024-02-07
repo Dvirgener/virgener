@@ -26,9 +26,7 @@ class dppService
             }
         }
         $serializedUsers = serialize($users);
-
         $instructions = "Process the Procurement of this activity amounting to {$procAmount} for the {$quarter} of CY-2024";
-
         $this->db->query(
             "INSERT INTO work (subject,instructions,assigned_to,type,added_by,added_from,status)
         VALUES(:subject,:instructions,:assigned_to,:type,:added_by,:added_from,:status)",
@@ -42,7 +40,6 @@ class dppService
                 'status' => "UNCOMPLIED"
             ]
         );
-
         $subWorkArray = [
             "UPR",
             "APP",
@@ -76,7 +73,6 @@ class dppService
             "Receipt from Supplier"
         ];
         $workId = $this->db->query("SELECT id from work ORDER BY id DESC LIMIT 1")->find();
-
         foreach ($subWorkArray as $sub) {
             $this->db->query(
                 "INSERT INTO sub_work (main_id,sub_subject,status) VALUES (:main_id,:sub_subject,:status)",

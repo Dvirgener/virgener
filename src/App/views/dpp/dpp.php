@@ -17,9 +17,9 @@ include $this->resolve("partials/_header.php");
                 </div>
                 <div class="row">
                     <form action="/section/dpp/addproc" method="POST">
-                    <?php
-                    include $this->resolve("partials/_token.php");
-                    ?>
+                        <?php
+                        include $this->resolve("partials/_token.php");
+                        ?>
                         <div class="row">
                             <label>Procurement Activity:</label>
                         </div>
@@ -52,9 +52,9 @@ include $this->resolve("partials/_header.php");
 
                         <div class="row">
                             <div class="col-4">
-                            <button class="btn btn-primary" type="submit">ADD PROCUREMENT</button>
+                                <button class="btn btn-primary" type="submit">ADD PROCUREMENT</button>
                             </div>
-                            
+
                         </div>
                     </form>
                 </div>

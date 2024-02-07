@@ -6,7 +6,7 @@ namespace App\config;
 
 use Framework\App;
 
-use App\Controllers\{HomeController, RegisterUserController, LoginController, TransactionController, ReceiptController, ErrorController, playerController, KaraokeController, playlistController, SpendingPlanController, ProfileController, dppController};
+use App\Controllers\{HomeController, RegisterUserController, LoginController, TransactionController, ReceiptController, ErrorController, playerController, KaraokeController, playlistController, SpendingPlanController, ProfileController, dppController, WorkQueueController, settingsController, workDetailsController};
 use App\Middleware\{AuthRequiredMiddleware, GuestOnlyMiddleware};
 
 
@@ -20,9 +20,8 @@ function registerRoutes(App $app)
     $app->get('/login', [LoginController::class, 'loginView'])->add(GuestOnlyMiddleware::class);
     $app->post('/login', [LoginController::class, 'login'])->add(GuestOnlyMiddleware::class);
     $app->get('/logout', [LoginController::class, 'logout'])->add(AuthRequiredMiddleware::class);
-    $app->get('/transaction', [TransactionController::class, 'createView'])->add(AuthRequiredMiddleware::class);
 
-
+    // * This is for the Karaoke Pages
     $app->get('/karaoke', [KaraokeController::class, 'karaokeMain'])->add(AuthRequiredMiddleware::class);
     $app->post('/karaoke', [KaraokeController::class, 'addSong'])->add(AuthRequiredMiddleware::class);
     $app->get('/karaoke/edit', [KaraokeController::class, 'editSong'])->add(AuthRequiredMiddleware::class);
@@ -31,54 +30,45 @@ function registerRoutes(App $app)
     $app->post('/karaoke/addsong', [KaraokeController::class, 'addSongtoDB'])->add(AuthRequiredMiddleware::class);
     $app->get('/karaoke/song', [KaraokeController::class, 'addSongtoCue'])->add(AuthRequiredMiddleware::class);
     $app->get('/livesearch', [KaraokeController::class, 'liveSearch'])->add(AuthRequiredMiddleware::class);
-
-
-    $app->post('/transaction', [TransactionController::class, 'create'])->add(AuthRequiredMiddleware::class);
-    $app->get('/transaction/{transaction}', [TransactionController::class, 'editView'])->add(AuthRequiredMiddleware::class);
-    $app->post('/transaction/{transaction}', [TransactionController::class, 'edit'])->add(AuthRequiredMiddleware::class);
-    $app->delete('/transaction/{transaction}', [TransactionController::class, 'delete'])->add(AuthRequiredMiddleware::class);
-    $app->get('/transaction/{transaction}/receipt', [ReceiptController::class, 'uploadView'])->add(AuthRequiredMiddleware::class);
-    $app->post('/transaction/{transaction}/receipt', [ReceiptController::class, 'upload'])->add(AuthRequiredMiddleware::class);
-    $app->get('/transaction/{transaction}/receipt/{receipt}', [ReceiptController::class, 'download'])->add(AuthRequiredMiddleware::class);
-    $app->delete('/transaction/{transaction}/receipt/{receipt}', [ReceiptController::class, 'delete'])->add(AuthRequiredMiddleware::class);
     $app->get('/player', [playerController::class, 'player'])->add(AuthRequiredMiddleware::class);
 
-
+    // * This is the routes for the spending plan page
     $app->get('/spendingplan', [SpendingPlanController::class, 'viewall'])->add(AuthRequiredMiddleware::class);
     $app->get('/spendingplan/addsaa', [SpendingPlanController::class, 'searchToAddSaa'])->add(AuthRequiredMiddleware::class);
     $app->post('/spendingplan/addsaa', [SpendingPlanController::class, 'addSaa'])->add(AuthRequiredMiddleware::class);
     $app->get('/spendingplan/viewsaa', [SpendingPlanController::class, 'viewSaa'])->add(AuthRequiredMiddleware::class);
     $app->get('/spendingplan/deletesaa', [SpendingPlanController::class, 'deleteSaa'])->add(AuthRequiredMiddleware::class);
 
+    // * This is for the profile and Work Detail page
     $app->get('/profile', [ProfileController::class, 'viewProfile'])->add(AuthRequiredMiddleware::class);
-    $app->get('/profile/workdetail', [ProfileController::class, 'viewWork'])->add(AuthRequiredMiddleware::class);
-    $app->get('/profile/added/workdetail', [ProfileController::class, 'viewAddedWork'])->add(AuthRequiredMiddleware::class);
-    $app->get('/profile/workdetail/viewfile', [ProfileController::class, 'viewFile'])->add(AuthRequiredMiddleware::class);
-    $app->get('/settings', [ProfileController::class, 'userSettings'])->add(AuthRequiredMiddleware::class);
-    $app->post('/settings', [ProfileController::class, 'updateUser'])->add(AuthRequiredMiddleware::class);
-
-    $app->get('/profile/{profilePic}', [ProfileController::class, 'renderProfPic'])->add(AuthRequiredMiddleware::class);
+    $app->get('/profile/return', [ProfileController::class, 'backTo'])->add(AuthRequiredMiddleware::class);
+    $app->get('/{viewedFrom}/work/{id}', [WorkQueueController::class, 'viewWorkList'])->add(AuthRequiredMiddleware::class);
+    $app->post('/profile/addwork', [ProfileController::class, 'addwork'])->add(AuthRequiredMiddleware::class);
+    $app->get('/{viewedFrom}/details/{id}', [workDetailsController::class, 'viewWorkDetails'])->add(AuthRequiredMiddleware::class);
+    $app->get('/{viewedFrom}/details/added/{id}', [workDetailsController::class, 'viewAddedWorkDetails'])->add(AuthRequiredMiddleware::class);
+    $app->get('/profile/details/edit/{id}', [workDetailsController::class, 'renderEditWorkModal'])->add(AuthRequiredMiddleware::class);
+    $app->post('/profile/details/edit/save', [workDetailsController::class, 'saveEditedWork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/profile/details/delete', [workDetailsController::class, 'deleteWork'])->add(AuthRequiredMiddleware::class);
+    $app->get('/profile/details/edit/sub/{id}', [workDetailsController::class, 'editSubWork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/profile/details/edit/sub/save', [workDetailsController::class, 'saveEditSubWork'])->add(AuthRequiredMiddleware::class);
+    $app->get('/profile/details/delete/sub/{id}', [workDetailsController::class, 'renderDeleteSubWorkModel'])->add(AuthRequiredMiddleware::class);
+    $app->post('/profile/details/delete/sub', [workDetailsController::class, 'deleteSubWork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/profile/details/add/sub', [workDetailsController::class, 'addSubWork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/profile/details/delete/update', [workDetailsController::class, 'deleteUpdate'])->add(AuthRequiredMiddleware::class);
+    $app->post('/profile/details/update', [workDetailsController::class, 'updateWork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/profile/details/update/sub', [workDetailsController::class, 'updateSubWork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/profile/details/comply/sub', [workDetailsController::class, 'complySubWork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/profile/details/comply', [workDetailsController::class, 'complyWork'])->add(AuthRequiredMiddleware::class);
+    $app->get('/profile/details/work/approve', [workDetailsController::class, 'approveCompliance'])->add(AuthRequiredMiddleware::class);
+    $app->get('/profile/details/work/return', [workDetailsController::class, 'returnCompliance'])->add(AuthRequiredMiddleware::class);
+    $app->get('/profile/viewfile', [ProfileController::class, 'viewFile'])->add(AuthRequiredMiddleware::class);
     $app->get('/profile/file/{file}', [ProfileController::class, 'renderFile'])->add(AuthRequiredMiddleware::class);
 
-    $app->post('/profile/addwork', [ProfileController::class, 'addwork'])->add(AuthRequiredMiddleware::class);
-    $app->post('/profile/editwork', [ProfileController::class, 'saveEditWork'])->add(AuthRequiredMiddleware::class);
-    $app->get('/editwork', [ProfileController::class, 'editWork'])->add(AuthRequiredMiddleware::class);
-    $app->get('/deletework', [ProfileController::class, 'deleteWork'])->add(AuthRequiredMiddleware::class);
-    $app->post('/confirmdeletework', [ProfileController::class, 'confirmDeleteWork'])->add(AuthRequiredMiddleware::class);
-    $app->post('/addsubwork', [ProfileController::class, 'addSubWork'])->add(AuthRequiredMiddleware::class);
-    $app->get('/editsubwork', [ProfileController::class, 'editSubWork'])->add(AuthRequiredMiddleware::class);
-    $app->post('/editsubwork', [ProfileController::class, 'saveEditSubWork'])->add(AuthRequiredMiddleware::class);
-    $app->get('/deletesubwork', [ProfileController::class, 'deleteSubWork'])->add(AuthRequiredMiddleware::class);
-    $app->post('/confirmdeletesubwork', [ProfileController::class, 'confirmDeleteSubWork'])->add(AuthRequiredMiddleware::class);
-    $app->post('/updatework', [ProfileController::class, 'updateWork'])->add(AuthRequiredMiddleware::class);
-    $app->post('/updatesubwork', [ProfileController::class, 'updateSubWork'])->add(AuthRequiredMiddleware::class);
-    $app->post('/complysubwork', [ProfileController::class, 'complySubWork'])->add(AuthRequiredMiddleware::class);
-    $app->post('/complywork', [ProfileController::class, 'complyWork'])->add(AuthRequiredMiddleware::class);
 
-    $app->get('/confirmwork', [ProfileController::class, 'confirmWork'])->add(AuthRequiredMiddleware::class);
-    $app->get('/confirmcompliance', [ProfileController::class, 'confirmCompliance'])->add(AuthRequiredMiddleware::class);
-    $app->get('/returncompliance', [ProfileController::class, 'returnCompliance'])->add(AuthRequiredMiddleware::class);
+    $app->get('/dashboard/profile/{id}', [HomeController::class, 'renderUserProfile'])->add(AuthRequiredMiddleware::class);
 
+    // * This is for viewing profile pictures and files uploaded
+    $app->get('/profile/{profilePic}', [ProfileController::class, 'renderProfPic'])->add(AuthRequiredMiddleware::class);
 
     $app->get('/history', [ProfileController::class, 'workHistory'])->add(AuthRequiredMiddleware::class);
     $app->get('/history/workdetail', [ProfileController::class, 'viewWorkHistory'])->add(AuthRequiredMiddleware::class);
@@ -88,7 +78,8 @@ function registerRoutes(App $app)
     $app->get('/section/dpp', [dppController::class, 'dppProfile'])->add(AuthRequiredMiddleware::class);
     $app->post('/section/dpp/addproc', [dppController::class, 'addProcurement'])->add(AuthRequiredMiddleware::class);
 
-
+    $app->get('/settings', [settingsController::class, 'userSettings'])->add(AuthRequiredMiddleware::class);
+    $app->post('/settings/save', [settingsController::class, 'updateUser'])->add(AuthRequiredMiddleware::class);
 
     $app->setErrorHandler([ErrorController::class, 'notFound']);
 }

@@ -83,7 +83,6 @@ include $this->resolve("partials/_header.php");
                                                     <button disabled class="btn btn-success complyWorkBut" type="button" value="<?= $workDetails['id'] ?>">COMPLY</button>
                                                 <?php endif ?>
                                             </div>
-
                                         </div>
                                         <div class="row justify-content-center">
                                             <div class="col-12 col-md-6 d-grid">
@@ -145,35 +144,45 @@ include $this->resolve("partials/_header.php");
                         <div class="row overflow-y-scroll" style="height: 400px;">
                             <div class="col">
                                 <?php foreach ($workDetails['updates'] as $update) : ?>
-                                    <div class="row border mx-1 mb-2">
-                                        <div class="col-4 border-end text-center d-flex align-items-center justify-content-center">
-                                            <span class="fw-bold"><?= $update['created_at'] ?></span>
-                                        </div>
-                                        <div class="col-8">
-                                            <?php if ($update['final'] == "YES") : ?>
-                                                <?php if ($update['sub_id'] != 0) : ?>
-                                                    <div class="row border-bottom">
-                                                        <span><span class="fw-bold">Sub Work: </span><?= $update['sub_id'] ?><span style="font-size: small; color:green;" class="fst-italic"> <?= $update['complied'] ?></span></span>
-                                                    </div>
-                                                <?php else : ?>
-                                                    <div class="row border-bottom">
-                                                        <span class="fst-italic" style="font-size: small; color:green;">Main work <?= $update['complied'] ?></span>
-                                                    </div>
-                                                <?php endif ?>
-                                            <?php endif ?>
 
-                                            <div class="row mb-1">
-                                                <span><?= $update['remarks'] ?></span>
-                                                <span class="fst-italic">- <?= $update['updated_by'] ?></span>
+                                    <div class="row-fluid border  mx-1 mb-2">
+                                        <div class="row justify-content-end">
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4 border-end text-center d-flex align-items-center justify-content-center">
+                                                <span class="fw-bold"><?= $update['created_at'] ?></span>
                                             </div>
-                                            <div class="row mb-1">
-                                                <?php foreach ($update['files'] as $file) : ?>
-                                                    <div class="col-4 d-grid">
-                                                        <button class="btn btn-secondary viewFileBut" type="button" value="<?= $file ?>">File</button>
-                                                    </div>
-                                                <?php endforeach ?>
+                                            <div class="col-7">
+                                                <?php if ($update['final'] == "YES") : ?>
+                                                    <?php if ($update['sub_id'] != 0) : ?>
+                                                        <div class="row">
+                                                            <span><span class="fw-bold">Sub Work: </span><?= $update['sub_id'] ?><span style="font-size: small; color:green;" class="fst-italic"> <?= $update['complied'] ?></span></span>
+                                                        </div>
+                                                    <?php else : ?>
+                                                        <div class="row border-bottom">
+                                                            <span class="fst-italic" style="font-size: small; color:green;">Main work <?= $update['complied'] ?></span>
+                                                        </div>
+                                                    <?php endif ?>
+                                                <?php endif ?>
+
+                                                <div class="row mb-1">
+                                                    <span><?= $update['remarks'] ?></span>
+                                                    <span class="fst-italic">- <?= $update['updated_by'] ?></span>
+                                                </div>
+                                                <div class="row mb-1">
+                                                    <?php foreach ($update['files'] as $file) : ?>
+                                                        <div class="col-4 d-grid">
+                                                            <button class="btn btn-secondary viewFileBut" type="button" value="<?= $file ?>">File</button>
+                                                        </div>
+                                                    <?php endforeach ?>
+                                                </div>
+                                            </div>
+                                            <div class="col-1 mt-1" style="font-size: smaller;">
+                                                <a href="/delete/update/<?= $update['id'] ?>" type="button" class="btn-close" aria-label="Close"></a>
                                             </div>
                                         </div>
+
                                     </div>
                                 <?php endforeach ?>
                             </div>

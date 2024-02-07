@@ -148,7 +148,7 @@ include $this->resolve("partials/_header.php");
                             </div>
                             <div class="col-8" style="height:fit-content">
                                 <div class="row mb-1">
-                                    <span class="fw-bold"><?= $user['name'] ?></span>
+                                    <a class="fw-bold" href="/dashboard/profile/<?= $user['id'] ?>" style="color:black"><?= $user['name'] ?></a>
                                 </div>
                                 <div class="row mb-1">
                                     <span>Duty Status: <span class="fw-bold" style="color:green"><?= $user['status'] ?></span></span>
@@ -186,7 +186,6 @@ include $this->resolve("partials/_header.php");
                             <span class="fw-bold fs-6"></span>
                         </div>
                         <div class="row ms-2">
-
                             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" id="pills-recentlyAdded-tab" data-bs-toggle="pill" data-bs-target="#pills-recentlyAdded" type="button" role="tab" aria-controls="pills-recentlyAdded" aria-selected="true">Recently Added</button>
@@ -204,7 +203,6 @@ include $this->resolve("partials/_header.php");
                                     <button class="nav-link" id="pills-approval-tab" data-bs-toggle="pill" data-bs-target="#pills-approval" type="button" role="tab" aria-controls="pills-approval" aria-selected="false">Pending Approval</button>
                                 </li>
                             </ul>
-
                             <!-- TABS -->
                             <div class="row overflow-y-scroll" style="height:290px">
                                 <div class="tab-content" id="pills-tabContent">
@@ -213,9 +211,9 @@ include $this->resolve("partials/_header.php");
                                     <div class="tab-pane fade show active" id="pills-recentlyAdded" role="tabpanel" aria-labelledby="pills-recentlyAdded-tab" tabindex="0">
                                         <?php foreach ($recentlyAdded as $work) : ?>
                                             <div class="row mb-2 border">
-                                                <div class="col-9 my-1">
+                                                <div class="col-12 my-1">
                                                     <div class="row mb-2 d-flex align-items-center justify-content-start">
-                                                        <span class="fw-bold ">Subject: <?= $work['subject'] ?></span>
+                                                        <span class="fw-bold ">Subject: <span style="text-decoration: underline;"><?= $work['subject'] ?></span> </span>
                                                     </div>
                                                     <div class="row mb-2 ">
                                                         <div class="col-3 d-flex align-items-center" style="width:fit-content">
@@ -235,9 +233,7 @@ include $this->resolve("partials/_header.php");
                                                         <span>Added by: <span class="fst-italic fw-bold"><?= $work['added_by'] ?></span></span>
                                                     </div>
                                                 </div>
-                                                <div class="col-3 my-1 d-flex align-items-center justify-content-center">
-                                                    <a href="#" class="btn btn-secondary">View</a>
-                                                </div>
+
                                             </div>
                                         <?php endforeach ?>
                                     </div>
@@ -249,18 +245,10 @@ include $this->resolve("partials/_header.php");
                                             <div class="row mb-2 border">
                                                 <div class="col-9 my-1">
                                                     <div class="row d-flex align-items-center justify-content-start">
-                                                        <span class="fw-bold ">Subject: <?= $work['subject'] ?></span>
+                                                        <span class="fw-bold ">Subject: <span style="text-decoration: underline;"><?= $work['subject'] ?></span></span>
                                                     </div>
                                                     <div class="row mb-2 d-flex align-items-center justify-content-start">
-                                                        <?php if ($work['timeliness'] == "Early") : ?>
-                                                            <span class="fw-bold ">Timeliness: <span class="fst-italic" style="color:green"><?= $work['timeliness'] ?></span></span>
-                                                        <?php elseif ($work['timeliness'] == "On Time") : ?>
-                                                            <span class="fw-bold ">Timeliness: <span class="fst-italic" style="color:orange"><?= $work['timeliness'] ?></span></span>
-                                                        <?php elseif ($work['timeliness'] == "Late") : ?>
-                                                            <span class="fw-bold ">Timeliness: <span class="fst-italic" style="color:red"><?= $work['timeliness'] ?></span></span>
-                                                        <?php else : ?>
-                                                            <span class="fw-bold ">Timeliness: <span class="fst-italic" style="color:none">No Target Date</span></span>
-                                                        <?php endif ?>
+
                                                     </div>
 
                                                     <div class="row">
@@ -283,7 +271,15 @@ include $this->resolve("partials/_header.php");
                                                     </div>
                                                 </div>
                                                 <div class="col-3 my-1 d-flex align-items-center justify-content-center">
-                                                    <a href="#" class="btn btn-secondary">View</a>
+                                                    <?php if ($work['timeliness'] == "Early") : ?>
+                                                        <span class="fw-bold ">Timeliness: <span class="fst-italic" style="color:green"><?= $work['timeliness'] ?></span></span>
+                                                    <?php elseif ($work['timeliness'] == "On Time") : ?>
+                                                        <span class="fw-bold ">Timeliness: <span class="fst-italic" style="color:orange"><?= $work['timeliness'] ?></span></span>
+                                                    <?php elseif ($work['timeliness'] == "Late") : ?>
+                                                        <span class="fw-bold ">Timeliness: <span class="fst-italic" style="color:red"><?= $work['timeliness'] ?></span></span>
+                                                    <?php else : ?>
+                                                        <span class="fw-bold "><span class="fst-italic" style="color:none">No Target Date</span></span>
+                                                    <?php endif ?>
                                                 </div>
                                             </div>
                                         <?php endforeach ?>
@@ -294,9 +290,9 @@ include $this->resolve("partials/_header.php");
                                     <div class="tab-pane fade" id="pills-update" role="tabpanel" aria-labelledby="pills-update-tab" tabindex="0">
                                         <?php foreach ($followUp as $work) : ?>
                                             <div class="row mb-2 border">
-                                                <div class="col-9 my-1">
+                                                <div class="col-12 my-1">
                                                     <div class="row mb-2 d-flex align-items-center justify-content-start">
-                                                        <span class="fw-bold ">Subject: <?= $work['subject'] ?></span>
+                                                        <span class="fw-bold ">Subject: <span style="text-decoration: underline;"><?= $work['subject'] ?></span></span>
                                                     </div>
                                                     <div class="row mb-2 ">
                                                         <div class="col-3 d-flex align-items-center" style="width: fit-content;">
@@ -315,9 +311,6 @@ include $this->resolve("partials/_header.php");
                                                     <div class="row">
                                                         <span>Added by: <span class="fst-italic fw-bold"><?= $work['added_by'] ?></span></span>
                                                     </div>
-                                                </div>
-                                                <div class="col-3 my-1 d-flex align-items-center justify-content-center">
-                                                    <a href="#" class="btn btn-secondary">View</a>
                                                 </div>
                                             </div>
                                         <?php endforeach ?>
@@ -328,9 +321,9 @@ include $this->resolve("partials/_header.php");
                                     <div class="tab-pane fade" id="pills-deadline" role="tabpanel" aria-labelledby="pills-deadline-tab" tabindex="0">
                                         <?php foreach ($deadline as $work) : ?>
                                             <div class="row mb-2 border">
-                                                <div class="col-9 my-1">
+                                                <div class="col-12 my-1">
                                                     <div class="row mb-2 d-flex align-items-center justify-content-start">
-                                                        <span class="fw-bold ">Subject: <span style="color:red"><?= $work['subject'] ?></span> </span>
+                                                        <span class="fw-bold ">Subject: <span style="color:red; text-decoration:underline"><?= $work['subject'] ?></span> </span>
                                                     </div>
                                                     <div class="row mb-2 ">
                                                         <div class="col-3 d-flex align-items-center" style="width: fit-content;">
@@ -350,9 +343,6 @@ include $this->resolve("partials/_header.php");
                                                         <span>Added by: <span class="fst-italic fw-bold"><?= $work['added_by'] ?></span></span>
                                                     </div>
                                                 </div>
-                                                <div class="col-3 my-1 d-flex align-items-center justify-content-center">
-                                                    <a href="#" class="btn btn-secondary">View</a>
-                                                </div>
                                             </div>
                                         <?php endforeach ?>
                                     </div>
@@ -362,9 +352,9 @@ include $this->resolve("partials/_header.php");
                                     <div class="tab-pane fade" id="pills-approval" role="tabpanel" aria-labelledby="pills-approval-tab" tabindex="0">
                                         <?php foreach ($pending as $work) : ?>
                                             <div class="row mb-2 border">
-                                                <div class="col-9 my-1">
+                                                <div class="col-12 my-1">
                                                     <div class="row mb-2 d-flex align-items-center justify-content-start">
-                                                        <span class="fw-bold ">Subject: <?= $work['subject'] ?></span>
+                                                        <span class="fw-bold ">Subject: <span style="text-decoration: underline;"><?= $work['subject'] ?></span></span>
                                                     </div>
                                                     <div class="row mb-2 ">
                                                         <div class="col-3 d-flex align-items-center">
@@ -384,9 +374,6 @@ include $this->resolve("partials/_header.php");
                                                         <span>Added by: <span class="fst-italic fw-bold"><?= $work['added_by'] ?></span></span>
                                                     </div>
                                                 </div>
-                                                <div class="col-3 my-1 d-flex align-items-center justify-content-center">
-                                                    <a href="#" class="btn btn-secondary">View</a>
-                                                </div>
                                             </div>
                                         <?php endforeach ?>
                                     </div>
@@ -394,7 +381,6 @@ include $this->resolve("partials/_header.php");
                                 </div>
                             </div>
                             <!-- TABS -->
-
                         </div>
                     </div>
                     <div class="col-5">
@@ -403,20 +389,25 @@ include $this->resolve("partials/_header.php");
                         </div>
                         <div class="row overflow-y-scroll pe-1 ps-3 align-content-start" style="height:270px">
                             <?php foreach ($updatesToday as $update) : ?>
-                                <div class="row border border-3 border align-content-start mb-2">
+                                <div class="row border border-2 py-1 border align-content-start mb-2">
                                     <div class="col-9">
-                                        <div class="row">
-                                            <span class="fw-bold"><?= $update['mainWork'] ?> <span><?= $update['subWork'] ?></span> <span class=" fst-italic" style="color:green"><?= $update['compliance'] ?></span> </span>
+                                        <div class="row mb-1">
+                                            <span class="fw-bold">Subject: <span><?= $update['mainWork'] ?></span> </span>
+                                            <?php if ($update['subWork'] != "") : ?>
+                                                <span> <span class="fw-bold"> For Sub-work: </span> <?= $update['subWork'] ?></span>
+                                            <?php endif ?>
+
+
+                                        </div>
+                                        <div class="row mb-1">
+                                            <span><span class="fw-bold">Remarks: </span><?= $update['remarks'] ?></span>
                                         </div>
                                         <div class="row">
-                                            <span><?= $update['remarks'] ?></span>
-                                        </div>
-                                        <div class="row">
-                                            <span class="fst-italic fw-bold">- <?= $update['name'] ?></span>
+                                            <span class="">Updated by: <span class="fw-bold fst-italic"><?= $update['name'] ?></span></span>
                                         </div>
                                     </div>
                                     <div class="col-3 d-flex align-items-center justify-content-center">
-                                        <a class="btn btn-secondary" href="#">View</a>
+                                        <span class=" fst-italic" style="color:green"><?= $update['compliance'] ?></span>
                                     </div>
                                 </div>
                             <?php endforeach ?>

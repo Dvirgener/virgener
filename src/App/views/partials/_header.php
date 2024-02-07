@@ -29,8 +29,8 @@
     <script defer src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
     <script defer src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
 
-    <script src="/assets/javascripts.js"></script>
-    <script src="/assets/utube.js"></script>
+    <!-- <script src="/assets/javascripts.js"></script> -->
+    <!-- <script src="/assets/utube.js"></script> -->
 
 
 
@@ -64,6 +64,19 @@
                             </li>
                             <li class="nav-item ">
                                 <a class="nav-link active" href="/karaoke">Karaoke</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Sections
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="/section/dpp">DPP</a></li>
+                                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                </ul>
                             </li>
                         </ul>
                     <?php else : ?>

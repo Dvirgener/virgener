@@ -58,6 +58,7 @@ class HomeService
             $individual['picture'] = $user['picture'];
             $individual['workNumbers'] = $this->workNumbers($user['id']);
             $individual['numberRank'] = $user['number_rank'];
+            $individual['id'] = $user['id'];
             $users[] = $individual;
         }
 
@@ -130,7 +131,7 @@ class HomeService
             $update['subWork'] = "";
             if ($updates['sub_id'] != 0) {
                 $subWork = $this->db->query("SELECT sub_subject FROM sub_work WHERE id =:id", ['id' => $updates['sub_id']])->find();
-                $update['subWork'] = "(" . $subWork['sub_subject'] . ")";
+                $update['subWork'] = $subWork['sub_subject'];
             }
 
             $update['remarks'] = $updates['remarks'];
@@ -141,7 +142,7 @@ class HomeService
 
             $update['compliance'] = "";
             if ($updates['final'] == 'YES') {
-                $update['compliance'] = "Compliance remarks!";
+                $update['compliance'] = "Complied!";
             }
             $updatesArray[] = $update;
         }
@@ -281,5 +282,46 @@ class HomeService
         }
 
         return $returnArray;
+    }
+
+    // * Function to render user profile in view only mode
+    public function renderUserProfile($id)
+    {
+
+        $userDetails = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $id])->find();
+        $userDetails['FullName'] = $userDetails['actual_rank'] . " " . $userDetails['first_name'] . " " . $userDetails['last_name'] . " PAF";
+        $userDetails['FullNameSN'] = $userDetails['actual_rank'] . " " . $userDetails['first_name'] . " " . $userDetails['last_name'] . " " . $userDetails['serial_number'] . " PAF";
+        if ($userDetails['section'] != "") {
+            $section = unserialize($userDetails['section']);
+        }
+        $finalSec = [];
+        foreach ($section as $sec) {
+            if ($sec === "DPP") {
+                $finalSec[$sec] = "Financial and Physical Obligation";
+                continue;
+            }
+            if ($sec === "DBFEE") {
+                $finalSec[$sec] = "Equipment and Vehicles";
+                continue;
+            }
+            if ($sec === "DMS") {
+                $finalSec[$sec] = "POL Products and ICIE";
+                continue;
+            }
+            if ($sec === "DMA") {
+                $finalSec[$sec] = "Munition and Armaments Management";
+                continue;
+            }
+            if ($sec === "DAMM") {
+                $finalSec[$sec] = "AeroDrome Ground Equipment Services";
+                continue;
+            }
+            if ($sec === "ADMIN") {
+                $finalSec[$sec] = "Administrative Services";
+                continue;
+            }
+        }
+        $userDetails['finalsec'] = $finalSec;
+        return $userDetails;
     }
 }
