@@ -132,6 +132,12 @@ include $this->resolve("partials/_header.php");
                 </div>
             </div>
             <?php if ($viewedFrom == "dashboard") : ?>
+                <div class="row mt-3">
+                    <div class="col-12 col-md-4">
+                        <a class="btn btn-secondary" href="/">BACK</a>
+                    </div>
+
+                </div>
             <?php else : ?>
                 <!-- // * ADD WORK QUEUE AND ACTIVITIES BUTTONS -->
                 <div class="row mt-3 mb-3">
