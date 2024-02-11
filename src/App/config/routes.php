@@ -43,8 +43,10 @@ function registerRoutes(App $app)
     $app->get('/profile', [ProfileController::class, 'viewProfile'])->add(AuthRequiredMiddleware::class);
     $app->get('/profile/return', [ProfileController::class, 'backTo'])->add(AuthRequiredMiddleware::class);
     $app->get('/{viewedFrom}/work/{id}', [WorkQueueController::class, 'viewWorkList'])->add(AuthRequiredMiddleware::class);
-    $app->post('/profile/addwork', [ProfileController::class, 'addwork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/profile', [ProfileController::class, 'addwork'])->add(AuthRequiredMiddleware::class);
     $app->get('/{viewedFrom}/details/{id}', [workDetailsController::class, 'viewWorkDetails'])->add(AuthRequiredMiddleware::class);
+    $app->get('/{view}/details/sub/{id}/{sub}', [workDetailsController::class, 'viewUpdates'])->add(AuthRequiredMiddleware::class);
+    $app->get('/{view}/details/added/sub/{id}/{sub}', [workDetailsController::class, 'viewAddedUpdates'])->add(AuthRequiredMiddleware::class);
     $app->get('/{viewedFrom}/details/added/{id}', [workDetailsController::class, 'viewAddedWorkDetails'])->add(AuthRequiredMiddleware::class);
     $app->get('/profile/details/edit/{id}', [workDetailsController::class, 'renderEditWorkModal'])->add(AuthRequiredMiddleware::class);
     $app->post('/profile/details/edit/save', [workDetailsController::class, 'saveEditedWork'])->add(AuthRequiredMiddleware::class);
@@ -63,6 +65,9 @@ function registerRoutes(App $app)
     $app->get('/profile/details/work/return', [workDetailsController::class, 'returnCompliance'])->add(AuthRequiredMiddleware::class);
     $app->get('/profile/viewfile', [ProfileController::class, 'viewFile'])->add(AuthRequiredMiddleware::class);
     $app->get('/profile/file/{file}', [ProfileController::class, 'renderFile'])->add(AuthRequiredMiddleware::class);
+
+    // Leetcode problem solver
+    $app->get('/special', [HomeController::class, 'special'])->add(AuthRequiredMiddleware::class);
 
 
     $app->get('/dashboard/profile/{id}', [HomeController::class, 'renderUserProfile'])->add(AuthRequiredMiddleware::class);

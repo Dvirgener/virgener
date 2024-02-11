@@ -18,6 +18,7 @@ class ProfileService
     {
     }
 
+
     // * Getting user details from DB for use of Side Profile
     public function getUserDetails($id): array
     {
@@ -26,6 +27,8 @@ class ProfileService
         $this->userFullNameSN = $userDetails['actual_rank'] . " " . $userDetails['first_name'] . " " . $userDetails['last_name'] . " " . $userDetails['serial_number'] . " PAF";
         if ($userDetails['section'] != "") {
             $section = unserialize($userDetails['section']);
+        } else if ($userDetails['position'] == "OIC" || $userDetails['position'] == "AOIC") {
+            $section = [];
         }
         $finalSec = [];
         foreach ($section as $sec) {
@@ -64,7 +67,7 @@ class ProfileService
         $allusers = $this->db->query("SELECT * FROM users")->findAll();
         $juniors = [];
         foreach ($allusers as $user) {
-            if ($user['serial_number'] <= $serialNumber && $user['serial_number'] != 0) {
+            if ($user['number_rank'] <= $rank && $user['serial_number'] >= $serialNumber && $user['classification'] == "EP") {
                 if (isset($assignedUsers)) {
                     $user['check'] = "";
                     if (in_array($user['id'], $assignedUsers)) {
@@ -85,7 +88,7 @@ class ProfileService
             }
         }
         $keys = array_column($juniors, 'serial_number');
-        array_multisort($keys, SORT_DESC, $juniors);
+        array_multisort($keys, SORT_ASC, $juniors);
         return $juniors;
     }
 
@@ -190,6 +193,18 @@ class ProfileService
         return $workCount;
     }
 
+    public function checkPending($id)
+    {
+        $allwork = $this->db->query("SELECT * FROM work WHERE status = 'PENDING'")->findAll();
+        $pending = 0;
+        foreach ($allwork as $work) {
+            if ($id == $work['added_by']) {
+                $pending += 1;
+            }
+        }
+        return $pending;
+    }
+
     // * This is for the added work numbers of the user
     public function checkAddedWorkNumbers($id): array
     {
@@ -201,8 +216,6 @@ class ProfileService
         foreach ($allwork as $work) {
             if ($id == $work['added_by']) {
                 $currentWork += 1;
-
-
                 $res = checkUpdate($work['updated_at']);
                 if ($res) {
                     $unupdatedWork += 1;
@@ -233,5 +246,35 @@ class ProfileService
         header("content-disposition: inline;filename={acwdcwa}");
         header("content-type: {.jpg,.jpeg,.png}");
         readfile($filePath);
+    }
+
+    // * This is for fetching all complied files that are assigned to the ID
+    public function getCompliedNumbers($id)
+    {
+        $noTD = 0;
+        $early = 0;
+        $onTime = 0;
+        $late = 0;
+        $allComplied = $this->db->query("SELECT * FROM work WHERE status = 'COMPLIED'")->findAll();
+        foreach ($allComplied as $work) {
+            $workOwners = unserialize($work['assigned_to']);
+            if (in_array($id, $workOwners)) {
+                switch ($work['timeliness']) {
+                    case 'No TD':
+                        $noTD += 1;
+                        break;
+                    case 'Early':
+                        $early += 1;
+                        break;
+                    case 'On Time':
+                        $onTime += 1;
+                        break;
+                    case 'Late':
+                        $late += 1;
+                        break;
+                }
+            }
+        }
+        return ['noTD' => $noTD, 'early' => $early, 'onTime' => $onTime, 'late' => $late];
     }
 }

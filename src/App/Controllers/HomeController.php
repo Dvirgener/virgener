@@ -26,6 +26,10 @@ class HomeController
             redirectTo('/karaoke');
         }
 
+        if ($_SESSION['user']['position'] === "Personnel") {
+            redirectTo('/profile');
+        }
+
         $allWorkQueue = $this->HomeService->allWorkQueue();
         $allTimeliness = $this->HomeService->timelinessNumbers();
         $active = $this->HomeService->activeWorkNumbers();
@@ -61,6 +65,8 @@ class HomeController
         $fullName = $this->profileService->userFullNameSN;
         $workCount = $this->profileService->checkWorkNumbers($params['id']);
         $addedWorkCount = $this->profileService->checkAddedWorkNumbers($params['id']);
+        $pending = $this->profileService->checkPending($_SESSION['user']['id']);
+        $workTimeliness = $this->profileService->getCompliedNumbers($params['id']);
         echo $this->view->render(
             "/profile/profile.php",
             [
@@ -68,8 +74,41 @@ class HomeController
                 'fullName' => $fullName,
                 'addedWorkCount' => $addedWorkCount,
                 'workCount' => $workCount,
-                'viewedFrom' => "dashboard"
+                'viewedFrom' => "dashboard",
+                'pending' => $pending,
+                'workTimeliness' => $workTimeliness
             ]
         );
+    }
+
+    public function special()
+    {
+        $nums = [3, 14, 4, 8, 12, 1, 11, 6, 78];
+        $target = 23;
+
+
+        function twoSum($nums, $target)
+        {
+            $index1 = 0; // index of the first element on the first foreach
+            $theSameAsNum = [];
+            foreach ($nums as $num) {
+
+                $index2 = 0; // index of the first element inside second the foreach
+                foreach ($nums as $nr) {
+                    if ($index1 == $index2) {
+                        continue;
+                    }
+                    $res = $num + $nr;
+                    if ($res == $target) {
+                        $theSameAsNum[] = $index2;
+                        $theSameAsNum[] = $index1;
+                        return $theSameAsNum;
+                    }
+                    $index2 += 1;
+                }
+                $index1 += 1;
+            }
+        }
+        pd(twoSum($nums, $target));
     }
 }

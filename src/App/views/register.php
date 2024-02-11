@@ -73,7 +73,7 @@ $oldFormPosition = isset($oldFormData['position']) ? $oldFormData['position'] : 
                     <select name="position" id="position" class="form-select <?php echo validInvalidForm($errors, $oldFormData, 'position'); ?>">
                         <option></option>
                         <option value="OIC" <?php echo ($oldFormPosition === "OIC" ? "selected" : ''); ?>>OIC</option>
-                        <option value="Assistant OIC" <?php echo ($oldFormPosition === "Assistant OIC" ? "selected" : ''); ?>>Assistant OIC</option>
+                        <option value="AOIC" <?php echo ($oldFormPosition === "AOIC" ? "selected" : ''); ?>>Assistant OIC</option>
                         <option value="NCOIC" <?php echo ($oldFormPosition === "NCOIC" ? "selected" : ''); ?>>NCOIC</option>
                         <option value="Personnel" <?php echo ($oldFormPosition === "Personnel" ? "selected" : ''); ?>>Personnel</option>
                     </select>

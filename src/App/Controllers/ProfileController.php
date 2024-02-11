@@ -6,13 +6,13 @@ namespace App\Controllers;
 
 use Framework\TemplateEngine;
 use App\config\paths;
-use App\Services\{TransactionService, ProfileService};
+use App\Services\{ValidatorService, ProfileService};
 
 
 class ProfileController
 {
 
-    public function __construct(private TemplateEngine $view, private ProfileService $profileService)
+    public function __construct(private ValidatorService $ValidatorService, private TemplateEngine $view, private ProfileService $profileService)
     {
     }
 
@@ -28,6 +28,7 @@ class ProfileController
         $user = $this->profileService->getUserDetails($_SESSION['user']['id']);
         $fullName = $this->profileService->userFullNameSN;
         $workCount = $this->profileService->checkWorkNumbers($_SESSION['user']['id']);
+        $pending = $this->profileService->checkPending($_SESSION['user']['id']);
         $addedWorkCount = $this->profileService->checkAddedWorkNumbers($_SESSION['user']['id']);
         // * Add Work Modal
         $juniors = $this->profileService->fetchAllJuniors($_SESSION['user']['serial_number'], $_SESSION['user']['number_rank']);
@@ -39,6 +40,7 @@ class ProfileController
                 'juniors' => $juniors,
                 'addedWorkCount' => $addedWorkCount,
                 'workCount' => $workCount,
+                'pending' => $pending,
                 'viewedFrom' => "profile"
             ]
         );

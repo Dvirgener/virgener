@@ -1,10 +1,11 @@
 <?php
 include $this->resolve("partials/_header.php");
-
 ?>
 
+<!-- THIS WILL LOAD THE CHARTS API FROM GOOGLE -->
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
+<!-- THIS IS THE CHART FOR THE CURRENT ACTIVE WORK QUEUES -->
 <script type="text/javascript">
     google.charts.load('current', {
         'packages': ['corechart']
@@ -46,6 +47,7 @@ include $this->resolve("partials/_header.php");
     }
 </script>
 
+<!-- THIS IS THE CHART FOR ALL THE WORK QUEUES CREATED IN THE SYSTEM -->
 <script type="text/javascript">
     google.charts.load('current', {
         'packages': ['corechart']
@@ -87,6 +89,7 @@ include $this->resolve("partials/_header.php");
     }
 </script>
 
+<!-- THIS IS THE CHART FOR THE TIMELINESS OF COMPLIANCE TO THE WORK QUEUES CREATED -->
 <script type="text/javascript">
     google.charts.load('current', {
         'packages': ['corechart']
@@ -135,6 +138,8 @@ include $this->resolve("partials/_header.php");
         <h2>DASHBOARD</h2>
     </div>
     <div class="row mx-2">
+
+        <!-- THIS IS THE PART WHERE YOU CAN SEE ALL THE PERSONNEL IN THE OFFICE, DUTY STATUS AND CURRENT ACTIVE WORK QUEUES -->
         <div class="col-12 col-md-3">
             <div class="row mb-3">
                 <span class="fs-5 fw-bold">Personnel Status:</span>
@@ -164,11 +169,16 @@ include $this->resolve("partials/_header.php");
                 </div>
             </div>
         </div>
+        <!-- THIS IS THE PART WHERE YOU CAN SEE ALL THE PERSONNEL IN THE OFFICE, DUTY STATUS AND CURRENT ACTIVE WORK QUEUES -->
+
+        <!-- THIS IS THE PART FOR THE DASHBOARD DATA -->
         <div class="col-9 ">
             <div class="row">
                 <span class="fs-5 fw-bold">Data Charts:</span>
             </div>
             <div class="row overflow-y-scroll" style="height:700px">
+
+                <!-- THIS IS WHERE YOU CAN SEE THE CHARTS -->
                 <div class="row mb-2" style="height:330px">
                     <div class="col-12 col-md-4">
                         <div id="piechart" style="height:50px; width:100%;" class=""></div>
@@ -180,12 +190,16 @@ include $this->resolve("partials/_header.php");
                         <div id="piechart3" style="height:50px; width:100%;" class=""></div>
                     </div>
                 </div>
+                <!-- THIS IS WHERE YOU CAN SEE THE CHARTS -->
+
+                <!-- THIS IS WHERE YOU CAN SEE WORK QUEUES OF THE OFFICE -->
                 <div class="row">
+
+                    <!-- THIS IS WHERE YOU CAN SEE THE WORK QUEUE NAVIGATION AND LISTS -->
                     <div class="col-7">
-                        <div class="row mb-2">
-                            <span class="fw-bold fs-6"></span>
-                        </div>
                         <div class="row ms-2">
+
+                            <!-- THIS IS FOR THE NAVIGATION BUTTONS OF WORK QUEUE VIEWS -->
                             <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link active" id="pills-recentlyAdded-tab" data-bs-toggle="pill" data-bs-target="#pills-recentlyAdded" type="button" role="tab" aria-controls="pills-recentlyAdded" aria-selected="true">Recently Added</button>
@@ -203,6 +217,8 @@ include $this->resolve("partials/_header.php");
                                     <button class="nav-link" id="pills-approval-tab" data-bs-toggle="pill" data-bs-target="#pills-approval" type="button" role="tab" aria-controls="pills-approval" aria-selected="false">Pending Approval</button>
                                 </li>
                             </ul>
+                            <!-- THIS IS FOR THE NAVIGATION BUTTONS OF WORK QUEUE VIEWS -->
+
                             <!-- TABS -->
                             <div class="row overflow-y-scroll" style="height:290px">
                                 <div class="tab-content" id="pills-tabContent">
@@ -381,8 +397,12 @@ include $this->resolve("partials/_header.php");
                                 </div>
                             </div>
                             <!-- TABS -->
+
                         </div>
                     </div>
+                    <!-- THIS IS WHERE YOU CAN SEE THE WORK QUEUE NAVIGATION AND LISTS -->
+
+                    <!-- THIS IS FOR THE UPDATES OF THE DAY PORTION -->
                     <div class="col-5">
                         <div class="row mb-2 pt-5">
                             <span class="fw-bold fs-6">Updates for Today:</span>
@@ -396,8 +416,6 @@ include $this->resolve("partials/_header.php");
                                             <?php if ($update['subWork'] != "") : ?>
                                                 <span> <span class="fw-bold"> For Sub-work: </span> <?= $update['subWork'] ?></span>
                                             <?php endif ?>
-
-
                                         </div>
                                         <div class="row mb-1">
                                             <span><span class="fw-bold">Remarks: </span><?= $update['remarks'] ?></span>
@@ -413,9 +431,15 @@ include $this->resolve("partials/_header.php");
                             <?php endforeach ?>
                         </div>
                     </div>
+                    <!-- THIS IS FOR THE UPDATES OF THE DAY PORTION -->
+
                 </div>
+                <!-- THIS IS WHERE YOU CAN SEE WORK QUEUES OF THE OFFICE -->
+
             </div>
         </div>
+        <!-- THIS IS THE PART FOR THE DASHBOARD DATA -->
+
     </div>
 
 </section>

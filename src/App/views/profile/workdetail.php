@@ -116,23 +116,27 @@
                         </div>
                     </div>
                     <!-- //* Display for Browser -->
-                    <div class="col-6 col-md-4 mb-2 d-none d-md-inline">
-                        <div class="row">
-                            <div class="col-5">
-                                <img class="border view_personnel_work img-fluid " type="button" id="view_personnel_work" src="/profile/<?= $assigned['picture'] ?>" onerror="this.src='../pictures/generic/imageplaceholder.png';" alt="" style=" height: 100%; width: 100%">
-                            </div>
-                            <div class="col-7 d-grid align-items-center">
-                                <span class="" style="font-size:small;"><?= $assigned['name'] ?></span>
-                            </div>
-                        </div>
+                    <div class="col-6 col-md-2 mb-2 d-none d-md-inline">
+                        <img class="border border-2 border-dark view_personnel_work img-fluid " type="button" id="view_personnel_work" src="/profile/<?= $assigned['picture'] ?>" alt="" style=" height: 50px; width: 50px">
                     </div>
                 <?php endforeach ?>
             </div>
-            <div class="row mb-2">
-                <span class="fw-bold">UPDATES:</span>
+            <div class="row my-2">
+                <div class="col-3 d-flex align-items-center">
+                    <span class="fw-bold">UPDATES:</span>
+                </div>
+                <div class="col-7">
+                    <select name="" id="selectUpdateView" class="form-select">
+                        <option value="all" selected>All updates</option>
+                        <option value="0">General Updates</option>
+                        <?php foreach ($subWork as $sub) : ?>
+                            <option value="<?= $sub['id'] ?>"><?= $sub['sub_subject'] ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
             </div>
-            <div class="row overflow-y-scroll" style="height: 400px;">
-                <div class="col">
+            <div class="row overflow-y-scroll mt-2" style="height: 400px;">
+                <div class="col" id="updateCol">
                     <?php foreach ($workDetails['updates'] as $update) : ?>
                         <div class="row border mx-1 mb-2">
                             <div class="col-4 border-end text-center d-flex align-items-center justify-content-center">
@@ -265,7 +269,7 @@
                     include $this->resolve("partials/_token.php");
                     ?>
                     <input type="hidden" name="idToUpdate" id="idToUpdate">
-                    <input type="hidden" name="mainId" id="mainId" value="<?= $workDetails['id'] ?>">
+                    <input type="hidden" name="main_id" id="main_id" value="<?= $workDetails['id'] ?>">
                     <div class="row mb-1">
                         <div class="col-8">
                             <label for="" class="form-label">Remarks:</label>

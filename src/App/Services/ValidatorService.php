@@ -45,7 +45,7 @@ class ValidatorService
             'confirmPassword' => ['required', 'password'],
             'lastName' => ['required'],
             'rank' => ['required', 'in:1,2,3,4,5,6,7,8,9,10,11,12'],
-            'position' => ['required', 'in:OIC,Assistant OIC,NCOIC,Personnel'],
+            'position' => ['required', 'in:OIC,AOIC,NCOIC,Personnel'],
             'serialNumber' => ['required', 'numeric']
         ]);
     }
@@ -74,12 +74,16 @@ class ValidatorService
         );
     }
 
-    public function validateSearchActivityForm(array $formData)
+    public function validateAddWork(array $formData)
     {
         $this->validator->validate($formData, [
-            'acct_code' => ['required'],
-            'reviewing_staff' => ['required'],
-            'quarter' => ['required'],
+            'subject' => ['required'],
+            'addworktype' => ['required']
         ]);
+?>
+        <script>
+            $('#viewFileModal').modal('show');
+        </script>
+<?php
     }
 }

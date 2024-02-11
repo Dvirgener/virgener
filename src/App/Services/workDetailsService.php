@@ -145,6 +145,58 @@ class workDetailsService
         return $workdetails;
     }
 
+    public function getSubwork($mainId)
+    {
+        return $this->db->query("SELECT * FROM sub_work WHERE main_id = :main_id", ['main_id' => $mainId])->findAll();
+    }
+
+    public function getUpdates($workId, $subId)
+    {
+        if ($subId == 0) {
+            $workUpdates = $this->db->query("SELECT * FROM updates WHERE main_id = :main_id AND sub_id = 0", ['main_id' => $workId])->findAll();
+        } else if ($subId == "all") {
+            $workUpdates = $this->db->query("SELECT * FROM updates WHERE main_id = :main_id", ['main_id' => $workId])->findAll();
+        } else {
+            $workUpdates = $this->db->query("SELECT * FROM updates WHERE main_id = :main_id AND sub_id = :sub_id", ['main_id' => $workId, 'sub_id' => $subId])->findAll();
+        }
+
+        // *Scan Each work updates for details
+        $detailedWorkUpdates = [];
+        foreach ($workUpdates as $workUpdate) {
+            // * Assign name for the person who made the update
+            $workUpdate['updated_by'] = $this->nameOfId($workUpdate['updated_by']);
+
+            // * Check if it came from a sub work queue
+
+            if ($workUpdate['sub_id'] != 0) {
+                $subSubject = $this->db->query("SELECT sub_subject FROM sub_work WHERE id = :id", ['id' => $workUpdate['sub_id']])->find();
+                $workUpdate['sub_id'] = $subSubject['sub_subject'];
+            }
+
+            // * Check if the update has a file uploaded
+            if ($workUpdate['files'] == "") {
+                $workUpdate['files'] = [];
+            } else {
+                $workUpdate['files'] = unserialize($workUpdate['files']);
+            }
+            // * Check if the update is a final update or what you call compliance remarks
+            $workUpdate['complied'] = "";
+            if ($workUpdate['final'] == "YES") {
+                $workUpdate['complied'] = "Compliance Remarks!";
+            }
+
+            // * format date to be readable
+            $date = date_create($workUpdate['created_at']);
+            $workUpdate['created_at'] = date_format($date, "d F Y");
+
+            // * add the work update to the array
+            $detailedWorkUpdates[] = $workUpdate;
+        }
+        return $detailedWorkUpdates;
+    }
+
+
+
     public function fetchAllJuniors($serialNumber, $rank, $workId = NULL): array
     {
         if ($workId != NULL) {
@@ -154,7 +206,7 @@ class workDetailsService
         $allusers = $this->db->query("SELECT * FROM users")->findAll();
         $juniors = [];
         foreach ($allusers as $user) {
-            if ($user['serial_number'] <= $serialNumber && $user['serial_number'] != 0) {
+            if ($user['number_rank'] <= $rank && $user['serial_number'] >= $serialNumber && $user['classification'] == "EP") {
                 if (isset($assignedUsers)) {
                     $user['check'] = "";
                     if (in_array($user['id'], $assignedUsers)) {
@@ -175,7 +227,7 @@ class workDetailsService
             }
         }
         $keys = array_column($juniors, 'serial_number');
-        array_multisort($keys, SORT_DESC, $juniors);
+        array_multisort($keys, SORT_ASC, $juniors);
         return $juniors;
     }
 

@@ -38,12 +38,10 @@ $(document).on('click', '.viewAddedWorkBut', function () {
 });
 
 // * This is for the add sub work button
-
 let id = 1;
 $(document).on('click', '#addSub', function () {
     id++;
     $('.subWorkGroup').append('<div class="row mb-2" id="id'+id+'"><div class="col-10 col-md-11"><input class="form-control" type="text" id="sub[]" name="sub[]"></div><div class="col-2 col-md-1"><button type="button" class="btn btn-danger removeDiv" id="'+id+'">&times</button></div></div>');
-
     $(document).on('click', '.removeDiv', function () {
         var butToRemove = $(this).attr("id");
         $('#id' + butToRemove).remove();
@@ -106,7 +104,7 @@ $(document).on('submit', '#editWorkForm', function (f) {
     })
 })
 
-// * Function to Delete Work Modal
+// * Function to Open Delete Work Modal
 $(document).on('click', '.deleteWorkBut', function () {
     var id = $(this).val();  
     $("#idToDelete").val(id);
@@ -114,7 +112,7 @@ $(document).on('click', '.deleteWorkBut', function () {
 });
 
 
-// * Function to edit Sub Work
+// * Function to Open edit Sub Work modal
 $(document).on('click', '.editSubWork', function () {
 
     var id = $(this).val();
@@ -149,7 +147,7 @@ $(document).on('submit', '#editSubWorkForm', function (f) {
     })
 })
 
-// * Function to Delete Sub Work Modal
+// * Function to open Delete Sub Work Modal
 $(document).on('click', '.deleteSubWorkBut', function () {
     var id = $(this).val();  
     $.ajax({
@@ -162,7 +160,7 @@ $(document).on('click', '.deleteSubWorkBut', function () {
     })
 });
 
-// * Function to save edited Sub work 
+// * Function to save deleted sub work 
 $(document).on('submit', '#deleteSubWorkForm', function (f) {
     f.preventDefault();
     var data = new FormData(this);
@@ -178,12 +176,11 @@ $(document).on('submit', '#deleteSubWorkForm', function (f) {
             $("#pageLoader").load("/profile/details/added/" + id);
             $("#deleteSubWorkModal").load(location.href + " #deleteSubWorkModal>*", "");
             $("#deleteWorkModal").load(location.href + " #deleteWorkModal>*", "");
-            
         }
     })
 })
 
-// * Add Sub-work
+// * Add Sub-work modal
 $(document).on('click', '#addSubWorkBut', function () {
     $('#addSubWorkModal').modal('show');
 });
@@ -227,10 +224,9 @@ $(document).on('submit', '#deleteUpdateForm', function (f) {
     })
 })
 
-// * update Work Modal
+// * Open update Work Modal
 $(document).on('click', '.updateWorkBut', function () {
     var idToUpdate = $(this).val();
-
     $('#idToUpdate').val(idToUpdate);
     $('#updateWorkModal').modal('show');
     
@@ -240,7 +236,7 @@ $(document).on('click', '.updateWorkBut', function () {
 $(document).on('submit', '#updateWorkForm', function (f) {
     f.preventDefault();
     var data = new FormData(this);
-    var id = data.get("mainId");
+    var id = data.get("main_id");
     $.ajax({
         type: 'POST',
         url: '/profile/details/update',
@@ -254,7 +250,6 @@ $(document).on('submit', '#updateWorkForm', function (f) {
     })
 })
 
-
 // * update Sub Work Modal
 $(document).on('click', '.updateSubWorkBut', function () {
     var subIdToUpdate = $(this).val();
@@ -267,7 +262,7 @@ $(document).on('click', '.updateSubWorkBut', function () {
 $(document).on('submit', '#updateSubWorkForm', function (f) {
     f.preventDefault();
     var data = new FormData(this);
-    var id = data.get("mainId");
+    var id = data.get("main_id");
     $.ajax({
         type: 'POST',
         url: '/profile/details/update/sub',
@@ -353,6 +348,31 @@ $(document).on('click', '.viewFileBut', function () {
         success: function (response) {
             $("#viewFiles").html(response);
             $('#viewFileModal').modal('show');
+        }
+    })
+});
+
+$(document).on('change', '#selectUpdateView', function () {
+    var id = $(this).val();
+    var mainId = $('#main_id').val();
+    var viewedFrom = $('#viewedFrom').val();
+        $.ajax({
+        type: "GET",
+        url: "/"+viewedFrom+"/details/sub/"+mainId+"/"+id,
+        success: function (response) {
+            $("#updateCol").html(response);
+        }
+    })
+});
+$(document).on('change', '#selectAddedUpdateView', function () {
+    var id = $(this).val();
+    var mainId = $('#main_id').val();
+    var viewedFrom = $('#viewedFrom').val();
+        $.ajax({
+        type: "GET",
+        url: "/"+viewedFrom+"/details/added/sub/"+mainId+"/"+id,
+        success: function (response) {
+            $("#updateAddedCol").html(response);
         }
     })
 });

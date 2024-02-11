@@ -2,7 +2,7 @@
 <div class="modal fade" id="addWorkModal" tabindex="-1" aria-labelledby="addWorkModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form action="/profile/addwork" enctype="multipart/form-data" method="POST" id="addWorkForm">
+            <form action="" enctype="multipart/form-data" method="POST" id="addWorkForm">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="addWorkModalLabel">Add Work Queue</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

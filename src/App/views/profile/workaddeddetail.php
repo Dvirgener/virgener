@@ -83,7 +83,6 @@
                             </div>
                         </div>
                     <?php endif ?>
-
                 </div>
             </div>
             <div class="row mb-2" style="height:fit-content;">
@@ -111,7 +110,6 @@
                             <div class="col-12">
                                 <img class="border view_personnel_work img-fluid " type="button" id="view_personnel_work" src="/profile/<?= $assigned['picture'] ?>" alt="" style=" height: 100%; width: 100%">
                             </div>
-
                         </div>
                         <div class="row text-center">
                             <span class="" style="font-size:small;"><?= $assigned['name'] ?></span>
@@ -121,7 +119,7 @@
                     <div class="col-6 col-md-4 mb-2 d-none d-md-inline">
                         <div class="row">
                             <div class="col-5">
-                                <img class="border view_personnel_work img-fluid " type="button" id="view_personnel_work" src="/profile/<?= $assigned['picture'] ?>" onerror="this.src='../pictures/generic/imageplaceholder.png';" alt="" style=" height: 100%; width: 100%">
+                                <img class="border view_personnel_work img-fluid " type="button" id="view_personnel_work" src="/profile/<?= $assigned['picture'] ?>" alt="" style=" height: 100%; width: 100%">
                             </div>
                             <div class="col-7 d-grid align-items-center">
                                 <span class="" style="font-size:small;"><?= $assigned['name'] ?></span>
@@ -130,15 +128,25 @@
                     </div>
                 <?php endforeach ?>
             </div>
-            <div class="row mb-2">
-                <span class="fw-bold">UPDATES:</span>
+            <div class="row my-2">
+                <div class="col-3 d-flex align-items-center">
+                    <span class="fw-bold">UPDATES:</span>
+                </div>
+                <div class="col-7">
+                    <select name="" id="selectAddedUpdateView" class="form-select">
+                        <option value="all" selected>All updates</option>
+                        <option value="0">General Updates</option>
+                        <?php foreach ($subWork as $sub) : ?>
+                            <option value="<?= $sub['id'] ?>"><?= $sub['sub_subject'] ?></option>
+                        <?php endforeach ?>
+                    </select>
+                </div>
             </div>
-            <div class="row overflow-y-scroll" style="height: 400px;">
-                <div class="col">
+            <div class="row overflow-y-scroll mt-2" style="height: 400px;">
+                <div class="col" id="updateAddedCol">
                     <?php foreach ($workDetails['updates'] as $update) : ?>
                         <div class="row-fluid border  mx-1 mb-2">
                             <div class="row justify-content-end">
-
                             </div>
                             <div class="row">
                                 <div class="col-4 border-end text-center d-flex align-items-center justify-content-center">
@@ -189,15 +197,17 @@
                                     </div>
                                 </div>
                                 <div class="col-1 mt-1" style="font-size: smaller;">
-                                    <form action="" method="POST" id="deleteUpdateForm">
-                                        <?php
-                                        include $this->resolve("partials/_token.php");
-                                        ?>
-                                        <input type="hidden" value="<?= $update['main_id'] ?>" id="mainId" name="mainId">
-                                        <input type="hidden" value="<?= $update['id'] ?>" id="id" name="id">
-                                        <button type="submit" class="btn-close" aria-label="Close"></button>
-                                    </form>
-
+                                    <?php if ($viewedFrom == "dashboard") : ?>
+                                    <?php else : ?>
+                                        <form action="" method="POST" id="deleteUpdateForm">
+                                            <?php
+                                            include $this->resolve("partials/_token.php");
+                                            ?>
+                                            <input type="hidden" value="<?= $update['main_id'] ?>" id="mainId" name="mainId">
+                                            <input type="hidden" value="<?= $update['id'] ?>" id="id" name="id">
+                                            <button type="submit" class="btn-close" aria-label="Close"></button>
+                                        </form>
+                                    <?php endif ?>
                                 </div>
                             </div>
                         </div>
@@ -303,7 +313,7 @@
                     ?>
                     <div class="row mb-2">
                         <div class="col">
-                            <input type="hidden" name="mainId" value="<?= $workDetails['id'] ?>">
+                            <input type="hidden" name="main_id" id="main_id" value="<?= $workDetails['id'] ?>">
                             <label for="addSubSubject" class="form-label fw-bold">SUB WORK SUBJECT:</label>
                             <input class="form-control" type="text" id="addSubSubject" name="addSubSubject">
                         </div>

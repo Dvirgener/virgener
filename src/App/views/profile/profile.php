@@ -2,29 +2,97 @@
 include $this->resolve("partials/_header.php");
 
 ?>
-<!-- //* Load Profile javascript -->
+
+<!-- THIS IS THE SCRIPT TO LOAD GOOGLE CHARTS API -->
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<!-- THIS IS THE SCRIPT FOR THE USER STATISTICS -->
+<script type="text/javascript">
+    google.charts.load("current", {
+        packages: ['corechart']
+    });
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+            ["Element", "Density", {
+                role: "style"
+            }],
+            ["No TD", <?= $workTimeliness['noTD'] ?>, "#b87333"],
+            ["Early", <?= $workTimeliness['early'] ?>, "green"],
+            ["On Time", <?= $workTimeliness['onTime'] ?>, "gold"],
+            ["Late", <?= $workTimeliness['late'] ?>, "red"]
+        ]);
+
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1,
+            {
+                calc: "stringify",
+                sourceColumn: 1,
+                type: "string",
+                role: "annotation"
+            },
+            2
+        ]);
+
+        var options = {
+            title: "",
+            width: 600,
+            height: 300,
+            chartArea: {
+                left: 50,
+                top: 50,
+                width: '100%',
+                height: '55%'
+            },
+            bar: {
+                groupWidth: "90%"
+            },
+            legend: {
+                position: "none"
+            },
+        };
+        var chart = new google.visualization.ColumnChart(document.getElementById("columnchart_values"));
+        chart.draw(view, options);
+    }
+</script>
+<!-- THIS IS THE SCRIPT FOR THE USER STATISTICS -->
+
+
+<!--  THIS IS USED TO LOAD PROFILE.JS -->
 <script src="/assets/profile.js"></script>
+
+<!-- THIS ARE HIDDEN INPUTS USED TO IDENTIFY USER BEING VIEWED AND WHERE THE PROFILE IS BEING VIEWED -->
 <input type="hidden" id="profileId" value="<?= $user['id'] ?>">
 <input type="hidden" id="viewedFrom" value="<?= $viewedFrom ?>">
+
+
 <section class="mt-4">
     <div class="row mx-3">
         <div class="col-12 col-md-4">
             <div class="row">
                 <div class="border p-2 bg-light border-2 border-dark shadow rounded-4">
+
+                    <!-- THIS IS FOR THE USER DETAILS ROW -->
                     <div class="row">
                         <div class="col-12 col-md-4 text-center text-md-start">
                             <img class="border-dark border-2 rounded-4" src="/profile/<?php echo $user['picture'] ?>" alt="" style=" border-radius:10px; height:100%; width:100%">
                         </div>
                         <div class="col-12 col-md-8 text-center text-md-start">
+
+                            <!-- DISPLAY FULL NAME OF THE USER -->
                             <div class="row">
                                 <span class="fs-5 fw-bold"> <?= $fullName ?></span>
                             </div>
                             <div class="row border-bottom border-dark ms-0 me-4">
+                            </div>
 
-                            </div>
+                            <!-- DISPLAY OFFICE OF THE USER (CAN BE DYNAMIC IN THE FUTURE) -->
                             <div class="row">
-                                <span class="fw-bold">Directorate for Logistics</span>
+                                <span class="fw-bold">Office of the Directorate for Logistics</span>
                             </div>
+
+                            <!-- DISPLAY THE DUTY STATUS OF THE USER -->
                             <div class="row mb-4">
                                 <?php
                                 $statusBG = "red";
@@ -34,58 +102,108 @@ include $this->resolve("partials/_header.php");
                                 ?>
                                 <span>Duty Status: <span class="fw-bold" style="color:<?= $statusBG ?>"><?php echo $user['status'] ?></span></span>
                             </div>
+                            <!-- DISPLAY THE DUTY STATUS OF THE USER -->
+
                             <div class="row mb-1">
                                 <span class="fw-bold text-start">Office Designation:</span>
                             </div>
-                            <div class="row">
-                                <?php
 
-                                foreach ($user['finalsec'] as $key => $value) :
-                                ?>
-                                    <div class=" row text-start">
-                                        <span><span class="fw-bold"><?= $key ?></span> - <?= $value ?></span>
+                            <!-- IF STATEMENT TO DETERMINE WHERE THE PROFILE IS BEING VIEWED -->
+                            <?php if ($viewedFrom == "dashboard") : ?>
+
+                                <!-- IF THE PROFILE IS BEING VIEWED ON THE DASHBOARD, DISPLAY USER'S SECTION -->
+                                <div class="row">
+                                    <?php
+                                    foreach ($user['finalsec'] as $key => $value) :
+                                    ?>
+                                        <div class=" row text-start">
+                                            <span><span class="fw-bold"><?= $key ?></span> - <?= $value ?></span>
+                                        </div>
+                                    <?php endforeach ?>
+                                </div>
+                                <!-- IF THE PROFILE IS BEING VIEWED ON THE DASHBOARD, DISPLAY USER'S SECTION -->
+
+                            <?php elseif ($viewedFrom == "profile") : ?>
+
+                                <!-- IF THE PROFILE IS BEING VIEWED ON THE PROFILE PAGE, CHECK FOR THE POSITION OF THE LOGGED USER -->
+                                <?php if ($_SESSION['user']['position'] == "OIC") : ?>
+                                    <div class="row">
+                                        <span>DIRECTOR FOR LOGISTICS</span>
                                     </div>
-                                <?php endforeach ?>
-                            </div>
+                                <?php elseif ($_SESSION['user']['position'] == "AOIC") : ?>
+                                    <div class="row">
+                                        <span>ASST DIRECTOR FOR LOGISTICS</span>
+                                    </div>
+                                <?php else : ?>
+                                    <div class="row">
+                                        <?php
+                                        foreach ($user['finalsec'] as $key => $value) :
+                                        ?>
+                                            <div class=" row text-start">
+                                                <span><span class="fw-bold"><?= $key ?></span> - <?= $value ?></span>
+                                            </div>
+                                        <?php endforeach ?>
+                                    </div>
+                                <?php endif ?>
+                                <!-- IF THE PROFILE IS BEING VIEWED ON THE PROFILE PAGE, CHECK FOR THE POSITION OF THE LOGGED USER -->
+
+                            <?php endif ?>
+                            <!-- IF STATEMENT TO DETERMINE WHERE THE PROFILE IS BEING VIEWED -->
+
                         </div>
                     </div>
+                    <!-- THIS IS FOR THE USER DETAILS ROW -->
+
                     <div class="row border-bottom border-dark border-2 mx-1 mt-1">
                     </div>
+
+                    <!-- THIS IS FOR THE USER'S WORK QUEUE NUMBERS -->
                     <div class="row">
                         <div class="col-6">
                             <div class="row text-start">
                                 <span class="fw-bold fs-6">Personal Work</span>
                             </div>
                             <div class="row">
-                                <div class="col-5">
-                                    <span class="fs-6">Active</span>
+                                <div class="col-6">
+                                    <span class="fs-6">Active Work</span>
                                 </div>
                                 <div class="col-1">
                                     <span>:</span>
                                 </div>
-                                <div class="col-4 text-center">
+                                <div class="col-3 text-center">
                                     <span class="fw-bold"><?= $workCount['active'] ?></span>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-5">
-                                    <span class="fs-6 text-secondary">Update</span>
+                                <div class="col-6">
+                                    <span class="fs-6">Pending Approval</span>
+                                </div>
+                                <div class="col-1">
+                                    <span class="fs-6">:</span>
+                                </div>
+                                <div class="col-3 text-center">
+                                    <span class="fw-bold"><?= $pending ?></span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <span class="fs-6 text-secondary">Needs Update</span>
                                 </div>
                                 <div class="col-1">
                                     <span class="fs-6 text-secondary">:</span>
                                 </div>
-                                <div class="col-4 text-center">
+                                <div class="col-3 text-center">
                                     <span class="fw-bold"><?= $workCount['unupdated'] ?></span>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-5">
-                                    <span class="fs-6 text-danger">Deadline</span>
+                                <div class="col-6">
+                                    <span class="fs-6 text-danger">Near Deadline</span>
                                 </div>
                                 <div class="col-1">
                                     <span class="fs-6 text-danger">:</span>
                                 </div>
-                                <div class="col-4 text-center">
+                                <div class="col-3 text-center">
                                     <span class="fw-bold text-danger"><?= $workCount['danger'] ?></span>
                                 </div>
                             </div>
@@ -107,7 +225,7 @@ include $this->resolve("partials/_header.php");
                             </div>
                             <div class="row">
                                 <div class="col-5">
-                                    <span class="fs-6 text-secondary">Update</span>
+                                    <span class="fs-6 text-secondary">Needs Update</span>
                                 </div>
                                 <div class="col-1">
                                     <span class="fs-6 text-secondary">:</span>
@@ -118,7 +236,7 @@ include $this->resolve("partials/_header.php");
                             </div>
                             <div class="row">
                                 <div class="col-5">
-                                    <span class="fs-6 text-danger">Deadline</span>
+                                    <span class="fs-6 text-danger">Near Deadline</span>
                                 </div>
                                 <div class="col-1">
                                     <span class="fs-6 text-danger">:</span>
@@ -129,14 +247,25 @@ include $this->resolve("partials/_header.php");
                             </div>
                         </div>
                     </div>
+                    <!-- THIS IS FOR THE USER'S WORK QUEUE NUMBERS -->
+
                 </div>
             </div>
+
+            <!-- CHECK WHERE THE PROFILE IS BEING VIEWED -->
             <?php if ($viewedFrom == "dashboard") : ?>
                 <div class="row mt-3">
                     <div class="col-12 col-md-4">
                         <a class="btn btn-secondary" href="/">BACK</a>
                     </div>
-
+                    <div class="row">
+                        <div class="row mt-2 ">
+                            <span class="fw-bold">TIMELINESS OF WORK COMPLIANCE:</span>
+                        </div>
+                        <div class="row">
+                            <div id="columnchart_values" style="width: 900px; height: 300px;"></div>
+                        </div>
+                    </div>
                 </div>
             <?php else : ?>
                 <!-- // * ADD WORK QUEUE AND ACTIVITIES BUTTONS -->
@@ -332,13 +461,15 @@ include $this->resolve("partials/_header.php");
                     </div>
                 </div>
             <?php endif ?>
-
+            <!-- CHECK WHERE THE PROFILE IS BEING VIEWED -->
 
         </div>
 
+        <!-- THIS IS FOR THE WORK LIST PORTION THIS IS WHERE WORK LIST ARE LOADED  -->
         <div class="col-12 col-md-8" id="pageLoader">
-
         </div>
+        <!-- THIS IS FOR THE WORK LIST PORTION THIS IS WHERE WORK LIST ARE LOADED  -->
+
     </div>
 </section>
 <?php

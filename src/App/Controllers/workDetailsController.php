@@ -21,12 +21,14 @@ class workDetailsController
     {
         // * Get Work Details
         $workArray = $this->workDetailsService->workDetails($params['id']);
+        $subWork = $this->workDetailsService->getSubwork($params['id']);
         echo $this->view->render(
             "/profile/workdetail.php",
             [
                 'workDetails' => $workArray['work'],
                 'subWorkDetails' => $workArray['sub_work'],
-                'viewedFrom' => $params['viewedFrom']
+                'viewedFrom' => $params['viewedFrom'],
+                'subWork' => $subWork
             ]
         );
     }
@@ -36,12 +38,44 @@ class workDetailsController
     {
         // * Get Work Details
         $workArray = $this->workDetailsService->workDetails($params['id']);
+        $subWork = $this->workDetailsService->getSubwork($params['id']);
+
         echo $this->view->render(
             "/profile/workaddeddetail.php",
             [
                 'workDetails' => $workArray['work'],
                 'subWorkDetails' => $workArray['sub_work'],
-                'viewedFrom' => $params['viewedFrom']
+                'viewedFrom' => $params['viewedFrom'],
+                'subWork' => $subWork
+
+            ]
+        );
+    }
+
+    public function viewUpdates(array $params)
+    {
+        $updates = $this->workDetailsService->getUpdates($params['id'], $params['sub']);
+        $workArray = $this->workDetailsService->workDetails($params['id']);
+        echo $this->view->render(
+            "/profile/updates.php",
+            [
+                'updates' => $updates,
+                'viewedFrom' => $params['view'],
+                'addedBy' => $workArray['work']['added_by'],
+            ]
+        );
+    }
+
+    public function viewAddedUpdates(array $params)
+    {
+        $updates = $this->workDetailsService->getUpdates($params['id'], $params['sub']);
+        $workArray = $this->workDetailsService->workDetails($params['id']);
+        echo $this->view->render(
+            "/profile/addedUpdates.php",
+            [
+                'updates' => $updates,
+                'viewedFrom' => $params['view'],
+                'addedBy' => $workArray['work']['added_by'],
             ]
         );
     }
