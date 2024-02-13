@@ -178,7 +178,7 @@
                                 <div class="row mb-1">
                                     <?php foreach ($update['files'] as $file) : ?>
                                         <div class="col-4 d-grid">
-                                            <button class="btn btn-secondary viewFileBut" type="button" value="<?= $file ?>">File</button>
+                                            <button class="btn btn-secondary viewFileBut mb-1" type="button" value="<?= $file ?>">File</button>
                                         </div>
                                     <?php endforeach ?>
                                 </div>
