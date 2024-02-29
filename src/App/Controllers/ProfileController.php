@@ -6,13 +6,13 @@ namespace App\Controllers;
 
 use Framework\TemplateEngine;
 use App\config\paths;
-use App\Services\{ValidatorService, ProfileService};
+use App\Services\{ValidatorService, ProfileService, FileService};
 
 
 class ProfileController
 {
 
-    public function __construct(private ValidatorService $ValidatorService, private TemplateEngine $view, private ProfileService $profileService)
+    public function __construct(private ValidatorService $ValidatorService, private TemplateEngine $view, private ProfileService $profileService, private FileService $fileService)
     {
     }
 
@@ -55,19 +55,21 @@ class ProfileController
     // * This function is for adding Work Queue
     public function addwork()
     {
-        $this->profileService->addWork($_POST, $_FILES);
+        $id = $this->profileService->addWork($_POST);
+        $this->fileService->upload("addWork", $id, $_FILES);
         redirectTo("/profile");
     }
 
     // * Function to view File
     public function viewFile()
     {
-        echo $this->view->render("/profile/modalRender/viewfile.php", ['file' => $_GET['file']]);
+        $fileData = $this->fileService->getFile($_GET['file']);
+        echo $this->view->render("/profile/modalRender/viewfile.php", ['file' => $fileData]);
     }
 
     // * function to render file
     public function renderFile(array $params)
     {
-        $this->profileService->readFile($params);
+        $this->fileService->read($params);
     }
 }

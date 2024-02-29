@@ -105,33 +105,14 @@ class ProfileService
     }
 
     // * This is for the add work function based on the input provided on the add work modal
-    public function addWork(array $formData, ?array $fileData)
+    public function addWork(array $formData)
     {
-        $filetosave = "";
-        if ($fileData['workfiles']['name'][0] != "") {
-            $names = $_FILES['workfiles']['name'];
-            $tmp_name = $_FILES['workfiles']['tmp_name'];
-            $files_array = array_combine($tmp_name, $names);
-            $filenamearray = array();
-            foreach ($files_array as $tmp_folder => $file_name) {
-                $fileExtension = pathinfo($file_name, PATHINFO_EXTENSION);
-                $newFileName = bin2hex(random_bytes(16)) . "." . $fileExtension;
-                $uploadpath = paths::STORAGE_UPLOADS_FILEREFERENCE . "/" . $newFileName;
-
-                if (!move_uploaded_file($tmp_folder, $uploadpath)) {
-                    throw new ValidationException(['receipt' => ["Failed to upload file!"]]);
-                }
-                array_push($filenamearray, $newFileName);
-            }
-            $filetosave = serialize($filenamearray);
-        }
-
+        // $ext = pathinfo($fileData['workfiles']['name'][0], PATHINFO_EXTENSION);
         $assigned = serialize($formData['addto']);
         $formattedDate = "{$formData['addworktargetdate']}) 00:00:00";
-
         $this->db->query(
-            "INSERT INTO work (subject, instructions, assigned_to, type, added_by, added_from, status, date_target, files) 
-                    VALUES (:subject, :instructions, :assigned_to, :type, :added_by, :added_from, :status, :date_target, :files)",
+            "INSERT INTO work (subject, instructions, assigned_to, type, added_by, added_from, status, date_target) 
+                    VALUES (:subject, :instructions, :assigned_to, :type, :added_by, :added_from, :status, :date_target)",
             [
                 'subject' => $formData['subject'],
                 'instructions' => $formData['addworkintremarks'],
@@ -140,26 +121,25 @@ class ProfileService
                 'added_by' => $_SESSION['user']['id'],
                 'added_from' => $formData['addedfrom'],
                 'status' => "UNCOMPLIED",
-                'date_target' => $formattedDate,
-                'files' => $filetosave
+                'date_target' => $formattedDate
             ]
         );
 
-        $workId = $this->db->query("SELECT id from work ORDER BY id DESC LIMIT 1")->find();
-
+        // * Function to get the id of the work added
+        $workId = $this->db->id();
         if (isset($formData['sub'])) {
             foreach ($formData['sub'] as $subWork) {
-
                 $this->db->query(
                     "INSERT INTO sub_work (main_id, sub_subject, status) VALUES (:main_id, :sub_subject,:status)",
                     [
-                        'main_id' => $workId['id'],
+                        'main_id' => $workId,
                         'sub_subject' => $subWork,
                         'status' => "UNCOMPLIED"
                     ]
                 );
             }
         }
+        return $workId;
     }
 
     // * This is for work numbers of the user

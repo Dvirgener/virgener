@@ -6,13 +6,13 @@ namespace App\Controllers;
 
 use Framework\TemplateEngine;
 use App\config\paths;
-use App\Services\{TransactionService, workDetailsService};
+use App\Services\{TransactionService, workDetailsService, FileService};
 
 
 class workDetailsController
 {
 
-    public function __construct(private TemplateEngine $view, private workDetailsService $workDetailsService)
+    public function __construct(private TemplateEngine $view, private workDetailsService $workDetailsService, private FileService $fileService)
     {
     }
 
@@ -91,7 +91,8 @@ class workDetailsController
     // * Save edited work
     public function saveEditedWork()
     {
-        $this->workDetailsService->saveEditedWork($_POST, $_FILES);
+        $this->workDetailsService->saveEditedWork($_POST);
+        $this->fileService->upload("editWork", $_POST['id'], $_FILES);
     }
 
     // * Delete work
@@ -142,22 +143,26 @@ class workDetailsController
 
     public function updateWork()
     {
-        $this->workDetailsService->updateWork($_POST, $_FILES);
+        $updateId = $this->workDetailsService->updateWork($_POST);
+        $this->fileService->upload("updateWork", $updateId, $_FILES);
     }
 
     public function updateSubWork()
     {
-        $this->workDetailsService->updateSubWork($_POST, $_FILES);
+        $updateId = $this->workDetailsService->updateSubWork($_POST);
+        $this->fileService->upload("updateSubWork", $updateId, $_FILES);
     }
 
     public function complySubWork()
     {
-        $this->workDetailsService->complySubWork($_POST, $_FILES);
+        $complySubId = $this->workDetailsService->complySubWork($_POST);
+        $this->fileService->upload("complySubWork", $complySubId, $_FILES);
     }
 
     public function complyWork()
     {
-        $this->workDetailsService->complyWork($_POST, $_FILES);
+        $complyId = $this->workDetailsService->complyWork($_POST);
+        $this->fileService->upload("complyWork", $complyId, $_FILES);
         redirectTo('/profile');
     }
 

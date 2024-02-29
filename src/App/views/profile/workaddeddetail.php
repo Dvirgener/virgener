@@ -313,7 +313,7 @@
                     ?>
                     <div class="row mb-2">
                         <div class="col">
-                            <input type="hidden" name="main_id" id="main_id" value="<?= $workDetails['id'] ?>">
+                            <input type="hidden" name="mainId" id="mainId" value="<?= $workDetails['id'] ?>">
                             <label for="addSubSubject" class="form-label fw-bold">SUB WORK SUBJECT:</label>
                             <input class="form-control" type="text" id="addSubSubject" name="addSubSubject">
                         </div>

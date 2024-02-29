@@ -139,4 +139,15 @@ CREATE TABLE IF NOT EXISTS updates (
     FOREIGN KEY (main_id) REFERENCES work (id)
 );
 
+CREATE TABLE IF NOT EXISTS uploads(
+    id bigint(20) unsigned NOT NULL AUTO_INCREMENT, -- id of the file in DB
+    upload_from varchar (255) NOT NULL,
+    file_original_name varchar (510) NOT NULL,
+    file_save_name varchar (510) NOT NULL,
+    file_type varchar (255) NOT NULL,
+    file_extension varchar (255) NOT NULL,
+    created_at date NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    PRIMARY KEY (id)
+)
+
 

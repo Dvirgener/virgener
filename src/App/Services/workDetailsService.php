@@ -238,37 +238,23 @@ class workDetailsService
         return $workDetails;
     }
 
-    public function saveEditedWork(array $formData, ?array $fileData)
+    public function saveEditedWork(array $formData)
     {
+
         $assigned = serialize($formData['addto']);
         $formattedDate = "{$formData['addworktargetdate']}) 00:00:00";
-        if ($fileData['workfiles']['name'][0] != "") {
-            $fileNameArray = saveFile($fileData);
-            $filetosave = serialize($fileNameArray);
-            $this->db->query(
-                "UPDATE work SET subject = :subject, instructions = :instructions, assigned_to = :assigned_to, date_target = :date_target, files = :files WHERE id = :id",
-                [
-                    'subject' => $formData['subject'],
-                    'instructions' => $formData['addworkintremarks'],
-                    'assigned_to' => $assigned,
-                    'date_target' => $formattedDate,
-                    'files' => $filetosave,
-                    'id' => $formData['id']
-                ]
-            );
-        } else {
-            $this->db->query(
-                "UPDATE work SET subject = :subject, instructions = :instructions, assigned_to = :assigned_to, date_target = :date_target WHERE id = :id",
-                [
-                    'subject' => $formData['subject'],
-                    'instructions' => $formData['addworkintremarks'],
-                    'assigned_to' => $assigned,
-                    'date_target' => $formattedDate,
-                    'id' => $formData['id']
-                ]
 
-            );
-        }
+        $this->db->query(
+            "UPDATE work SET subject = :subject, instructions = :instructions, assigned_to = :assigned_to, date_target = :date_target WHERE id = :id",
+            [
+                'subject' => $formData['subject'],
+                'instructions' => $formData['addworkintremarks'],
+                'assigned_to' => $assigned,
+                'date_target' => $formattedDate,
+                'id' => $formData['id']
+            ]
+
+        );
     }
 
     public function deleteWork($id)
@@ -365,23 +351,21 @@ class workDetailsService
     }
 
 
-    public function updateWork($formData, $fileData)
+    public function updateWork(array $formData)
     {
-        $filetosave = "";
-        if ($fileData['workfiles']['name'][0] != "") {
-            $fileNameArray = saveFile($fileData);
-            $filetosave = serialize($fileNameArray);
-        }
+
         $dateToday = date('Y-m-d');
         $this->db->query(
-            "INSERT INTO updates (main_id, remarks, files, updated_by) VALUES (:main_id, :remarks, :files, :updated_by)",
+            "INSERT INTO updates (main_id, remarks, updated_by) VALUES (:main_id, :remarks, :updated_by)",
             [
                 'main_id' => $formData['idToUpdate'],
                 'remarks' => $formData['updateRemarks'],
-                'files' => $filetosave,
                 'updated_by' => $_SESSION['user']['id']
             ]
         );
+
+        $id = $this->db->id();
+
         $this->db->query(
             "UPDATE work SET updated_at = :updated_at WHERE id = :id",
             [
@@ -389,26 +373,22 @@ class workDetailsService
                 'id' => $formData['idToUpdate']
             ]
         );
+        return $id;
     }
 
-    public function updateSubWork($formData, $fileData)
+    public function updateSubWork(array $formData)
     {
-        $filetosave = "";
-        if ($fileData['workfiles']['name'][0] != "") {
-            $fileNameArray = saveFile($fileData);
-            $filetosave = serialize($fileNameArray);
-        }
         $mainId = $this->db->query("SELECT main_id FROM sub_work WHERE id=:id", ['id' => $formData['subIdToUpdate']])->find();
         $this->db->query(
-            "INSERT INTO updates (main_id, sub_id, remarks, files, updated_by) VALUES (:main_id, :sub_id, :remarks, :files, :updated_by)",
+            "INSERT INTO updates (main_id, sub_id, remarks, updated_by) VALUES (:main_id, :sub_id, :remarks, :updated_by)",
             [
                 'main_id' => $mainId['main_id'],
                 'sub_id' => $formData['subIdToUpdate'],
                 'remarks' => $formData['updateRemarks'],
-                'files' => $filetosave,
                 'updated_by' => $_SESSION['user']['id']
             ]
         );
+        $id = $this->db->id();
         $dateToday = date('Y-m-d');
         $this->db->query(
             "UPDATE work SET updated_at = :updated_at WHERE id = :id",
@@ -417,31 +397,26 @@ class workDetailsService
                 'id' => $mainId['main_id']
             ]
         );
+        return $id;
     }
 
-    public function complySubWork($formData, $fileData)
+    public function complySubWork(array $formData)
     {
-        $filetosave = "";
-        if ($fileData['workfiles']['name'][0] != "") {
-            $fileNameArray = saveFile($fileData);
-            $filetosave = serialize($fileNameArray);
-        }
 
         $mainId = $this->db->query("SELECT main_id FROM sub_work WHERE id=:id", ['id' => $formData['subIdToComply']])->find();
         $this->db->query(
-            "INSERT INTO updates (main_id, sub_id, remarks, files, final, updated_by) VALUES (:main_id, :sub_id, :remarks, :files, :final, :updated_by)",
+            "INSERT INTO updates (main_id, sub_id, remarks, final, updated_by) VALUES (:main_id, :sub_id, :remarks, :final, :updated_by)",
             [
                 'main_id' => $mainId['main_id'],
                 'sub_id' => $formData['subIdToComply'],
                 'remarks' => $formData['complyRemarks'],
-                'files' => $filetosave,
                 'final' => "YES",
                 'updated_by' => $_SESSION['user']['id']
             ]
         );
+        $id = $this->db->id();
 
         $this->db->query("UPDATE sub_work SET status = 'COMPLIED' WHERE id =:id", ['id' => $formData['subIdToComply']]);
-
         $dateToday = date('Y-m-d');
         $this->db->query(
             "UPDATE work SET updated_at = :updated_at WHERE id = :id",
@@ -450,26 +425,21 @@ class workDetailsService
                 'id' => $mainId['main_id']
             ]
         );
+        return $id;
     }
 
-    public function complyWork($formData, $fileData)
+    public function complyWork($formData)
     {
-        $filetosave = "";
-        if ($fileData['workfiles']['name'][0] != "") {
-            $fileNameArray = saveFile($fileData);
-            $filetosave = serialize($fileNameArray);
-        }
-
         $this->db->query(
-            "INSERT INTO updates (main_id, remarks, files, final, updated_by) VALUES (:main_id, :remarks, :files, :final, :updated_by)",
+            "INSERT INTO updates (main_id, remarks, final, updated_by) VALUES (:main_id, :remarks, :final, :updated_by)",
             [
                 'main_id' => $formData['IdToComply'],
                 'remarks' => $formData['complyRemarks'],
-                'files' => $filetosave,
                 'final' => "YES",
                 'updated_by' => $_SESSION['user']['id']
             ]
         );
+        $id = $this->db->id();
 
         $targetDate = $this->db->query("SELECT date_target FROM work WHERE id = :id", ['id' => $formData['IdToComply']])->find();
         $targetDate = $targetDate['date_target'];
@@ -502,6 +472,8 @@ class workDetailsService
                 'id' => $formData['IdToComply']
             ]
         );
+
+        return $id;
     }
 
     public function confirmCompliance($id)

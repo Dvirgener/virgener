@@ -167,7 +167,7 @@ function saveFile($fileData)
     $filenamearray = array();
     foreach ($files_array as $tmp_folder => $file_name) {
         $fileExtension = pathinfo($file_name, PATHINFO_EXTENSION);
-        $newFileName = bin2hex(random_bytes(16)) . "." . $fileExtension;
+        $newFileName = bin2hex(random_bytes(4)) . "." . $fileExtension;
         $uploadpath = paths::STORAGE_UPLOADS_FILEREFERENCE . "/" . $newFileName;
 
         if (!move_uploaded_file($tmp_folder, $uploadpath)) {

@@ -261,8 +261,9 @@ $(document).on('click', '.updateSubWorkBut', function () {
 // * Function to save an update on a sub work 
 $(document).on('submit', '#updateSubWorkForm', function (f) {
     f.preventDefault();
+
     var data = new FormData(this);
-    var id = data.get("main_id");
+    var id = data.get("mainId");
     $.ajax({
         type: 'POST',
         url: '/profile/details/update/sub',
