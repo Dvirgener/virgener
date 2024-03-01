@@ -28,6 +28,7 @@ $(document).on('click', '.viewWorkBut', function () {
 $(document).on('click', '.viewAddedWorkBut', function () {
     var id = $(this).val();
     var viewedFrom = $('#viewedFrom').val();
+    var viewedOn = $('#viewedOn').val();
     $.ajax({
             type: "GET",
             url: "/"+viewedFrom+"/details/added/"+id,
@@ -389,6 +390,7 @@ $(document).on('change', '#selectUpdateView', function () {
         }
     })
 });
+
 $(document).on('change', '#selectAddedUpdateView', function () {
     var id = $(this).val();
     var mainId = $('#main_id').val();
@@ -397,7 +399,43 @@ $(document).on('change', '#selectAddedUpdateView', function () {
         type: "GET",
         url: "/"+viewedFrom+"/details/added/sub/"+mainId+"/"+id,
         success: function (response) {
-            $("#updateAddedCol").html(response);
+            $("#updateCol").html(response);
         }
     })
 });
+
+// * Function for viewing added work details
+$(document).on('click', '.editUpdateBut', function () {
+    var id = $(this).val();
+    $.ajax({
+            type: "GET",
+            url: "/profile/update/edit?id="+id,
+            success: function (response) {
+                $("#editUpdateDiv").html(response);
+                $('#editUpdateModal').modal('show');
+            }
+        })
+});
+
+// * Function to save compliance on a sub work 
+$(document).on('submit', '#updateWorkUpdateForm', function (f) {
+    f.preventDefault();
+    var data = new FormData(this);
+    var main_id = data.get("main_id");
+    var id = data.get("complyId");
+    $.ajax({
+        type: 'POST',
+        url: '/profile/update/edit/save',
+        data: data,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            $('#editUpdateModal').modal('hide');
+            if (id == 0){
+                window.location.href = "/profile";  
+            }else{
+                $("#pageLoader").load("/profile/details/" + main_id);    
+            }
+        }
+    })
+})

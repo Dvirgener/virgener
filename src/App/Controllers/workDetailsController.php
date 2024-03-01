@@ -27,7 +27,7 @@ class workDetailsController
                 'workDetails' => $workArray['work'],
                 'subWorkDetails' => $workArray['sub_work'],
                 'viewedFrom' => $params['viewedFrom'],
-                'viewedOn' => "work queue"
+                'viewedOn' => "workqueue"
             ]
         );
     }
@@ -37,16 +37,29 @@ class workDetailsController
     {
         // * Get Work Details
         $workArray = $this->workDetailsService->workDetails($params['id']);
-
         echo $this->view->render(
             "/profile/workdetail.php",
             [
                 'workDetails' => $workArray['work'],
                 'subWorkDetails' => $workArray['sub_work'],
                 'viewedFrom' => $params['viewedFrom'],
-                'viewedOn' => "added queue"
+                'viewedOn' => "addedqueue"
+            ]
+        );
+    }
 
-
+    // * Function for viewing work details in history page
+    public function workHistory(array $params)
+    {
+        // * Get Work Details
+        $workArray = $this->workDetailsService->workDetails($params['id']);
+        echo $this->view->render(
+            "/profile/workdetail.php",
+            [
+                'workDetails' => $workArray['work'],
+                'subWorkDetails' => $workArray['sub_work'],
+                'viewedFrom' => $params['viewedFrom'],
+                'viewedOn' => "history"
             ]
         );
     }
@@ -61,7 +74,7 @@ class workDetailsController
                 'updates' => $updates,
                 'viewedFrom' => $params['view'],
                 'addedBy' => $workArray['work']['added_by'],
-                'viewedOn' => "added queue"
+                'viewedOn' => "workqueue"
             ]
         );
     }
@@ -71,12 +84,12 @@ class workDetailsController
         $updates = $this->workDetailsService->getUpdates($params['id'], $params['sub']);
         $workArray = $this->workDetailsService->workDetails($params['id']);
         echo $this->view->render(
-            "/profile/addedUpdates.php",
+            "/profile/updates.php",
             [
                 'updates' => $updates,
                 'viewedFrom' => $params['view'],
                 'addedBy' => $workArray['work']['added_by'],
-                'viewedOn' => "added queue"
+                'viewedOn' => "addedqueue"
             ]
         );
     }
@@ -115,6 +128,23 @@ class workDetailsController
                 'subAssigned' => $subWorkDetails['subAssigned']
             ]
         );
+    }
+
+    public function renderEditUpdate()
+    {
+        $updateDetails = $this->workDetailsService->getUpdateDetail((int) $_GET['id']);
+        echo $this->view->render(
+            "/profile/modalRender/editupdate.php",
+            [
+                'updateDetails' => $updateDetails
+            ]
+        );
+    }
+
+    public function saveEditUpdate()
+    {
+        $this->workDetailsService->saveEditUpdate($_POST);
+        $this->fileService->upload("updateUpdateWork", $_POST['updateId'], $_FILES);
     }
 
     public function saveEditSubWork()

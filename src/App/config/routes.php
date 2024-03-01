@@ -6,7 +6,7 @@ namespace App\config;
 
 use Framework\App;
 
-use App\Controllers\{HomeController, RegisterUserController, LoginController, TransactionController, ReceiptController, ErrorController, playerController, KaraokeController, playlistController, SpendingPlanController, ProfileController, dppController, WorkQueueController, settingsController, workDetailsController};
+use App\Controllers\{HomeController, RegisterUserController, LoginController, TransactionController, ReceiptController, ErrorController, playerController, KaraokeController, playlistController, SpendingPlanController, ProfileController, dppController, historyController, WorkQueueController, settingsController, workDetailsController};
 use App\Middleware\{AuthRequiredMiddleware, GuestOnlyMiddleware};
 
 
@@ -45,9 +45,9 @@ function registerRoutes(App $app)
     $app->get('/{viewedFrom}/work/{id}', [WorkQueueController::class, 'viewWorkList'])->add(AuthRequiredMiddleware::class);
     $app->post('/profile', [ProfileController::class, 'addwork'])->add(AuthRequiredMiddleware::class);
     $app->get('/{viewedFrom}/details/{id}', [workDetailsController::class, 'viewWorkDetails'])->add(AuthRequiredMiddleware::class);
+    $app->get('/{viewedFrom}/details/added/{id}', [workDetailsController::class, 'viewAddedWorkDetails'])->add(AuthRequiredMiddleware::class);
     $app->get('/{view}/details/sub/{id}/{sub}', [workDetailsController::class, 'viewUpdates'])->add(AuthRequiredMiddleware::class);
     $app->get('/{view}/details/added/sub/{id}/{sub}', [workDetailsController::class, 'viewAddedUpdates'])->add(AuthRequiredMiddleware::class);
-    $app->get('/{viewedFrom}/details/added/{id}', [workDetailsController::class, 'viewAddedWorkDetails'])->add(AuthRequiredMiddleware::class);
     $app->get('/profile/details/edit/{id}', [workDetailsController::class, 'renderEditWorkModal'])->add(AuthRequiredMiddleware::class);
     $app->post('/profile/details/edit/save', [workDetailsController::class, 'saveEditedWork'])->add(AuthRequiredMiddleware::class);
     $app->post('/profile/details/delete', [workDetailsController::class, 'deleteWork'])->add(AuthRequiredMiddleware::class);
@@ -65,7 +65,16 @@ function registerRoutes(App $app)
     $app->get('/profile/details/work/return', [workDetailsController::class, 'returnCompliance'])->add(AuthRequiredMiddleware::class);
     $app->get('/profile/viewfile', [ProfileController::class, 'viewFile'])->add(AuthRequiredMiddleware::class);
     $app->get('/profile/file/{file}', [ProfileController::class, 'renderFile'])->add(AuthRequiredMiddleware::class);
-    $app->get('/profile/history/{id}', [ProfileController::class, 'workHistory'])->add(AuthRequiredMiddleware::class);
+    $app->get('/profile/update/edit', [workDetailsController::class, 'renderEditUpdate'])->add(AuthRequiredMiddleware::class);
+
+    $app->post('/profile/update/edit/save', [workDetailsController::class, 'saveEditUpdate'])->add(AuthRequiredMiddleware::class);
+
+
+    // * This is for the History Page
+    $app->get('/history', [historyController::class, 'workHistory'])->add(AuthRequiredMiddleware::class);
+    $app->get('/{viewedFrom}/details/{id}', [workDetailsController::class, 'workHistory'])->add(AuthRequiredMiddleware::class);
+    $app->get('/{viewedFrom}/details/sub/{id}', [workDetailsController::class, 'workHistory'])->add(AuthRequiredMiddleware::class);
+
 
 
     // Leetcode problem solver

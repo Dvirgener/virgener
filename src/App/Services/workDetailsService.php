@@ -103,18 +103,16 @@ class workDetailsService
             // * Check if a sub work is already Complied.
             $subStatus['comp'] = ['bg' => "", 'compBut' => ""];
             if ($subStatus['status'] == "COMPLIED") {
-                $subStatus['comp'] = ['bg' => ' OK!', 'compBut' => "disabled"];
+                $subStatus['comp'] = ['bg' => ' complied!', 'compBut' => "disabled"];
             }
-
             //  * Check if sub work assignee is not empty
             if (!empty($subStatus['assigned_to'])) {
                 $subAssigned = unserialize($subStatus['assigned_to']);
                 $assignedName = [];
-
+                $authBut = "not";
                 // * variable for disabling / enabling comply button
-                $authBut = "disabled";
                 if (in_array($_SESSION['user']['id'], $subAssigned)) {
-                    $authBut = "";
+                    $authBut = "do";
                 }
                 // * assign names for each assigned user
                 foreach ($subAssigned as $id) {
@@ -124,7 +122,7 @@ class workDetailsService
                 $subStatus['authBut'] = $authBut;
                 $finalSubWorkList[] = $subStatus;
             } else {
-                $subStatus['authBut'] = "";
+                $subStatus['authBut'] = "do";
                 $subStatus['assignedNames'] = [];
                 $finalSubWorkList[] = $subStatus;
             }
@@ -548,5 +546,16 @@ class workDetailsService
         $this->db->query("DELETE FROM updates WHERE id = :id", ['id' => $lastUpdate['id']]);
 
         $this->db->query("UPDATE work SET status = :status WHERE id = :id", ['status' => "UNCOMPLIED", 'id' => $id]);
+    }
+
+    public function getUpdateDetail(int $id)
+    {
+        $updateDetails = $this->db->query("SELECT * FROM updates WHERE id = :id", ['id' => $id])->find();
+        return $updateDetails;
+    }
+
+    public function saveEditUpdate(array $formData)
+    {
+        $this->db->query("UPDATE updates SET remarks = :remarks WHERE id = :id", ['remarks' => $formData['updateRemarks'], 'id' => $formData['updateId']]);
     }
 }

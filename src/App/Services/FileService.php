@@ -106,6 +106,17 @@ class FileService
                 case "complyWork":
                     $this->db->query("UPDATE updates SET files = :fileIds WHERE id = :id", ['fileIds' => $fileIdsToSave, 'id' => $idFrom]);
                     break;
+                case "updateUpdateWork":
+                    $workFileIds = $this->db->query("SELECT * FROM updates WHERE id = :id", ['id' => $idFrom])->find();
+                    $workFileIds = unserialize($workFileIds['files']);
+                    foreach ($workFileIds as $file) {
+                        $fileName = $this->db->query("SELECT * FROM uploads WHERE id = :id", ['id' => $file])->find();
+                        $filePath = paths::STORAGE_UPLOADS_FILEREFERENCE . "/" . $fileName['file_save_name'];
+                        unlink($filePath);
+                        $this->db->query("DELETE FROM uploads WHERE id = :id", ['id' => $file]);
+                    }
+                    $this->db->query("UPDATE updates SET files = :fileIds WHERE id = :id", ['fileIds' => $fileIdsToSave, 'id' => $idFrom]);
+                    break;
             }
         }
     }

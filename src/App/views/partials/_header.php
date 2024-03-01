@@ -57,7 +57,7 @@
                                 <a class="nav-link active" href="/profile">Profile</a>
                             </li>
                             <li class="nav-item ">
-                                <a class="nav-link active" href="/office/history">History</a>
+                                <a class="nav-link active" href="/history">History</a>
                             </li>
                             <li class="nav-item ">
                                 <a class="nav-link active" href="/spendingplan">Spending Plan</a>

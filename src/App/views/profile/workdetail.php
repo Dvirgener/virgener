@@ -7,6 +7,7 @@
         <a class="btn btn-secondary" href="/profile/return">
             BACK
         </a>
+        <input type="hidden" value="<?= $viewedOn ?>" id="viewedOn">
     </div>
 </div>
 <div class="row border-bottom border-dark border-2 mx-1 mb-3">
@@ -61,10 +62,11 @@
 
                     <!-- CHECK WHERE THE WORK IS BEING VIEWED FROM -->
                     <?php if ($viewedFrom == "dashboard") : ?>
+                    <?php elseif ($viewedFrom == "history") : ?>
                     <?php else : ?>
 
                         <!-- IF THE WORK IS VIEWED ON PROFILE, CHECK IF IT IS VIEWED ON WORK QUEUE OR ADDED QUEUE -->
-                        <?php if ($viewedOn == "work queue") : ?>
+                        <?php if ($viewedOn == "workqueue") : ?>
                             <div class="row text-start">
                                 <span for="" class="form-label fs-6 fw-bold">ACTION:</span>
                             </div>
@@ -83,7 +85,7 @@
                                     </div>
                                 </div>
                             </div>
-                        <?php elseif ($viewedOn == "added queue") : ?>
+                        <?php elseif ($viewedOn == "addedqueue") : ?>
                             <div class="row text-start">
                                 <span for="" class="form-label fs-6 fw-bold">ACTION:</span>
                             </div>
@@ -168,7 +170,7 @@
                         <div class="col-9">
                             <?php if ($viewedFrom == "dashboard") : ?>
                             <?php else : ?>
-                                <?php if ($viewedOn == "added queue") : ?>
+                                <?php if ($viewedOn == "addedqueue") : ?>
                                     <button class="btn btn-outline-primary" id="addSubWorkBut" name="addSubWorkBut">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 20 18">
                                             <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
@@ -190,7 +192,7 @@
                                     <div class="row-fluid border shadow rounded ms-2 mb-2" style="height: fit-content;">
                                         <div class="row mb-2">
                                             <div class="col-6 d-flex align-items-center">
-                                                <span class="fw-bold">SUBJECT: <span class="fw-bold" style="color:red"><?= $subwork['comp']['bg'] ?></span></span>
+                                                <span class="fw-bold">SUBJECT: <span class="fw-bold" style="color:green"><?= $subwork['comp']['bg'] ?></span></span>
                                             </div>
                                             <div class="col-6">
                                                 <div class="row mt-1 me-4 justify-content-end">
@@ -200,8 +202,8 @@
                                                     <?php else : ?>
 
                                                         <!-- CHECK WHERE THE SUB WORK IS VIEWED FROM WORKLIST OR ADDED WORK -->
-                                                        <?php if ($viewedOn == "work queue") : ?>
-                                                        <?php elseif ($viewedOn == "added queue") : ?>
+                                                        <?php if ($viewedOn == "workqueue") : ?>
+                                                        <?php elseif ($viewedOn == "addedqueue") : ?>
                                                             <div class="col-3 mb-2 d-grid">
                                                                 <button class="editSubWork" type="button" style="background: none ; border:none;" value="<?= $subwork['id'] ?>">Edit</button>
                                                             </div>
@@ -265,17 +267,30 @@
                 <span class="fw-bold">UPDATES:</span>
             </div>
             <div class="col-8">
-                <select name="" id="selectUpdateView" class="form-select">
-                    <option value="all" selected>All updates</option>
-                    <option value="0">General Updates</option>
+                <?php if ($viewedOn == "workqueue") : ?>
+                    <select name="" id="selectUpdateView" class="form-select">
+                        <option value="all" selected>All updates</option>
+                        <option value="0">General Updates</option>
 
-                    <!-- THIS IS THE OPTIONS FOR SELECTING SUB WORK QUEUE UPDATES -->
-                    <?php foreach ($subWorkDetails as $sub) : ?>
-                        <option value="<?= $sub['id'] ?>"><?= $sub['sub_subject'] ?></option>
-                    <?php endforeach ?>
-                    <!-- THIS IS THE OPTIONS FOR SELECTING SUB WORK QUEUE UPDATES -->
+                        <!-- THIS IS THE OPTIONS FOR SELECTING SUB WORK QUEUE UPDATES -->
+                        <?php foreach ($subWorkDetails as $sub) : ?>
+                            <option value="<?= $sub['id'] ?>"><?= $sub['sub_subject'] ?></option>
+                        <?php endforeach ?>
+                        <!-- THIS IS THE OPTIONS FOR SELECTING SUB WORK QUEUE UPDATES -->
+                    </select>
+                <?php elseif ($viewedOn == "addedqueue") : ?>
+                    <select name="" id="selectAddedUpdateView" class="form-select">
+                        <option value="all" selected>All updates</option>
+                        <option value="0">General Updates</option>
 
-                </select>
+                        <!-- THIS IS THE OPTIONS FOR SELECTING SUB WORK QUEUE UPDATES -->
+                        <?php foreach ($subWorkDetails as $sub) : ?>
+                            <option value="<?= $sub['id'] ?>"><?= $sub['sub_subject'] ?></option>
+                        <?php endforeach ?>
+                        <!-- THIS IS THE OPTIONS FOR SELECTING SUB WORK QUEUE UPDATES -->
+                    </select>
+                <?php endif ?>
+
             </div>
         </div>
         <div class="row overflow-y-scroll mt-2" style="height: 540px;">
@@ -347,10 +362,13 @@
 
                             <!-- CHECK WHERE THE WORK IS BEING VIEWED FROM -->
                             <?php if ($viewedFrom == "dashboard") : ?>
+                            <?php elseif ($viewedFrom == "history") : ?>
                             <?php else : ?>
 
                                 <!-- SHOW IF THE WORK IS BEING VIEW FROM ADDED QUEUE -->
-                                <?php if ($viewedOn == "added queue") : ?>
+                                <?php if ($viewedOn == "workqueue") : ?>
+                                    <button type="button" class="editUpdateBut" style="background: none; border: none;" value="<?= $update['id'] ?>">Edit</button>
+                                <?php elseif ($viewedOn == "addedqueue") : ?>
                                     <form action="" method="POST" id="deleteUpdateForm">
                                         <?php
                                         include $this->resolve("partials/_token.php");
@@ -406,7 +424,9 @@
                                 <!-- THIS IS THE OPTIONS FOR SELECTING SUB WORK QUEUE UPDATES -->
                                 <?php foreach ($subWorkDetails as $sub) : ?>
                                     <?php if ($sub['status'] != "COMPLIED") : ?>
-                                        <option value="<?= $sub['id'] ?>"><?= $sub['sub_subject'] ?></option>
+                                        <?php if ($sub['authBut'] == "do") : ?>
+                                            <option value="<?= $sub['id'] ?>"><?= $sub['sub_subject'] ?></option>
+                                        <?php endif ?>
                                     <?php endif ?>
                                 <?php endforeach ?>
                                 <!-- THIS IS THE OPTIONS FOR SELECTING SUB WORK QUEUE UPDATES -->
@@ -444,102 +464,6 @@
 </div>
 <!-- UPDATE WORK MODAL -->
 
-<!-- UPDATE SUBWORK MODAL -->
-<div class="modal fade" id="updateSubWorkModal" tabindex="-1" aria-labelledby="updateSubWorkModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="updateSubWorkModalLabel">Update Sub-Work</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="/updatesubwork" method="POST" enctype="multipart/form-data" id="updateSubWorkForm">
-                <div class="modal-body" id="updateWorkDiv">
-                    <?php
-                    include $this->resolve("partials/_token.php");
-                    ?>
-                    <input type="hidden" name="subIdToUpdate" id="subIdToUpdate">
-                    <input type="hidden" name="mainId" id="mainId" value="<?= $workDetails['id'] ?>">
-                    <div class="row mb-1">
-                        <div class="col-8">
-                            <label for="" class="form-label">Remarks:</label>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col">
-                            <textarea class="form-control" name="updateRemarks" id="updateRemarks" cols="15" rows="4" required></textarea>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <div class="col-8">
-                            <label for="" class="form-label">File:</label>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col">
-                            <input class="form-control text-center" type="file" name="workfiles[]" accept=".jpg,.jpeg,.png,.pdf" multiple>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Update</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- UPDATE SUBWORK MODAL -->
-
-<!-- COMPLY SUBWORK MODAL -->
-<div class="modal fade" id="complySubWorkModal" tabindex="-1" aria-labelledby="complySubWorkModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="complySubWorkModalLabel">Comply Sub-Work</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="/complysubwork" method="POST" enctype="multipart/form-data" id="complySubWorkForm">
-                <div class="modal-body" id="updateWorkDiv">
-                    <?php
-                    include $this->resolve("partials/_token.php");
-                    ?>
-                    <input type="hidden" name="subIdToComply" id="subIdToComply">
-                    <input type="hidden" name="mainId" id="mainId" value="<?= $workDetails['id'] ?>">
-                    <div class="row mb-1">
-                        <div class="col-8">
-                            <label for="" class="form-label">Remarks:</label>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col">
-                            <textarea class="form-control" name="complyRemarks" id="complyRemarks" cols="15" rows="4" required></textarea>
-                        </div>
-                    </div>
-                    <div class="row mb-1">
-                        <div class="col-8">
-                            <label for="" class="form-label">File:</label>
-                        </div>
-                    </div>
-                    <div class="row mb-2">
-                        <div class="col">
-                            <input class="form-control text-center" type="file" name="workfiles[]" accept=".jpg,.jpeg,.png,.pdf" multiple>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Comply</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-<!-- COMPLY SUBWORK MODAL -->
-
 <!-- COMPLY WORK MODAL -->
 <div class="modal fade" id="complyWorkModal" tabindex="-1" aria-labelledby="complyWorkModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -568,7 +492,9 @@
                                 <!-- THIS IS THE OPTIONS FOR SELECTING SUB WORK QUEUE UPDATES -->
                                 <?php foreach ($subWorkDetails as $sub) : ?>
                                     <?php if ($sub['status'] != "COMPLIED") : ?>
-                                        <option value="<?= $sub['id'] ?>"><?= $sub['sub_subject'] ?></option>
+                                        <?php if ($sub['authBut'] == "do") : ?>
+                                            <option value="<?= $sub['id'] ?>"><?= $sub['sub_subject'] ?></option>
+                                        <?php endif ?>
                                     <?php endif ?>
                                 <?php endforeach ?>
                                 <!-- THIS IS THE OPTIONS FOR SELECTING SUB WORK QUEUE UPDATES -->
@@ -687,3 +613,26 @@
     </div>
 </div>
 <!-- CONFIRM COMPLIANCE MODAL -->
+
+<!-- EDIT UPDATE MODAL -->
+<div class="modal fade" id="editUpdateModal" tabindex="-1" aria-labelledby="editUpdateModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="editUpdateModalLabel">Edit Update</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="" method="POST" enctype="multipart/form-data" id="updateWorkUpdateForm">
+                <input type="hidden" name="main_id" id="main_id" value="<?= $workDetails['id'] ?>">
+                <div class="modal-body" id="editUpdateDiv">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- EDIT UPDATE MODAL -->
