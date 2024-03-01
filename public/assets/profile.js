@@ -311,6 +311,29 @@ $(document).on('click', '.complyWorkBut', function () {
     $('#complyWorkModal').modal('show');
 });
 
+// * Function to save compliance on a sub work 
+$(document).on('submit', '#complyWorkForm', function (f) {
+    f.preventDefault();
+    var data = new FormData(this);
+    var main_id = data.get("main_id");
+    var id = data.get("complyId");
+    $.ajax({
+        type: 'POST',
+        url: '/profile/details/comply',
+        data: data,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            $('#complyWorkModal').modal('hide');
+            if (id == 0){
+                window.location.href = "/profile";  
+            }else{
+                $("#pageLoader").load("/profile/details/" + main_id);    
+            }
+        }
+    })
+})
+
 // * Function on the work approve button
 $(document).on('click', '.approveBut', function () {
     $('#confirmWorkModal').modal('show');
@@ -357,6 +380,7 @@ $(document).on('change', '#selectUpdateView', function () {
     var id = $(this).val();
     var mainId = $('#main_id').val();
     var viewedFrom = $('#viewedFrom').val();
+    var viewedOn = $('#viewedOn').val();
         $.ajax({
         type: "GET",
         url: "/"+viewedFrom+"/details/sub/"+mainId+"/"+id,

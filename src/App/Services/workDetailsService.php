@@ -36,7 +36,6 @@ class workDetailsService
             $work['detailedAssignee'][] = ['picture' => $user['picture'], 'name' => $name, 'id' => $user['id']];
         }
 
-
         // * Check if the work has files uploaded or not
         if (($work['files']) == "") {
             $work['files'] = [];
@@ -52,6 +51,7 @@ class workDetailsService
 
         // * Search the DB for all work updates on the work queue
         $workUpdates = $this->db->query("SELECT * FROM updates WHERE main_id = :main_id ORDER BY id ASC", ['main_id' => $workId])->findAll();
+
         // * array for detailed work updates
         $detailedWorkUpdates = [];
 
@@ -61,7 +61,6 @@ class workDetailsService
             $workUpdate['updated_by'] = $this->nameOfId($workUpdate['updated_by']);
 
             // * Check if it came from a sub work queue
-
             if ($workUpdate['sub_id'] != 0) {
                 $subSubject = $this->db->query("SELECT sub_subject FROM sub_work WHERE id = :id", ['id' => $workUpdate['sub_id']])->find();
                 $workUpdate['sub_id'] = $subSubject['sub_subject'];
@@ -73,6 +72,7 @@ class workDetailsService
             } else {
                 $workUpdate['files'] = unserialize($workUpdate['files']);
             }
+
             // * Check if the update is a final update or what you call compliance remarks
             $workUpdate['complied'] = "";
             if ($workUpdate['final'] == "YES") {
@@ -142,6 +142,7 @@ class workDetailsService
         // * add work and sub work details to an array before you hit return
         $workdetails['work'] = $work;
         $workdetails['sub_work'] = $sub_work;
+
         return $workdetails;
     }
 
@@ -257,11 +258,32 @@ class workDetailsService
         );
     }
 
-    public function deleteWork($id)
+    public function deleteWork(int $id)
     {
+        $filesToDelete = [];
+
+        // * Select Main work Files
+        $mainWorkFiles = $this->db->query("SELECT files FROM work WHERE id = :id", ['id' => $id])->find();
+        $mainWorkFiles = $mainWorkFiles['files'];
+        if (!empty($mainWorkFiles)) {
+            $mainWorkFiles = unserialize($mainWorkFiles);
+            array_push($filesToDelete, ...$mainWorkFiles);
+        }
+
+        // * Select all update files from work;
+        $allUpdateFiles = $this->db->query("SELECT files FROM updates WHERE main_id = :id", ['id' => $id])->findAll();
+        foreach ($allUpdateFiles as $update) {
+            if (!empty($update['files'])) {
+                $files = unserialize($update['files']);
+                array_push($filesToDelete, ...$files);
+            }
+        }
+
         $this->db->query("DELETE from updates WHERE main_id = :id", ['id' => $id]);
         $this->db->query("DELETE from sub_work WHERE main_id = :id", ['id' => $id]);
         $this->db->query("DELETE FROM work WHERE id = :id", ['id' => $id]);
+
+        return $filesToDelete;
     }
 
     public function editSubWork($id)
@@ -310,10 +332,21 @@ class workDetailsService
         return $workId['main_id'];
     }
 
-    public function deleteSubWork($id)
+    public function deleteSubWork(int $id)
     {
+        $filesToDelete = [];
+        // * Select all update files from work;
+        $allUpdateFiles = $this->db->query("SELECT files FROM updates WHERE sub_id = :id", ['id' => $id])->findAll();
+        foreach ($allUpdateFiles as $update) {
+            if (!empty($update['files'])) {
+                $files = unserialize($update['files']);
+                array_push($filesToDelete, ...$files);
+            }
+        }
+
         $this->db->query("DELETE from updates WHERE sub_id = :id", ['id' => $id]);
         $this->db->query("DELETE from sub_work WHERE id = :id", ['id' => $id]);
+        return $filesToDelete;
     }
 
     public function addSubWork($formData)
@@ -347,33 +380,59 @@ class workDetailsService
             }
         }
 
+        if (!empty($updateDetails['files'])) {
+            $updateFiles = unserialize($updateDetails['files']);
+        }
+
         $this->db->query("DELETE FROM updates WHERE id = :id", ['id' => $params['id']]);
+        return $updateFiles;
     }
 
 
     public function updateWork(array $formData)
     {
-
         $dateToday = date('Y-m-d');
-        $this->db->query(
-            "INSERT INTO updates (main_id, remarks, updated_by) VALUES (:main_id, :remarks, :updated_by)",
-            [
-                'main_id' => $formData['idToUpdate'],
-                'remarks' => $formData['updateRemarks'],
-                'updated_by' => $_SESSION['user']['id']
-            ]
-        );
+        if ($formData['updateId'] == 0) {
+            $this->db->query(
+                "INSERT INTO updates (main_id, remarks, updated_by) VALUES (:main_id, :remarks, :updated_by)",
+                [
+                    'main_id' => $formData['main_id'],
+                    'remarks' => $formData['updateRemarks'],
+                    'updated_by' => $_SESSION['user']['id']
+                ]
+            );
 
-        $id = $this->db->id();
+            $id = $this->db->id();
 
-        $this->db->query(
-            "UPDATE work SET updated_at = :updated_at WHERE id = :id",
-            [
-                'updated_at' => $dateToday,
-                'id' => $formData['idToUpdate']
-            ]
-        );
-        return $id;
+            $this->db->query(
+                "UPDATE work SET updated_at = :updated_at WHERE id = :id",
+                [
+                    'updated_at' => $dateToday,
+                    'id' => $formData['main_id']
+                ]
+            );
+            return $id;
+        } else {
+            $this->db->query(
+                "INSERT INTO updates (main_id, sub_id, remarks, updated_by) VALUES (:main_id, :sub_id, :remarks, :updated_by)",
+                [
+                    'main_id' => $formData['main_id'],
+                    'sub_id' => $formData['updateId'],
+                    'remarks' => $formData['updateRemarks'],
+                    'updated_by' => $_SESSION['user']['id']
+                ]
+            );
+            $id = $this->db->id();
+            $dateToday = date('Y-m-d');
+            $this->db->query(
+                "UPDATE work SET updated_at = :updated_at WHERE id = :id",
+                [
+                    'updated_at' => $dateToday,
+                    'id' => $formData['main_id']
+                ]
+            );
+            return $id;
+        }
     }
 
     public function updateSubWork(array $formData)
@@ -402,78 +461,79 @@ class workDetailsService
 
     public function complySubWork(array $formData)
     {
-
-        $mainId = $this->db->query("SELECT main_id FROM sub_work WHERE id=:id", ['id' => $formData['subIdToComply']])->find();
-        $this->db->query(
-            "INSERT INTO updates (main_id, sub_id, remarks, final, updated_by) VALUES (:main_id, :sub_id, :remarks, :final, :updated_by)",
-            [
-                'main_id' => $mainId['main_id'],
-                'sub_id' => $formData['subIdToComply'],
-                'remarks' => $formData['complyRemarks'],
-                'final' => "YES",
-                'updated_by' => $_SESSION['user']['id']
-            ]
-        );
-        $id = $this->db->id();
-
-        $this->db->query("UPDATE sub_work SET status = 'COMPLIED' WHERE id =:id", ['id' => $formData['subIdToComply']]);
-        $dateToday = date('Y-m-d');
-        $this->db->query(
-            "UPDATE work SET updated_at = :updated_at WHERE id = :id",
-            [
-                'updated_at' => $dateToday,
-                'id' => $mainId['main_id']
-            ]
-        );
-        return $id;
     }
 
     public function complyWork($formData)
     {
-        $this->db->query(
-            "INSERT INTO updates (main_id, remarks, final, updated_by) VALUES (:main_id, :remarks, :final, :updated_by)",
-            [
-                'main_id' => $formData['IdToComply'],
-                'remarks' => $formData['complyRemarks'],
-                'final' => "YES",
-                'updated_by' => $_SESSION['user']['id']
-            ]
-        );
-        $id = $this->db->id();
-
-        $targetDate = $this->db->query("SELECT date_target FROM work WHERE id = :id", ['id' => $formData['IdToComply']])->find();
-        $targetDate = $targetDate['date_target'];
         $dateToday = date('Y-m-d');
+        if ($formData['complyId'] == 0) {
+            $this->db->query(
+                "INSERT INTO updates (main_id, remarks, final, updated_by) VALUES (:main_id, :remarks, :final, :updated_by)",
+                [
+                    'main_id' => $formData['main_id'],
+                    'remarks' => $formData['complyRemarks'],
+                    'final' => "YES",
+                    'updated_by' => $_SESSION['user']['id']
+                ]
+            );
+            $id = $this->db->id();
 
-        $timeliness = "No TD";
-        if ($targetDate != "0000-00-00") {
-            $targetDate = strtotime($targetDate);
-            $dateToday = strtotime($dateToday);
-            $interval = $targetDate - $dateToday;
-            $daysinterval = floor($interval / (60 * 60 * 24));
-            if ($daysinterval >= 1) {
-                $timeliness = "Early";
+            $targetDate = $this->db->query("SELECT date_target FROM work WHERE id = :id", ['id' => $formData['main_id']])->find();
+            $targetDate = $targetDate['date_target'];
+
+            $timeliness = "No TD";
+            if ($targetDate != "0000-00-00") {
+                $targetDate = strtotime($targetDate);
+                $dateToday = strtotime($dateToday);
+                $interval = $targetDate - $dateToday;
+                $daysinterval = floor($interval / (60 * 60 * 24));
+                if ($daysinterval >= 1) {
+                    $timeliness = "Early";
+                }
+                if ($daysinterval == 0) {
+                    $timeliness = "On Time";
+                }
+                if ($daysinterval < 0) {
+                    $timeliness = "Late";
+                }
             }
-            if ($daysinterval == 0) {
-                $timeliness = "On Time";
-            }
-            if ($daysinterval < 0) {
-                $timeliness = "Late";
-            }
+            $this->db->query(
+                "UPDATE work SET status = :status, updated_at = :updated_at, date_complied = :date_complied, complied_by = :complied_by, timeliness = :timeliness WHERE id =:id",
+                [
+                    'status' => "PENDING",
+                    'updated_at' => $dateToday,
+                    'date_complied' => $dateToday,
+                    'complied_by' => $_SESSION['user']['id'],
+                    'timeliness' => $timeliness,
+                    'id' => $formData['main_id']
+                ]
+            );
+
+            return ['complyFrom' => "mainWork", 'id' => $id];
+        } else {
+            $this->db->query(
+                "INSERT INTO updates (main_id, sub_id, remarks, final, updated_by) VALUES (:main_id, :sub_id, :remarks, :final, :updated_by)",
+                [
+                    'main_id' => $formData['main_id'],
+                    'sub_id' => $formData['complyId'],
+                    'remarks' => $formData['complyRemarks'],
+                    'final' => "YES",
+                    'updated_by' => $_SESSION['user']['id']
+                ]
+            );
+            $id = $this->db->id();
+
+            $this->db->query("UPDATE sub_work SET status = 'COMPLIED' WHERE id =:id", ['id' => $formData['complyId']]);
+
+            $this->db->query(
+                "UPDATE work SET updated_at = :updated_at WHERE id = :id",
+                [
+                    'updated_at' => $dateToday,
+                    'id' => $formData['main_id']
+                ]
+            );
+            return ['complyFrom' => "subWork", 'id' => $id];
         }
-        $this->db->query(
-            "UPDATE work SET status = :status, updated_at = :updated_at, date_complied = :date_complied, complied_by = :complied_by, timeliness = :timeliness WHERE id =:id",
-            [
-                'status' => "PENDING",
-                'updated_at' => $dateToday,
-                'date_complied' => $dateToday,
-                'complied_by' => $_SESSION['user']['id'],
-                'timeliness' => $timeliness,
-                'id' => $formData['IdToComply']
-            ]
-        );
-
-        return $id;
     }
 
     public function confirmCompliance($id)

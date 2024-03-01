@@ -21,14 +21,13 @@ class workDetailsController
     {
         // * Get Work Details
         $workArray = $this->workDetailsService->workDetails($params['id']);
-        $subWork = $this->workDetailsService->getSubwork($params['id']);
         echo $this->view->render(
             "/profile/workdetail.php",
             [
                 'workDetails' => $workArray['work'],
                 'subWorkDetails' => $workArray['sub_work'],
                 'viewedFrom' => $params['viewedFrom'],
-                'subWork' => $subWork
+                'viewedOn' => "work queue"
             ]
         );
     }
@@ -38,15 +37,15 @@ class workDetailsController
     {
         // * Get Work Details
         $workArray = $this->workDetailsService->workDetails($params['id']);
-        $subWork = $this->workDetailsService->getSubwork($params['id']);
 
         echo $this->view->render(
-            "/profile/workaddeddetail.php",
+            "/profile/workdetail.php",
             [
                 'workDetails' => $workArray['work'],
                 'subWorkDetails' => $workArray['sub_work'],
                 'viewedFrom' => $params['viewedFrom'],
-                'subWork' => $subWork
+                'viewedOn' => "added queue"
+
 
             ]
         );
@@ -62,6 +61,7 @@ class workDetailsController
                 'updates' => $updates,
                 'viewedFrom' => $params['view'],
                 'addedBy' => $workArray['work']['added_by'],
+                'viewedOn' => "added queue"
             ]
         );
     }
@@ -76,6 +76,7 @@ class workDetailsController
                 'updates' => $updates,
                 'viewedFrom' => $params['view'],
                 'addedBy' => $workArray['work']['added_by'],
+                'viewedOn' => "added queue"
             ]
         );
     }
@@ -98,7 +99,8 @@ class workDetailsController
     // * Delete work
     public function deleteWork()
     {
-        $this->workDetailsService->deleteWork($_POST['idToDelete']);
+        $filesToDelete = $this->workDetailsService->deleteWork((int) $_POST['idToDelete']);
+        $this->fileService->deleteFile($filesToDelete);
         redirectTo("/profile");
     }
 
@@ -128,7 +130,8 @@ class workDetailsController
 
     public function deleteSubWork()
     {
-        $this->workDetailsService->deleteSubWork($_POST['idToDelete']);
+        $filesToDelete = $this->workDetailsService->deleteSubWork((int) $_POST['idToDelete']);
+        $this->fileService->deleteFile($filesToDelete);
     }
 
     public function addSubWork()
@@ -138,7 +141,8 @@ class workDetailsController
 
     public function deleteUpdate()
     {
-        $this->workDetailsService->deleteUpdate($_POST);
+        $filesToDelete = $this->workDetailsService->deleteUpdate($_POST);
+        $this->fileService->deleteFile($filesToDelete);
     }
 
     public function updateWork()
@@ -147,23 +151,10 @@ class workDetailsController
         $this->fileService->upload("updateWork", $updateId, $_FILES);
     }
 
-    public function updateSubWork()
-    {
-        $updateId = $this->workDetailsService->updateSubWork($_POST);
-        $this->fileService->upload("updateSubWork", $updateId, $_FILES);
-    }
-
-    public function complySubWork()
-    {
-        $complySubId = $this->workDetailsService->complySubWork($_POST);
-        $this->fileService->upload("complySubWork", $complySubId, $_FILES);
-    }
-
     public function complyWork()
     {
-        $complyId = $this->workDetailsService->complyWork($_POST);
-        $this->fileService->upload("complyWork", $complyId, $_FILES);
-        redirectTo('/profile');
+        $complianceArray = $this->workDetailsService->complyWork($_POST);
+        $this->fileService->upload("complyWork", $complianceArray['id'], $_FILES);
     }
 
     public function approveCompliance()

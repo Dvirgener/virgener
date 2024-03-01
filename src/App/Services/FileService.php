@@ -130,10 +130,13 @@ class FileService
         readfile($filePath);
     }
 
-    // public function delete(array $receipt)
-    // {
-    //     $filePath = paths::STORAGE_UPLOADS . '/' . $receipt['storage_filename'];
-    //     unlink($filePath);
-    //     $this->db->query("DELETE FROM receipts WHERE id = :id", ['id' => $receipt['id']]);
-    // }
+    public function deleteFile(array $files)
+    {
+        foreach ($files as $file) {
+            $fileDetails = $this->db->query("SELECT * FROM uploads WHERE id = :id", ['id' => $file])->find();
+            $filePath = paths::STORAGE_UPLOADS_FILEREFERENCE . '/' . $fileDetails['file_save_name'];
+            unlink($filePath);
+            $this->db->query("DELETE FROM uploads WHERE id = :id", ['id' => $fileDetails['id']]);
+        }
+    }
 }

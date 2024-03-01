@@ -44,13 +44,36 @@
                 <div class="row mb-1">
                     <?php foreach ($update['files'] as $file) : ?>
                         <div class="col-4 d-grid">
-                            <button class="btn btn-secondary viewFileBut" type="button" value="<?= $file ?>">File</button>
+                            <button class="btn btn-secondary viewFileBut mb-1" type="button" value="<?= $file ?>">File</button>
                         </div>
                     <?php endforeach ?>
                 </div>
                 <div class="row">
                     <span class="fst-italic mt-2">- <?= $update['updated_by'] ?></span>
                 </div>
+            </div>
+            <div class="col-1 mt-1" style="font-size: smaller;">
+
+                <!-- CHECK WHERE THE WORK IS BEING VIEWED FROM -->
+                <?php if ($viewedFrom == "dashboard") : ?>
+                <?php else : ?>
+
+                    <!-- SHOW IF THE WORK IS BEING VIEW FROM ADDED QUEUE -->
+                    <?php if ($viewedOn == "added queue") : ?>
+                        <form action="" method="POST" id="deleteUpdateForm">
+                            <?php
+                            include $this->resolve("partials/_token.php");
+                            ?>
+                            <input type="hidden" value="<?= $update['main_id'] ?>" id="mainId" name="mainId">
+                            <input type="hidden" value="<?= $update['id'] ?>" id="id" name="id">
+                            <button type="submit" class="btn-close" aria-label="Close"></button>
+                        </form>
+                    <?php endif ?>
+                    <!-- SHOW IF THE WORK IS BEING VIEW FROM ADDED QUEUE -->
+
+                <?php endif ?>
+                <!-- CHECK WHERE THE WORK IS BEING VIEWED FROM -->
+
             </div>
         </div>
     </div>

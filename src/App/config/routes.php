@@ -65,9 +65,11 @@ function registerRoutes(App $app)
     $app->get('/profile/details/work/return', [workDetailsController::class, 'returnCompliance'])->add(AuthRequiredMiddleware::class);
     $app->get('/profile/viewfile', [ProfileController::class, 'viewFile'])->add(AuthRequiredMiddleware::class);
     $app->get('/profile/file/{file}', [ProfileController::class, 'renderFile'])->add(AuthRequiredMiddleware::class);
+    $app->get('/profile/history/{id}', [ProfileController::class, 'workHistory'])->add(AuthRequiredMiddleware::class);
+
 
     // Leetcode problem solver
-    $app->get('/special', [HomeController::class, 'special'])->add(AuthRequiredMiddleware::class);
+    // $app->get('/special', [HomeController::class, 'special'])->add(AuthRequiredMiddleware::class);
 
 
     $app->get('/dashboard/profile/{id}', [HomeController::class, 'renderUserProfile'])->add(AuthRequiredMiddleware::class);
