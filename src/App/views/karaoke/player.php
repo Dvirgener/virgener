@@ -12,6 +12,9 @@ include $this->resolve("partials/_header.php");
 
 ?>
 
+
+<!--  THIS IS USED TO LOAD PROFILE.JS -->
+<script src="/assets/utube.js"></script>
 <!-- Start Main Content Area -->
 <section>
 

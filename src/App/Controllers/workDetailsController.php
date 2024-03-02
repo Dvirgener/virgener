@@ -106,7 +106,7 @@ class workDetailsController
     public function saveEditedWork()
     {
         $this->workDetailsService->saveEditedWork($_POST);
-        $this->fileService->upload("editWork", $_POST['id'], $_FILES);
+        $this->fileService->upload("editWork", $_POST['id'], $_FILES['workfiles']);
     }
 
     // * Delete work
@@ -144,7 +144,7 @@ class workDetailsController
     public function saveEditUpdate()
     {
         $this->workDetailsService->saveEditUpdate($_POST);
-        $this->fileService->upload("updateUpdateWork", $_POST['updateId'], $_FILES);
+        $this->fileService->upload("updateUpdateWork", $_POST['updateId'], $_FILES['workfiles']);
     }
 
     public function saveEditSubWork()
@@ -178,13 +178,13 @@ class workDetailsController
     public function updateWork()
     {
         $updateId = $this->workDetailsService->updateWork($_POST);
-        $this->fileService->upload("updateWork", $updateId, $_FILES);
+        $this->fileService->upload("updateWork", $updateId, $_FILES['workfiles']);
     }
 
     public function complyWork()
     {
         $complianceArray = $this->workDetailsService->complyWork($_POST);
-        $this->fileService->upload("complyWork", $complianceArray['id'], $_FILES);
+        $this->fileService->upload("complyWork", $complianceArray['id'], $_FILES['workfiles']);
     }
 
     public function approveCompliance()

@@ -3,6 +3,9 @@
 include $this->resolve("partials/_header.php");
 ?>
 
+<!--  THIS IS USED TO LOAD PROFILE.JS -->
+<script src="/assets/utube.js"></script>
+
 <section class="my-5 virg-karaoke-font">
     <div class="row justify-content-between text-center">
         <div class="col-12 col-md-3 px-5">

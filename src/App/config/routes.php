@@ -6,7 +6,7 @@ namespace App\config;
 
 use Framework\App;
 
-use App\Controllers\{HomeController, RegisterUserController, LoginController, TransactionController, ReceiptController, ErrorController, playerController, KaraokeController, playlistController, SpendingPlanController, ProfileController, dppController, historyController, WorkQueueController, settingsController, workDetailsController};
+use App\Controllers\{HomeController, RegisterUserController, LoginController, TransactionController, ReceiptController, ErrorController, playerController, KaraokeController, playlistController, SpendingPlanController, ProfileController, dppController, historyController, WorkQueueController, settingsController, vehicleController, workDetailsController};
 use App\Middleware\{AuthRequiredMiddleware, GuestOnlyMiddleware};
 
 
@@ -93,6 +93,11 @@ function registerRoutes(App $app)
 
     $app->get('/section/dpp', [dppController::class, 'dppProfile'])->add(AuthRequiredMiddleware::class);
     $app->post('/section/dpp/addproc', [dppController::class, 'addProcurement'])->add(AuthRequiredMiddleware::class);
+
+    $app->get('/section/vehicle', [vehicleController::class, 'renderVehiclePage'])->add(AuthRequiredMiddleware::class);
+    $app->post('/section/vehicle/add', [vehicleController::class, 'addVehicle'])->add(AuthRequiredMiddleware::class);
+    $app->get('/section/vehicle/details/{id}', [vehicleController::class, 'vehicleDetails'])->add(AuthRequiredMiddleware::class);
+
 
     $app->get('/settings', [settingsController::class, 'userSettings'])->add(AuthRequiredMiddleware::class);
     $app->post('/settings/save', [settingsController::class, 'updateUser'])->add(AuthRequiredMiddleware::class);

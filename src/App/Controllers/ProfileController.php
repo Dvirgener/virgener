@@ -56,7 +56,7 @@ class ProfileController
     public function addwork()
     {
         $id = $this->profileService->addWork($_POST);
-        $this->fileService->upload("addWork", $id, $_FILES);
+        $this->fileService->upload("addWork", $id, $_FILES['workfiles']);
         redirectTo("/profile");
     }
 

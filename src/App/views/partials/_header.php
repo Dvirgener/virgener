@@ -60,7 +60,7 @@
                                 <a class="nav-link active" href="/history">History</a>
                             </li>
                             <li class="nav-item ">
-                                <a class="nav-link active" href="/spendingplan">Spending Plan</a>
+                                <a class="nav-link active" href="#">Spending Plan</a>
                             </li>
                             <li class="nav-item ">
                                 <a class="nav-link active" href="/karaoke">Karaoke</a>
@@ -71,7 +71,7 @@
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a class="dropdown-item" href="/section/dpp">DPP</a></li>
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                                    <li><a class="dropdown-item" href="/section/vehicle">DBFEE</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>

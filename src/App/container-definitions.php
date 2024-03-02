@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Framework\{TemplateEngine, Database, Container};
 use App\config\paths;
-use App\Services\{ValidatorService, UserService, HomeService, FileService, MusicService, SpendingPlanService, ProfileService, workQueueService, dppService, historyService, settingsService, workDetailsService};
+use App\Services\{ValidatorService, UserService, HomeService, FileService, MusicService, SpendingPlanService, ProfileService, workQueueService, dppService, historyService, settingsService, vehicleService, workDetailsService};
 
 return [
     // * 7. return an arrow function with the class name as key and function that create a new instance of the class as value
@@ -63,6 +63,10 @@ return [
     historyService::class => function (container $container) {
         $db = $container->get(Database::class);
         return new historyService($db);
+    },
+    vehicleService::class => function (container $container) {
+        $db = $container->get(Database::class);
+        return new vehicleService($db);
     }
 
 ];

@@ -367,7 +367,7 @@
 
                                 <!-- SHOW IF THE WORK IS BEING VIEW FROM ADDED QUEUE -->
                                 <?php if ($viewedOn == "workqueue") : ?>
-                                    <button type="button" class="editUpdateBut" style="background: none; border: none;" value="<?= $update['id'] ?>">Edit</button>
+                                    <button type="button" class="editUpdateBut" style="background: none; border: none; color:blue" value="<?= $update['id'] ?>">Edit</button>
                                 <?php elseif ($viewedOn == "addedqueue") : ?>
                                     <form action="" method="POST" id="deleteUpdateForm">
                                         <?php

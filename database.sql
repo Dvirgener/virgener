@@ -110,6 +110,7 @@ CREATE TABLE IF NOT EXISTS work (
     complied_by bigint(20) NOT NULL,
     timeliness varchar(255) NOT NULL,
     files varchar(255),
+    veh_id bigint (20) unsigned NOT NULL,
     PRIMARY KEY (id)
 );
 
@@ -148,6 +149,26 @@ CREATE TABLE IF NOT EXISTS uploads(
     file_extension varchar (255) NOT NULL,
     created_at date NOT NULL DEFAULT CURRENT_TIMESTAMP(),
     PRIMARY KEY (id)
-)
+);
+
+CREATE TABLE if NOT EXISTS vehicles(
+    id bigint(20) unsigned NOT NULL AUTO_INCREMENT, -- id of the file in DB
+    article varchar(255) NOT NULL,
+    descriptions varchar(255) NOT NULL,
+    plate_number varchar(255) NOT NULL,
+    year_acquired date NOT NULL,
+    renewal_date date NOT NULL,
+    engine_number varchar(255) NOT NULL,
+    chassis_number varchar(255) NOT NULL,
+    pictures varchar(255) NOT NULL,
+    cert_reg varchar(255) NOT NULL,
+    official_receipt varchar(255) NOT NULL,
+    insurance_policy varchar(255) NOT NULL,
+    unit varchar(255) NOT NULL,
+    veh_status varchar(255) NOT NULL,
+    remarks varchar(255) NOT NULL,
+    created_at date NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    PRIMARY KEY (id)   
+);
 
 

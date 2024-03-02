@@ -35,46 +35,51 @@ class FileService
     //     }
     // }
 
+    private function actualUpload(string $created_from, array $fileData): array
+    {
+        $numberofFiles = count($fileData['name']);
+        $allFiles = [];
+        for ($x = 0; $x < $numberofFiles; $x += 1) {
+            $tempName = $fileData['tmp_name'][$x];
+            $originalName = $fileData['name'][$x];
+            $fileExtension = pathinfo($originalName, PATHINFO_EXTENSION);
+            $saveName = bin2hex(random_bytes(4)) . "_" . $fileData['name'][$x];
+            $fileType = $fileData['type'][$x];
+            $oneFile = [
+                'tempName' => $tempName,
+                'originalName' => $originalName,
+                'saveName' => $saveName,
+                'fileType' => $fileType,
+                'fileExtension' => $fileExtension
+            ];
+            $allFiles[] = $oneFile;
+        }
+
+        // * Uploading of files to DB and folder
+        foreach ($allFiles as $file) {
+            $uploadpath = paths::STORAGE_UPLOADS_FILEREFERENCE . "/" . $file['saveName'];
+            if (!move_uploaded_file($file['tempName'], $uploadpath)) {
+            }
+            $this->db->query(
+                "INSERT INTO uploads (upload_from, file_original_name, file_save_name, file_type, file_extension)
+                        VALUES (:uploadFrom, :originalName, :saveName, :fileType, :fileExtenstion)",
+                [
+                    'uploadFrom' => $created_from,
+                    'originalName' => $file['originalName'],
+                    'saveName' => $file['saveName'],
+                    'fileType' => $file['fileType'],
+                    'fileExtenstion' => $file['fileExtension']
+                ]
+            );
+            $ids[] = $this->db->id();
+        }
+        return $ids;
+    }
+
     public function upload(string $created_from, string $idFrom, array $fileData)
     {
-        // * this is to extract individual file details and put in an array
-        if ($fileData['workfiles']['name'][0] !== "") {
-            $numberofFiles = count($fileData['workfiles']['name']);
-            $allFiles = [];
-            for ($x = 0; $x < $numberofFiles; $x += 1) {
-                $tempName = $fileData['workfiles']['tmp_name'][$x];
-                $originalName = $fileData['workfiles']['name'][$x];
-                $fileExtension = pathinfo($originalName, PATHINFO_EXTENSION);
-                $saveName = bin2hex(random_bytes(4)) . "_" . $fileData['workfiles']['name'][$x];
-                $fileType = $fileData['workfiles']['type'][$x];
-                $oneFile = [
-                    'tempName' => $tempName,
-                    'originalName' => $originalName,
-                    'saveName' => $saveName,
-                    'fileType' => $fileType,
-                    'fileExtension' => $fileExtension
-                ];
-                $allFiles[] = $oneFile;
-            }
-
-            // * Uploading of files to DB and folder
-            foreach ($allFiles as $file) {
-                $uploadpath = paths::STORAGE_UPLOADS_FILEREFERENCE . "/" . $file['saveName'];
-                if (!move_uploaded_file($file['tempName'], $uploadpath)) {
-                }
-                $this->db->query(
-                    "INSERT INTO uploads (upload_from, file_original_name, file_save_name, file_type, file_extension)
-                        VALUES (:uploadFrom, :originalName, :saveName, :fileType, :fileExtenstion)",
-                    [
-                        'uploadFrom' => $created_from,
-                        'originalName' => $file['originalName'],
-                        'saveName' => $file['saveName'],
-                        'fileType' => $file['fileType'],
-                        'fileExtenstion' => $file['fileExtension']
-                    ]
-                );
-                $ids[] = $this->db->id();
-            }
+        if ($fileData['name'][0] !== "") {
+            $ids = $this->actualUpload($created_from, $fileData);
 
             // * Updating the work or update table to insert identity of files
             $fileIdsToSave = serialize($ids);
@@ -121,6 +126,30 @@ class FileService
         }
     }
 
+    public function vehicleUpload(string $created_from, string $idFrom, array $fileData)
+    {
+        if ($fileData['name'][0] !== "") {
+            $ids = $this->actualUpload($created_from, $fileData);
+
+            // * Updating the work or update table to insert identity of files
+            $fileIdsToSave = serialize($ids);
+            switch ($created_from) {
+                case "pictures":
+                    $this->db->query("UPDATE vehicles SET pictures = :fileIds WHERE id = :id", ['fileIds' => $fileIdsToSave, 'id' => $idFrom]);
+                    break;
+                case "certOfReg":
+                    $this->db->query("UPDATE vehicles SET cert_reg = :fileIds WHERE id = :id", ['fileIds' => $fileIdsToSave, 'id' => $idFrom]);
+                    break;
+                case "officialReceipt":
+                    $this->db->query("UPDATE vehicles SET official_receipt = :fileIds WHERE id = :id", ['fileIds' => $fileIdsToSave, 'id' => $idFrom]);
+                    break;
+                case "insurance":
+                    $this->db->query("UPDATE vehicles SET insurance_policy = :fileIds WHERE id = :id", ['fileIds' => $fileIdsToSave, 'id' => $idFrom]);
+                    break;
+            }
+        }
+    }
+
     public function getFile(string $id)
     {
         $file = $this->db->query("SELECT * FROM uploads WHERE id = :id", ['id' => $id])->find();
@@ -129,7 +158,6 @@ class FileService
 
     public function read(array $file)
     {
-        // dd($file);
         $file = $this->db->query("SELECT * FROM uploads WHERE id = :id", ['id' => $file['file']])->find();
 
         $filePath = paths::STORAGE_UPLOADS_FILEREFERENCE . '/' . $file['file_save_name'];

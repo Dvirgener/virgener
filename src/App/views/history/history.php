@@ -46,7 +46,6 @@ include $this->resolve("partials/_header.php");
                                 <div class="col-5">
                                     <span>Date : <?= $work['dateComplied'] ?></span>
                                 </div>
-
                             </div>
                         </button>
                     <?php endforeach ?>
