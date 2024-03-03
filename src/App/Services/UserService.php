@@ -108,11 +108,33 @@ class UserService
         $_SESSION['user'] = $user;
     }
 
+    public function usersInSection(string $section)
+    {
+        $allUsers = $this->db->query("SELECT * FROM users WHERE classification = 'EP'")->findAll();
+        foreach ($allUsers as $user) {
+            $assignment = unserialize($user['section']);
+            if (in_array($section, $assignment)) {
+                $users[] = $user['id'];
+            }
+        }
+        $returnArray = [];
+        foreach ($users as $user) {
+            $userDetails = $this->db->query("SELECT * FROM users WHERE id =:id", ['id' => $user])->find();
+            $userName = $userDetails['actual_rank'] . " " . $userDetails['last_name'] . " PAF";
+            $returnArray[] = [
+                'id' => $user,
+                'name' => $userName,
+                'status' => $userDetails['status'],
+                'picture' => $userDetails['picture']
+            ];
+        }
+        return $returnArray;
+    }
+
     // * Logout User
     public function logout()
     {
         // unset($_SESSION['user']);
-
         session_destroy();
         // session_regenerate_id();
         $params = session_get_cookie_params();

@@ -158,21 +158,3 @@ function checkDeadline($date): bool
     }
     return $deadline;
 }
-
-function saveFile($fileData)
-{
-    $names = $fileData['workfiles']['name'];
-    $tmp_name = $fileData['workfiles']['tmp_name'];
-    $files_array = array_combine($tmp_name, $names);
-    $filenamearray = array();
-    foreach ($files_array as $tmp_folder => $file_name) {
-        $fileExtension = pathinfo($file_name, PATHINFO_EXTENSION);
-        $newFileName = bin2hex(random_bytes(4)) . "." . $fileExtension;
-        $uploadpath = paths::STORAGE_UPLOADS_FILEREFERENCE . "/" . $newFileName;
-
-        if (!move_uploaded_file($tmp_folder, $uploadpath)) {
-        }
-        array_push($filenamearray, $newFileName);
-    }
-    return $filenamearray;
-}

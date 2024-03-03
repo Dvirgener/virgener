@@ -107,7 +107,6 @@ class ProfileService
     // * This is for the add work function based on the input provided on the add work modal
     public function addWork(array $formData)
     {
-        // $ext = pathinfo($fileData['workfiles']['name'][0], PATHINFO_EXTENSION);
         $assigned = serialize($formData['addto']);
         $formattedDate = "{$formData['addworktargetdate']}) 00:00:00";
         $this->db->query(

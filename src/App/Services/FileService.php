@@ -76,6 +76,16 @@ class FileService
         return $ids;
     }
 
+    public function deleteExistingFiles(array $files)
+    {
+        foreach ($files as $file) {
+            $fileName = $this->db->query("SELECT * FROM uploads WHERE id = :id", ['id' => $file])->find();
+            $filePath = paths::STORAGE_UPLOADS_FILEREFERENCE . "/" . $fileName['file_save_name'];
+            unlink($filePath);
+            $this->db->query("DELETE FROM uploads WHERE id = :id", ['id' => $file]);
+        }
+    }
+
     public function upload(string $created_from, string $idFrom, array $fileData)
     {
         if ($fileData['name'][0] !== "") {
@@ -88,14 +98,9 @@ class FileService
                     $this->db->query("UPDATE work SET files = :fileIds WHERE id = :id", ['fileIds' => $fileIdsToSave, 'id' => $idFrom]);
                     break;
                 case "editWork":
-                    $workFileIds = $this->db->query("SELECT * FROM work WHERE id = :id", ['id' => $idFrom])->find();
+                    $workFileIds = $this->db->query("SELECT files FROM work WHERE id = :id", ['id' => $idFrom])->find();
                     $workFileIds = unserialize($workFileIds['files']);
-                    foreach ($workFileIds as $file) {
-                        $fileName = $this->db->query("SELECT * FROM uploads WHERE id = :id", ['id' => $file])->find();
-                        $filePath = paths::STORAGE_UPLOADS_FILEREFERENCE . "/" . $fileName['file_save_name'];
-                        unlink($filePath);
-                        $this->db->query("DELETE FROM uploads WHERE id = :id", ['id' => $file]);
-                    }
+                    $this->deleteExistingFiles($workFileIds);
                     $this->db->query("UPDATE work SET files = :fileIds WHERE id = :id", ['fileIds' => $fileIdsToSave, 'id' => $idFrom]);
                     return $workFileIds;
                     break;
@@ -112,14 +117,9 @@ class FileService
                     $this->db->query("UPDATE updates SET files = :fileIds WHERE id = :id", ['fileIds' => $fileIdsToSave, 'id' => $idFrom]);
                     break;
                 case "updateUpdateWork":
-                    $workFileIds = $this->db->query("SELECT * FROM updates WHERE id = :id", ['id' => $idFrom])->find();
+                    $workFileIds = $this->db->query("SELECT files FROM updates WHERE id = :id", ['id' => $idFrom])->find();
                     $workFileIds = unserialize($workFileIds['files']);
-                    foreach ($workFileIds as $file) {
-                        $fileName = $this->db->query("SELECT * FROM uploads WHERE id = :id", ['id' => $file])->find();
-                        $filePath = paths::STORAGE_UPLOADS_FILEREFERENCE . "/" . $fileName['file_save_name'];
-                        unlink($filePath);
-                        $this->db->query("DELETE FROM uploads WHERE id = :id", ['id' => $file]);
-                    }
+                    $this->deleteExistingFiles($workFileIds);
                     $this->db->query("UPDATE updates SET files = :fileIds WHERE id = :id", ['fileIds' => $fileIdsToSave, 'id' => $idFrom]);
                     break;
             }
@@ -144,6 +144,30 @@ class FileService
                     $this->db->query("UPDATE vehicles SET official_receipt = :fileIds WHERE id = :id", ['fileIds' => $fileIdsToSave, 'id' => $idFrom]);
                     break;
                 case "insurance":
+                    $this->db->query("UPDATE vehicles SET insurance_policy = :fileIds WHERE id = :id", ['fileIds' => $fileIdsToSave, 'id' => $idFrom]);
+                    break;
+                case "updatePictures":
+                    $workFileIds = $this->db->query("SELECT pictures FROM vehicles WHERE id = :id", ['id' => $idFrom])->find();
+                    $workFileIds = unserialize($workFileIds['pictures']);
+                    $this->deleteExistingFiles($workFileIds);
+                    $this->db->query("UPDATE vehicles SET pictures = :fileIds WHERE id = :id", ['fileIds' => $fileIdsToSave, 'id' => $idFrom]);
+                    break;
+                case "updateCertOfReg":
+                    $workFileIds = $this->db->query("SELECT cert_reg FROM vehicles WHERE id = :id", ['id' => $idFrom])->find();
+                    $workFileIds = unserialize($workFileIds['cert_reg']);
+                    $this->deleteExistingFiles($workFileIds);
+                    $this->db->query("UPDATE vehicles SET cert_reg = :fileIds WHERE id = :id", ['fileIds' => $fileIdsToSave, 'id' => $idFrom]);
+                    break;
+                case "updateOfficialReceipt":
+                    $workFileIds = $this->db->query("SELECT official_receipt FROM vehicles WHERE id = :id", ['id' => $idFrom])->find();
+                    $workFileIds = unserialize($workFileIds['official_receipt']);
+                    $this->deleteExistingFiles($workFileIds);
+                    $this->db->query("UPDATE vehicles SET official_receipt = :fileIds WHERE id = :id", ['fileIds' => $fileIdsToSave, 'id' => $idFrom]);
+                    break;
+                case "updateInsurance":
+                    $workFileIds = $this->db->query("SELECT insurance_policy FROM vehicles WHERE id = :id", ['id' => $idFrom])->find();
+                    $workFileIds = unserialize($workFileIds['insurance_policy']);
+                    $this->deleteExistingFiles($workFileIds);
                     $this->db->query("UPDATE vehicles SET insurance_policy = :fileIds WHERE id = :id", ['fileIds' => $fileIdsToSave, 'id' => $idFrom]);
                     break;
             }

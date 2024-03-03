@@ -25,7 +25,7 @@ include $this->resolve("partials/_header.php");
 
                 </div>
             </div>
-            <div class="row overflow-y-scroll overflow-x-hidden px-3 align-content-start" style="height:500px">
+            <div class="row overflow-y-scroll overflow-x-hidden px-3 align-content-start" id="vehicleListDiv" style="height:500px">
                 <?php foreach ($allVehicles as $vehicle) : ?>
                     <button type="button" class="btn btn-light buttonzoom viewVehicleBut border border-2" style="margin-bottom: 2px; height:fit-content; width: 100%;" value="<?= $vehicle['id'] ?>">
                         <div class="row">
@@ -122,19 +122,19 @@ include $this->resolve("partials/_header.php");
                                 </div>
                                 <div class="row mb-2">
                                     <label for="pictures" class="form-label">PICTURES:</label>
-                                    <input type="file" name="pictures[]" id="pictures[]" class="form-control ms-2" accept=".jpg,.jpeg,.png,.pdf" multiple required>
+                                    <input type="file" name="pictures[]" id="pictures[]" class="form-control ms-2" accept=".jpg,.jpeg,.png" multiple required>
                                 </div>
                                 <div class="row mb-2">
                                     <label for="certOfReg" class="form-label">CERTIFICATE OF REGISTRATION:</label>
-                                    <input type="file" name="certOfReg[]" id="certOfReg[]" class="form-control ms-2" accept=".jpg,.jpeg,.png,.pdf" multiple required>
+                                    <input type="file" name="certOfReg[]" id="certOfReg[]" class="form-control ms-2" accept=".jpg,.jpeg,.png,.pdf" required>
                                 </div>
                                 <div class="row mb-2">
                                     <label for="officialReceipt" class="form-label">OFFICIAL RECEIPT:</label>
-                                    <input type="file" name="officialReceipt[]" id="officialReceipt[]" class="form-control ms-2" accept=".jpg,.jpeg,.png,.pdf" multiple required>
+                                    <input type="file" name="officialReceipt[]" id="officialReceipt[]" class="form-control ms-2" accept=".jpg,.jpeg,.png,.pdf" required>
                                 </div>
                                 <div class="row mb-2">
                                     <label for="insurance" class="form-label">INSURANCE POLICY:</label>
-                                    <input type="file" name="insurance[]" id="insurance[]" class="form-control ms-2" accept=".jpg,.jpeg,.png,.pdf" multiple required>
+                                    <input type="file" name="insurance[]" id="insurance[]" class="form-control ms-2" accept=".jpg,.jpeg,.png,.pdf" required>
                                 </div>
 
                             </div>
@@ -151,6 +151,28 @@ include $this->resolve("partials/_header.php");
     </div>
 </div>
 <!-- Add vehicle Modal -->
+
+<!-- VIEW FILE MODAL -->
+<div class="modal fade" id="viewFileModal" tabindex="-1" aria-labelledby="viewFileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="viewFileModalLabel">File Uploaded:</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row justify-content-center" id="viewFiles">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- VIEW FILE MODAL -->
 
 
 

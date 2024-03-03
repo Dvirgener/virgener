@@ -97,6 +97,12 @@ function registerRoutes(App $app)
     $app->get('/section/vehicle', [vehicleController::class, 'renderVehiclePage'])->add(AuthRequiredMiddleware::class);
     $app->post('/section/vehicle/add', [vehicleController::class, 'addVehicle'])->add(AuthRequiredMiddleware::class);
     $app->get('/section/vehicle/details/{id}', [vehicleController::class, 'vehicleDetails'])->add(AuthRequiredMiddleware::class);
+    $app->post('/section/vehicle/update/status', [vehicleController::class, 'updateVehicleStatus'])->add(AuthRequiredMiddleware::class);
+    $app->post('/section/vehicle/update/details', [vehicleController::class, 'updateVehicleDetails'])->add(AuthRequiredMiddleware::class);
+    $app->get('/section/vehicle/delete', [vehicleController::class, 'deleteVehicle'])->add(AuthRequiredMiddleware::class);
+    $app->post('/section/vehicle/addwork', [vehicleController::class, 'addVehicleWork'])->add(AuthRequiredMiddleware::class);
+    $app->post('/section/vehicle/renew', [vehicleController::class, 'renewVehicle'])->add(AuthRequiredMiddleware::class);
+
 
 
     $app->get('/settings', [settingsController::class, 'userSettings'])->add(AuthRequiredMiddleware::class);
