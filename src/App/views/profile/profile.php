@@ -347,7 +347,7 @@ include $this->resolve("partials/_header.php");
                 <!-- // * WORK AND ACTIVITIES HISTORY BUTTONS -->
                 <div class="row mb-3">
                     <div class="col-6 d-grid ">
-                        <a class="btn btn-outline-primary shadow text-start" href="/history">
+                        <button class="btn btn-outline-primary shadow text-start personalWorkHistoryBut" value="<?= $_SESSION['user']['id'] ?>">
                             <div class="row">
                                 <div class="text-center col-12 col-md-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-clock-history" viewBox="-2 0 20 18">
@@ -363,7 +363,7 @@ include $this->resolve("partials/_header.php");
                                     <span style="font-size:medium">WORK HISTORY</span>
                                 </div>
                             </div>
-                        </a>
+                        </button>
                     </div>
                     <div class="col-6 d-grid ">
                         <a class="btn btn-outline-primary shadow text-start" href="/history">

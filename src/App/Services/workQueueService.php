@@ -72,4 +72,29 @@ class workQueueService
         }
         return $myWork;
     }
+
+    public function viewWorkHistory(int $id)
+    {
+        $allWork = $this->db->query("SELECT * FROM updates WHERE updated_by = :id ORDER BY id DESC", ['id' => $id])->findAll();
+        $returnArray = [];
+        foreach ($allWork as $work) {
+            $workMainSubject = $this->db->query("SELECT subject FROM work WHERE id =:id", ['id' => $work['main_id']])->find();
+            $workSubSubject['sub_subject'] = 0;
+            if ($work['sub_id'] != 0) {
+                $workSubSubject = $this->db->query("SELECT sub_subject FROM sub_work WHERE id = :id", ['id' => $work['sub_id']])->find();
+            }
+            $date = formatDate($work['created_at']);
+            $returnArray[] = [
+                'id' => $work['id'],
+                'mainId' => $work['main_id'],
+                'mainSubject' => $workMainSubject['subject'],
+                'subSubject' => $workSubSubject['sub_subject'],
+                'dateCreated' => $date,
+                'remarks' => $work['remarks'],
+                'files' => $work['files'],
+                'final' => $work['final']
+            ];
+        }
+        return $returnArray;
+    }
 }

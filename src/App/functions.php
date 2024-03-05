@@ -158,3 +158,11 @@ function checkDeadline($date): bool
     }
     return $deadline;
 }
+
+function formatDate($dateFromDb)
+{
+    // * format date to be readable
+    $dateAcquired = date_create($dateFromDb);
+    $returnVar = date_format($dateAcquired, "d F Y");
+    return $returnVar;
+}

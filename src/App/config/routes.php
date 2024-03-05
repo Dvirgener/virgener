@@ -66,6 +66,7 @@ function registerRoutes(App $app)
     $app->get('/profile/viewfile', [ProfileController::class, 'viewFile'])->add(AuthRequiredMiddleware::class);
     $app->get('/profile/file/{file}', [ProfileController::class, 'renderFile'])->add(AuthRequiredMiddleware::class);
     $app->get('/profile/update/edit', [workDetailsController::class, 'renderEditUpdate'])->add(AuthRequiredMiddleware::class);
+    $app->get('/profile/{viewedFrom}/{id}', [ProfileController::class, 'renderWorkHistory'])->add(AuthRequiredMiddleware::class);
 
     $app->post('/profile/update/edit/save', [workDetailsController::class, 'saveEditUpdate'])->add(AuthRequiredMiddleware::class);
 

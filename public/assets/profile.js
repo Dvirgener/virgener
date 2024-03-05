@@ -24,6 +24,47 @@ $(document).on('click', '.viewWorkBut', function () {
         })
 });
 
+// * Function for viewing work details
+$(document).on('click', '.personalWorkHistoryBut', function () {
+    var id = $(this).val();
+    $.ajax({
+            type: "GET",
+            url: "/profile/history/"+id,
+            success: function (response) {
+                $("#pageLoader").html(response);
+            }
+        })
+});
+
+// * Function for viewing work details
+$(document).on('click', '.persHistoryBackBut', function () {
+    var id = $(this).val();
+    $.ajax({
+            type: "GET",
+            url: "/profile/history/"+id,
+            success: function (response) {
+                $("#pageLoader").html(response);
+            }
+        })
+});
+
+
+// * Function for viewing work details
+$(document).on('click', '.viewWorkButHistory', function () {
+    var id = $(this).val();
+    var viewedFrom = $('#historyViewedFrom').val();
+    var historyBy = $('#historyBy').val();
+    $.ajax({
+            type: "GET",
+            url: "/"+viewedFrom+"/details/"+id,
+            success: function (response) {
+
+                $("#pageLoader").html(response);
+                $('#historyButton').val(historyBy);
+            }
+        })
+});
+
 // * Function for viewing added work details
 $(document).on('click', '.viewAddedWorkBut', function () {
     var id = $(this).val();

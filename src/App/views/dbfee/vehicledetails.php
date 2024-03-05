@@ -91,7 +91,7 @@
                     </div>
                     <div class="row mb-2">
                         <div class="col-7 d-flex align-items-center">
-                            <span class="align-items-center">Certificate of Registration:</span>
+                            <span class="align-items-center">Cert of Registration:</span>
                         </div>
                         <div class="col-5">
                             <button class="btn btn-primary viewFileBut" style="width:100%" value="<?= $vehicle['cert_reg'][0] ?>">CR</button>

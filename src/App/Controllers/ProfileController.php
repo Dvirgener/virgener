@@ -6,13 +6,13 @@ namespace App\Controllers;
 
 use Framework\TemplateEngine;
 use App\config\paths;
-use App\Services\{ValidatorService, ProfileService, FileService};
+use App\Services\{ValidatorService, ProfileService, FileService, workQueueService, UserService};
 
 
 class ProfileController
 {
 
-    public function __construct(private ValidatorService $ValidatorService, private TemplateEngine $view, private ProfileService $profileService, private FileService $fileService)
+    public function __construct(private ValidatorService $ValidatorService, private TemplateEngine $view, private ProfileService $profileService, private FileService $fileService, private workQueueService $workQueueService, private UserService $userService)
     {
     }
 
@@ -31,7 +31,7 @@ class ProfileController
         $pending = $this->profileService->checkPending($_SESSION['user']['id']);
         $addedWorkCount = $this->profileService->checkAddedWorkNumbers($_SESSION['user']['id']);
         // * Add Work Modal
-        $juniors = $this->profileService->fetchAllJuniors($_SESSION['user']['serial_number'], $_SESSION['user']['number_rank']);
+        $juniors = $this->userService->subordinateOfUser((int) $_SESSION['user']['id']);
         echo $this->view->render(
             "/profile/profile.php",
             [
@@ -71,5 +71,19 @@ class ProfileController
     public function renderFile(array $params)
     {
         $this->fileService->read($params);
+    }
+
+    public function renderWorkHistory(array $params)
+    {
+        $allUpdates = $this->workQueueService->viewWorkHistory((int) $params['id']);
+
+        echo $this->view->render(
+            "/history/personalhistory.php",
+            [
+                'allUpdates' => $allUpdates,
+                'viewedFrom' => $params['viewedFrom'],
+                'updatedBy' => $params['id']
+            ]
+        );
     }
 }

@@ -38,7 +38,7 @@
         </div>
         <div class="row mx-1 py-4 pe-3 overflow-y-scroll overflow-x-hidden rounded align-content-start" style="height:560px">
             <?php foreach ($addedWork as $work) : ?>
-                <button type="button" class="btn btn-light buttonzoom viewAddedWorkBut border border-2" style="margin-bottom: 2px; height:fit-content; width: 100%; <?= $work['style'] ?>" value="<?= $work['id'] ?>">
+                <button type="button" class="btn btn-light buttonzoom viewAddedWorkBut border border-2" style="margin-bottom: 2px; height:60px; width: 100%; <?= $work['style'] ?>" value="<?= $work['id'] ?>">
                     <div class="row">
                         <h5 class="text-start fw-bold fs-6"><?= $work['subject'] ?>
                         </h5>

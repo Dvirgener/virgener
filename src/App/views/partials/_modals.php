@@ -42,7 +42,7 @@
                                                     <img src="/profile/<?php echo $junior['picture'] ?>" style="height:100%; width:100%" alt="">
                                                 </div>
                                                 <div class="col-9 col-md-8 d-flex align-items-center">
-                                                    <label for=""><?php echo $junior['actual_rank'] . " " . $junior['last_name'] . " " . " PAF" ?></label>
+                                                    <label for=""><?php echo $junior['name'] ?></label>
                                                 </div>
                                             </div>
                                         </div>

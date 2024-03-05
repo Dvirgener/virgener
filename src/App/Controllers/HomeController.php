@@ -6,13 +6,13 @@ namespace App\Controllers;
 
 use Framework\TemplateEngine;
 use App\config\paths;
-use App\Services\{HomeService, ProfileService};
+use App\Services\{HomeService, ProfileService, UserService};
 
 
 class HomeController
 {
 
-    public function __construct(private TemplateEngine $view, private HomeService $HomeService, private ProfileService $profileService)
+    public function __construct(private TemplateEngine $view, private HomeService $HomeService, private ProfileService $profileService, private UserService $userService)
     {
     }
 
@@ -40,7 +40,7 @@ class HomeController
         $followUp = $this->HomeService->followUp();
         $deadline = $this->HomeService->deadline();
         $pending = $this->HomeService->pending();
-
+        // $subordinates = $this->userService->subordinateOfUser((int) $_SESSION['user']['id']);
         echo $this->view->render(
             "index.php",
             [

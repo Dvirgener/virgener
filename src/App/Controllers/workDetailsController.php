@@ -6,13 +6,13 @@ namespace App\Controllers;
 
 use Framework\TemplateEngine;
 use App\config\paths;
-use App\Services\{TransactionService, workDetailsService, FileService};
+use App\Services\{TransactionService, workDetailsService, FileService, UserService};
 
 
 class workDetailsController
 {
 
-    public function __construct(private TemplateEngine $view, private workDetailsService $workDetailsService, private FileService $fileService)
+    public function __construct(private TemplateEngine $view, private workDetailsService $workDetailsService, private FileService $fileService, private UserService $userService)
     {
     }
 
@@ -97,7 +97,7 @@ class workDetailsController
     // * Render content for Edit Work modal
     public function renderEditWorkModal(array $params)
     {
-        $juniors = $this->workDetailsService->fetchAllJuniors($_SESSION['user']['serial_number'], $_SESSION['user']['number_rank'], $params['id']);
+        $juniors = $this->userService->subordinateOfUser((int) $_SESSION['user']['id']);
         $workDetails = $this->workDetailsService->editWork($params['id']);
         echo $this->view->render("/profile/modalRender/editwork.php", ['editWorkDetails' => $workDetails, 'juniors' => $juniors]);
     }

@@ -16,18 +16,19 @@
 </div>
 <div class="row mb-2">
     <?php foreach ($juniors as $junior) : ?>
-        <div class="col-4 mb-2">
+        <!-- //* Display for Browser -->
+        <div class="col-12 col-md-4 mb-2" id="allJuniorBrowser">
             <div class="row">
-                <div class="col-3 d-flex align-items-center">
-                    <input class="form-check-input ms-3 form-check-required" id="addto[]" name="addto[]" type="checkbox" value="<?= $junior['id'] ?>" <?= $junior['check'] ?>>
+                <div class="col-2 d-flex align-items-center">
+                    <input class="form-check-input form-check-required ms-3" id="addto[]" name="addto[]" type="checkbox" value="<?= $junior['id'] ?>" required>
                 </div>
-                <div class="col-9">
+                <div class="col-10">
                     <div class="row">
-                        <div class="col-4">
-                            <img src="/profile/<?php echo $junior['picture'] ?>" style="height:50px; width:50px" alt="">
+                        <div class="col-3 col-md-4">
+                            <img src="/profile/<?php echo $junior['picture'] ?>" style="height:100%; width:100%" alt="">
                         </div>
-                        <div class="col-8 d-flex align-items-center">
-                            <label for=""><?php echo $junior['actual_rank'] . " " . $junior['last_name'] . " " . " PAF" ?></label>
+                        <div class="col-9 col-md-8 d-flex align-items-center">
+                            <label for=""><?php echo $junior['name'] ?></label>
                         </div>
                     </div>
                 </div>

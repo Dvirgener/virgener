@@ -14,6 +14,31 @@ class UserService
     {
     }
 
+    // * This private function get the Rank, Last name, and picture of users selected
+    private function GetArrayOfUsers(array $users, int $loggedSerialNumber = 0, int $loggedNumberRank = 0)
+    {
+        $returnArray = [];
+        foreach ($users as $user) {
+            $userDetails = $this->db->query("SELECT * FROM users WHERE id =:id", ['id' => $user])->find();
+            if ($userDetails['serial_number'] < $loggedSerialNumber && $loggedSerialNumber != 0) {
+                continue;
+            }
+            if ($userDetails['number_rank'] > $loggedNumberRank && $loggedNumberRank != 0) {
+                continue;
+            }
+            $userName = $userDetails['actual_rank'] . " " . $userDetails['last_name'] . " PAF";
+            $returnArray[] = [
+                'id' => $user,
+                'name' => $userName,
+                'numberRank' => $userDetails['number_rank'],
+                'serialNumber' => $userDetails['serial_number'],
+                'status' => $userDetails['status'],
+                'picture' => $userDetails['picture']
+            ];
+        }
+        return $returnArray;
+    }
+
     // * Check if an email is Taken
     public function isEmailTaken(string $email)
     {
@@ -108,6 +133,8 @@ class UserService
         $_SESSION['user'] = $user;
     }
 
+
+    // * Check for the users assigned in the section given
     public function usersInSection(string $section)
     {
         $allUsers = $this->db->query("SELECT * FROM users WHERE classification = 'EP'")->findAll();
@@ -117,18 +144,34 @@ class UserService
                 $users[] = $user['id'];
             }
         }
-        $returnArray = [];
-        foreach ($users as $user) {
-            $userDetails = $this->db->query("SELECT * FROM users WHERE id =:id", ['id' => $user])->find();
-            $userName = $userDetails['actual_rank'] . " " . $userDetails['last_name'] . " PAF";
-            $returnArray[] = [
-                'id' => $user,
-                'name' => $userName,
-                'status' => $userDetails['status'],
-                'picture' => $userDetails['picture']
-            ];
+        return $this->GetArrayOfUsers($users);
+    }
+
+    public function subordinateOfUser(int $id)
+    {
+        $loggedUser = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $id])->find();
+        switch ($loggedUser['position']) {
+            case "OIC":
+                $fetchedIds = $this->db->query("SELECT id FROM users ORDER BY serial_number")->findall();
+                foreach ($fetchedIds as $fetched) {
+                    $allUnder[] = $fetched['id'];
+                }
+                break;
+            case "AOIC":
+                $fetchedIds = $this->db->query("SELECT id FROM users  WHERE position != 'OIC' ORDER BY serial_number")->findAll();
+                foreach ($fetchedIds as $fetched) {
+                    $allUnder[] = $fetched['id'];
+                }
+                break;
+            case "NCOIC":
+            case "Personnel":
+                $fetchedIds = $this->db->query("SELECT id FROM users WHERE classification = 'EP'  ORDER BY serial_number")->findAll();
+                foreach ($fetchedIds as $fetched) {
+                    $allUnder[] = $fetched['id'];
+                }
+                break;
         }
-        return $returnArray;
+        return $this->GetArrayOfUsers($allUnder, $loggedUser['serial_number'], $loggedUser['number_rank']);
     }
 
     // * Logout User

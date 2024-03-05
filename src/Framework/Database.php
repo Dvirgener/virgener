@@ -29,11 +29,6 @@ class Database
         return $this;
     }
 
-    public function tableId(int $id)
-    {
-        $this->connection->lastInsertId();
-    }
-
     public function count()
     {
         return $this->stmt->fetchColumn();

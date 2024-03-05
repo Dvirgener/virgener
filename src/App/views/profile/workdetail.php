@@ -4,9 +4,17 @@
     </div>
     <div class="col-3 d-none d-md-inline col-md-1">
         <!-- BACK BUTTON TO WHERE THIS PAGE WAS REQUESTED FROM -->
-        <a class="btn btn-secondary" href="/profile/return">
-            BACK
-        </a>
+        <?php if ($viewedFrom == "history") : ?>
+            <button class="btn btn-secondary persHistoryBackBut" id="historyButton">
+                BACK
+            </button>
+        <?php else : ?>
+            <a class="btn btn-secondary" href="/profile/return">
+                BACK
+            </a>
+        <?php endif ?>
+        <!-- BACK BUTTON TO WHERE THIS PAGE WAS REQUESTED FROM -->
+
         <input type="hidden" value="<?= $viewedOn ?>" id="viewedOn">
     </div>
 </div>
@@ -16,25 +24,35 @@
     <div class="col-12 col-md-6 d-grid">
         <div class="row-fluid overflow-y-scroll overflow-x-hidden align-content-start pe-0 pe-md-3" style="height:600px; width:100%">
             <div class="row mb-2">
-                <div class="col-12">
-                    <label for="" class="form-label fs-6 fw-bold text-wrap">SUBJECT:</label>
-                    <input class="form-control" type="text" disabled value="<?= $workDetails['subject'] ?>">
-                </div>
+                <span class="fw-bold">ASSIGNED TO:</span>
             </div>
             <div class="row mb-2">
-                <div class="col-12 col-md-6 mb-2">
-                    <label for="" class="form-label fs-6 fw-bold">ADDED BY:</label>
-                    <input class="form-control" type="text" disabled value="<?= $workDetails['added_by_name'] ?>">
-                </div>
-                <div class="col-12 col-md-6 mb-2">
-                    <label for="" class="form-label fs-6 fw-bold">WORK TYPE:</label>
-                    <input class="form-control" type="text" disabled value="<?= $workDetails['type'] ?>">
-                </div>
+
+                <!-- THIS PART WILL SHOW THE PICTURES OF THE PERSONNEL WHERE THE WORK WAS ASSIGNED TO -->
+                <?php foreach ($workDetails['detailedAssignee'] as $assigned) : ?>
+                    <div class="col-4 col-md-2 mb-2">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <img class="border img-fluid" id="" src="/profile/<?= $assigned['picture'] ?>" alt="" style=" height: 70px; width: 70px">
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach ?>
+                <!-- THIS PART WILL SHOW THE PICTURES OF THE PERSONNEL WHERE THE WORK WAS ASSIGNED TO -->
+
             </div>
-            <div class="row mb-2">
-                <div class="col-12">
-                    <label for="" class="form-label fs-6 fw-bold">INSTRUCTIONS / REMARKS:</label>
-                    <textarea class="form-control" name="" id="" cols="20" rows="5" disabled><?= $workDetails['instructions'] ?></textarea>
+            <div class="row mb-2" style="height:fit-content;">
+                <div class="col-12 col-md-4 mb-2">
+                    <label for="" class="form-label fs-6 fw-bold">DATE ADDED:</label>
+                    <input class="form-control" type="text" disabled value="<?= $workDetails['created_at'] ?>">
+                </div>
+                <div class="col-12 col-md-4 mb-2 ">
+                    <label for="" class="form-label fs-6 fw-bold">LAST UPDATE:</label>
+                    <input class="form-control" type="text" disabled value="<?= $workDetails['updated_at'] ?>">
+                </div>
+                <div class="col-12 col-md-4 mb-2">
+                    <label for="" class="form-label fs-6 fw-bold">TARGET DATE:</label>
+                    <input class="form-control" type="text" disabled value="<?= $workDetails['date_target'] ?>">
                 </div>
             </div>
             <div class="row justify-content-between ps-2">
@@ -119,47 +137,31 @@
 
                 </div>
             </div>
-            <div class="row mb-2" style="height:fit-content;">
-                <div class="col-12 col-md-4 mb-2">
-                    <label for="" class="form-label fs-6 fw-bold">DATE ADDED:</label>
-                    <input class="form-control" type="text" disabled value="<?= $workDetails['created_at'] ?>">
-                </div>
-                <div class="col-12 col-md-4 mb-2 ">
-                    <label for="" class="form-label fs-6 fw-bold">LAST UPDATE:</label>
-                    <input class="form-control" type="text" disabled value="<?= $workDetails['updated_at'] ?>">
-                </div>
-                <div class="col-12 col-md-4 mb-2">
-                    <label for="" class="form-label fs-6 fw-bold">TARGET DATE:</label>
-                    <input class="form-control" type="text" disabled value="<?= $workDetails['date_target'] ?>">
+            <div class="row mb-2">
+                <div class="col-12">
+                    <label for="" class="form-label fs-6 fw-bold text-wrap">SUBJECT:</label>
+                    <input class="form-control" type="text" disabled value="<?= $workDetails['subject'] ?>">
                 </div>
             </div>
             <div class="row mb-2">
-                <span class="fw-bold">ASSIGNED TO:</span>
+                <div class="col-12 col-md-6 mb-2">
+                    <label for="" class="form-label fs-6 fw-bold">ADDED BY:</label>
+                    <input class="form-control" type="text" disabled value="<?= $workDetails['added_by_name'] ?>">
+                </div>
+                <div class="col-12 col-md-6 mb-2">
+                    <label for="" class="form-label fs-6 fw-bold">WORK TYPE:</label>
+                    <input class="form-control" type="text" disabled value="<?= $workDetails['type'] ?>">
+                </div>
             </div>
-            <div class="row">
-
-                <!-- THIS PART WILL SHOW THE PICTURES OF THE PERSONNEL WHERE THE WORK WAS ASSIGNED TO -->
-                <?php foreach ($workDetails['detailedAssignee'] as $assigned) : ?>
-                    <!-- //* Display for CP -->
-                    <div class="col-6 d-inline d-md-none justify-content-center">
-                        <div class="row">
-                            <div class="col-12">
-                                <img class="border view_personnel_work img-fluid " type="button" id="view_personnel_work" src="/profile/<?= $assigned['picture'] ?>" alt="" style=" height: 100%; width: 100%">
-                            </div>
-
-                        </div>
-                        <div class="row text-center">
-                            <span class="" style="font-size:small;"><?= $assigned['name'] ?></span>
-                        </div>
-                    </div>
-                    <!-- //* Display for Browser -->
-                    <div class="col-6 col-md-2 mb-2 d-none d-md-inline">
-                        <img class="border border-2 border-dark view_personnel_work img-fluid " type="button" id="view_personnel_work" src="/profile/<?= $assigned['picture'] ?>" alt="" style=" height: 50px; width: 50px">
-                    </div>
-                <?php endforeach ?>
-                <!-- THIS PART WILL SHOW THE PICTURES OF THE PERSONNEL WHERE THE WORK WAS ASSIGNED TO -->
-
+            <div class="row mb-2">
+                <div class="col-12">
+                    <label for="" class="form-label fs-6 fw-bold">INSTRUCTIONS / REMARKS:</label>
+                    <textarea class="form-control" name="" id="" cols="20" rows="5" disabled><?= $workDetails['instructions'] ?></textarea>
+                </div>
             </div>
+
+
+
 
             <div class="row-fluid me-2 overflow-y-scroll overflow-x-hidden align-content-start p-0" style="height:565px">
                 <div class="row">
@@ -191,8 +193,19 @@
                                 <?php foreach ($subWorkDetails as $subwork) : ?>
                                     <div class="row-fluid border shadow rounded ms-2 mb-2" style="height: fit-content;">
                                         <div class="row mb-2">
-                                            <div class="col-6 d-flex align-items-center">
-                                                <span class="fw-bold">SUBJECT: <span class="fw-bold" style="color:green"><?= $subwork['comp']['bg'] ?></span></span>
+                                            <div class="col-6">
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <span class="fw-bold">SUBJECT:</span>
+                                                    </div>
+                                                    <div class="col-6" style="color:green; display:<?php echo ($subwork['comp']['bg'] === " complied!" ? 'block' : 'none') ?>">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-check2-circle" viewBox="0 0 16 16">
+                                                            <path d="M2.5 8a5.5 5.5 0 0 1 8.25-4.764.5.5 0 0 0 .5-.866A6.5 6.5 0 1 0 14.5 8a.5.5 0 0 0-1 0 5.5 5.5 0 1 1-11 0" />
+                                                            <path d="M15.354 3.354a.5.5 0 0 0-.708-.708L8 9.293 5.354 6.646a.5.5 0 1 0-.708.708l3 3a.5.5 0 0 0 .708 0z" />
+                                                        </svg>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                             <div class="col-6">
                                                 <div class="row mt-1 me-4 justify-content-end">
@@ -298,88 +311,63 @@
 
                 <!-- SCAN INDIVIDUAL UPDATES FOR THIS WORK QUEUE -->
                 <?php foreach ($workDetails['updates'] as $update) : ?>
-                    <div class="row border mx-1 mb-2">
-                        <div class="col-4 border-end text-center d-flex align-items-center justify-content-center">
-                            <span class="fw-bold"><?= $update['created_at'] ?></span>
-                        </div>
-                        <div class="col-7">
+                    <div class="row border border-dark mb-2 justify-content-center" style="background-color: <?php echo (($update['final']) == 'YES' ? '#31a339' : ''); ?>">
+                        <div class="row border-bottom border-dark p-0">
+                            <div class="col-10 ps-1">
+                                <span class="fw-bold">Update for: </span><span><?php echo ($update['sub_id'] != 0 ? $update['sub_id'] : 'Main Work') ?></span>
+                            </div>
+                            <div class="col-2 mt-1 d-flex justify-content-end" style="font-size: smaller;">
 
-                            <!-- CHECK IF THE UPDATE IS FINAL OR NOT -->
-                            <?php if ($update['final'] == "YES") : ?>
-
-                                <!-- CHECK IF THE UPDATE BELONGS TO A SUB WORK QUEUE -->
-                                <?php if ($update['sub_id'] != 0) : ?>
-                                    <div class="row">
-                                        <span><span class="fw-bold">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-                                                    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" />
-                                                </svg>
-                                                Sub Work: </span><?= $update['sub_id'] ?><span style="font-size: small; color:green;" class="fst-italic"> <?= $update['complied'] ?></span></span>
-                                    </div>
+                                <!-- CHECK WHERE THE WORK IS BEING VIEWED FROM -->
+                                <?php if ($viewedFrom == "dashboard") : ?>
+                                <?php elseif ($viewedFrom == "history") : ?>
                                 <?php else : ?>
-                                    <div class="row">
-                                        <span class="fst-italic" style="font-size: small; color:green;">Main work <?= $update['complied'] ?></span>
-                                    </div>
+
+                                    <!-- SHOW IF THE WORK IS BEING VIEW FROM ADDED QUEUE -->
+                                    <?php if ($viewedOn == "workqueue") : ?>
+                                        <button type="button" class="editUpdateBut" style="background: none; border: none; color:blue" value="<?= $update['id'] ?>">Edit</button>
+                                    <?php elseif ($viewedOn == "addedqueue") : ?>
+                                        <form action="" method="POST" id="deleteUpdateForm">
+                                            <?php
+                                            include $this->resolve("partials/_token.php");
+                                            ?>
+                                            <input type="hidden" value="<?= $update['main_id'] ?>" id="mainId" name="mainId">
+                                            <input type="hidden" value="<?= $viewedOn ?>" id="viewedOn" name="viewedOn">
+                                            <input type="hidden" value="<?= $update['id'] ?>" id="id" name="id">
+                                            <button type="submit" class="btn-close" aria-label="Close"></button>
+                                        </form>
+                                    <?php endif ?>
+                                    <!-- SHOW IF THE WORK IS BEING VIEW FROM ADDED QUEUE -->
+
                                 <?php endif ?>
-                                <!-- CHECK IF THE UPDATE BELONGS TO A SUB WORK QUEUE -->
+                                <!-- CHECK WHERE THE WORK IS BEING VIEWED FROM -->
 
-                            <?php else : ?>
-                                <?php if ($update['sub_id'] != 0) : ?>
-                                    <div class="row">
-                                        <span><span class="fw-bold">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-                                                    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" />
-                                                </svg>
-                                                Sub Work: </span><?= $update['sub_id'] ?><span style="font-size: small; color:green;" class="fst-italic"> <?= $update['complied'] ?></span></span>
-                                    </div>
-                                <?php endif ?>
-                            <?php endif ?>
-                            <!-- CHECK IF THE UPDATE IS FINAL OR NOT -->
-
-                            <div class="row mb-1">
-                                <span><?= $update['remarks'] ?></span>
-                            </div>
-                            <div class="row mb-1">
-
-                                <!-- CHECK FOR FILES -->
-                                <?php foreach ($update['files'] as $file) : ?>
-                                    <div class="col-4 d-grid">
-                                        <button class="btn btn-secondary viewFileBut mb-1" type="button" value="<?= $file ?>">File</button>
-                                    </div>
-                                <?php endforeach ?>
-                                <!-- CHECK FOR FILES -->
-
-                            </div>
-                            <div class="row">
-                                <span class="fst-italic mt-2">- <?= $update['updated_by'] ?></span>
                             </div>
                         </div>
-                        <div class="col-1 mt-1" style="font-size: smaller;">
+                        <div class="row">
+                            <div class="col-4 border-end border-dark text-center d-flex align-items-center justify-content-center">
+                                <div class="row">
+                                    <span class="fw-bold"><?= $update['created_at'] ?></span>
+                                </div>
+                            </div>
+                            <div class="col-8">
+                                <div class="row mb-1">
+                                    <span><?= $update['remarks'] ?></span>
+                                </div>
+                                <div class="row mb-1">
 
-                            <!-- CHECK WHERE THE WORK IS BEING VIEWED FROM -->
-                            <?php if ($viewedFrom == "dashboard") : ?>
-                            <?php elseif ($viewedFrom == "history") : ?>
-                            <?php else : ?>
-
-                                <!-- SHOW IF THE WORK IS BEING VIEW FROM ADDED QUEUE -->
-                                <?php if ($viewedOn == "workqueue") : ?>
-                                    <button type="button" class="editUpdateBut" style="background: none; border: none; color:blue" value="<?= $update['id'] ?>">Edit</button>
-                                <?php elseif ($viewedOn == "addedqueue") : ?>
-                                    <form action="" method="POST" id="deleteUpdateForm">
-                                        <?php
-                                        include $this->resolve("partials/_token.php");
-                                        ?>
-                                        <input type="hidden" value="<?= $update['main_id'] ?>" id="mainId" name="mainId">
-                                        <input type="hidden" value="<?= $viewedOn ?>" id="viewedOn" name="viewedOn">
-                                        <input type="hidden" value="<?= $update['id'] ?>" id="id" name="id">
-                                        <button type="submit" class="btn-close" aria-label="Close"></button>
-                                    </form>
-                                <?php endif ?>
-                                <!-- SHOW IF THE WORK IS BEING VIEW FROM ADDED QUEUE -->
-
-                            <?php endif ?>
-                            <!-- CHECK WHERE THE WORK IS BEING VIEWED FROM -->
-
+                                    <!-- CHECK FOR FILES -->
+                                    <?php foreach ($update['files'] as $file) : ?>
+                                        <div class="col-4 d-grid">
+                                            <button class="btn btn-secondary viewFileBut mb-1" type="button" value="<?= $file ?>">File</button>
+                                        </div>
+                                    <?php endforeach ?>
+                                    <!-- CHECK FOR FILES -->
+                                </div>
+                                <div class="row">
+                                    <span class="fst-italic mt-2">- <?= $update['updated_by'] ?></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 <?php endforeach ?>

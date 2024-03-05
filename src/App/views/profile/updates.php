@@ -1,91 +1,62 @@
 <!-- SCAN INDIVIDUAL UPDATES FOR THIS WORK QUEUE -->
 <?php foreach ($updates as $update) : ?>
-    <div class="row border mx-1 mb-2">
-        <div class="col-4 border-end text-center d-flex align-items-center justify-content-center">
-            <span class="fw-bold"><?= $update['created_at'] ?></span>
-        </div>
-        <div class="col-7">
+    <div class="row border border-dark mb-2 justify-content-center" style="background-color: <?php echo (($update['final']) == 'YES' ? '#31a339' : ''); ?>">
+        <div class="row border-bottom border-dark p-0">
+            <div class="col-10 ps-1">
+                <span class="fw-bold">Update for: </span><span><?php echo ($update['sub_id'] != 0 ? $update['sub_id'] : 'Main Work') ?></span>
+            </div>
+            <div class="col-2 mt-1 d-flex justify-content-end" style="font-size: smaller;">
 
-            <!-- CHECK IF THE UPDATE IS FINAL OR NOT -->
-            <?php if ($update['final'] == "YES") : ?>
-
-                <!-- CHECK IF THE UPDATE BELONGS TO A SUB WORK QUEUE -->
-                <?php if ($update['sub_id'] != 0) : ?>
-                    <div class="row">
-                        <span><span class="fw-bold">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" />
-                                </svg>
-                                Sub Work: </span><?= $update['sub_id'] ?><span style="font-size: small; color:green;" class="fst-italic"> <?= $update['complied'] ?></span></span>
-                    </div>
+                <!-- CHECK WHERE THE WORK IS BEING VIEWED FROM -->
+                <?php if ($viewedFrom == "dashboard") : ?>
+                <?php elseif ($viewedFrom == "history") : ?>
                 <?php else : ?>
-                    <div class="row">
-                        <span class="fst-italic" style="font-size: small; color:green;">Main work <?= $update['complied'] ?></span>
-                    </div>
+
+                    <!-- SHOW IF THE WORK IS BEING VIEW FROM ADDED QUEUE -->
+                    <?php if ($viewedOn == "workqueue") : ?>
+                        <button type="button" class="editUpdateBut" style="background: none; border: none; color:blue" value="<?= $update['id'] ?>">Edit</button>
+                    <?php elseif ($viewedOn == "addedqueue") : ?>
+                        <form action="" method="POST" id="deleteUpdateForm">
+                            <?php
+                            include $this->resolve("partials/_token.php");
+                            ?>
+                            <input type="hidden" value="<?= $update['main_id'] ?>" id="mainId" name="mainId">
+                            <input type="hidden" value="<?= $viewedOn ?>" id="viewedOn" name="viewedOn">
+                            <input type="hidden" value="<?= $update['id'] ?>" id="id" name="id">
+                            <button type="submit" class="btn-close" aria-label="Close"></button>
+                        </form>
+                    <?php endif ?>
+                    <!-- SHOW IF THE WORK IS BEING VIEW FROM ADDED QUEUE -->
+
                 <?php endif ?>
-                <!-- CHECK IF THE UPDATE BELONGS TO A SUB WORK QUEUE -->
+                <!-- CHECK WHERE THE WORK IS BEING VIEWED FROM -->
 
-            <?php else : ?>
-                <?php if ($update['sub_id'] != 0) : ?>
-                    <div class="row">
-                        <span><span class="fw-bold">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-                                    <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" />
-                                </svg>
-                                Sub Work: </span><?= $update['sub_id'] ?><span style="font-size: small; color:green;" class="fst-italic"> <?= $update['complied'] ?></span></span>
-                    </div>
-                <?php endif ?>
-            <?php endif ?>
-            <!-- CHECK IF THE UPDATE IS FINAL OR NOT -->
-
-            <div class="row mb-1">
-                <span><span class="fw-bold">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8" />
-                        </svg>
-                        Remarks: </span><span><?= $update['remarks'] ?></span></span>
-            </div>
-            <div class="row mb-1">
-
-                <!-- CHECK FOR FILES -->
-                <?php foreach ($update['files'] as $file) : ?>
-                    <div class="col-4 d-grid">
-                        <button class="btn btn-secondary viewFileBut mb-1" type="button" value="<?= $file ?>">File</button>
-                    </div>
-                <?php endforeach ?>
-                <!-- CHECK FOR FILES -->
-
-            </div>
-            <div class="row">
-                <span class="fst-italic mt-2">- <?= $update['updated_by'] ?></span>
             </div>
         </div>
-        <div class="col-1 mt-1" style="font-size: smaller;">
+        <div class="row">
+            <div class="col-4 border-end border-dark text-center d-flex align-items-center justify-content-center">
+                <div class="row">
+                    <span class="fw-bold"><?= $update['created_at'] ?></span>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="row mb-1">
+                    <span><?= $update['remarks'] ?></span>
+                </div>
+                <div class="row mb-1">
 
-            <!-- CHECK WHERE THE WORK IS BEING VIEWED FROM -->
-            <?php if ($viewedFrom == "dashboard") : ?>
-            <?php elseif ($viewedFrom == "history") : ?>
-            <?php else : ?>
-
-                <!-- SHOW IF THE WORK IS BEING VIEW FROM ADDED QUEUE -->
-                <?php if ($viewedOn == "workqueue") : ?>
-                    <button type="button" class="editUpdateBut" style="background: none; border: none;" value="<?= $update['id'] ?>">Edit</button>
-                <?php elseif ($viewedOn == "addedqueue") : ?>
-                    <form action="" method="POST" id="deleteUpdateForm">
-                        <?php
-                        include $this->resolve("partials/_token.php");
-                        ?>
-                        <input type="hidden" value="<?= $update['main_id'] ?>" id="mainId" name="mainId">
-                        <input type="hidden" value="<?= $viewedOn ?>" id="viewedOn" name="viewedOn">
-                        <input type="hidden" value="<?= $update['id'] ?>" id="id" name="id">
-                        <button type="submit" class="btn-close" aria-label="Close"></button>
-                    </form>
-                <?php endif ?>
-                <!-- SHOW IF THE WORK IS BEING VIEW FROM ADDED QUEUE -->
-
-            <?php endif ?>
-            <!-- CHECK WHERE THE WORK IS BEING VIEWED FROM -->
-
+                    <!-- CHECK FOR FILES -->
+                    <?php foreach ($update['files'] as $file) : ?>
+                        <div class="col-4 d-grid">
+                            <button class="btn btn-secondary viewFileBut mb-1" type="button" value="<?= $file ?>">File</button>
+                        </div>
+                    <?php endforeach ?>
+                    <!-- CHECK FOR FILES -->
+                </div>
+                <div class="row">
+                    <span class="fst-italic mt-2">- <?= $update['updated_by'] ?></span>
+                </div>
+            </div>
         </div>
     </div>
 <?php endforeach ?>

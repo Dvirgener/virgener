@@ -5,9 +5,13 @@
     color: black;
   }
 
-  .virg-normal-font{
+  /* .virg-normal-font{
 font-family: 'helvetica neue', sans serif;
-  }
+  } */
+
+  .virg-normal-font{
+    font-family: Arial, Helvetica, sans-serif;
+      }
 
   /* .virg-background-color{
     background-color: rgb(132, 133, 135);
