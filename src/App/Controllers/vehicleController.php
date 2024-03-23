@@ -36,6 +36,7 @@ class vehicleController
         $users = $this->userService->usersInSection("DBFEE");
         $vehicle = $this->vehicleService->getVehicleDetails((int) $params['id']);
         $vehicleWork = $this->vehicleService->getVehicleWork((int) $params['id']);
+        // dd($vehicleWork);
         echo $this->view->render("/dbfee/vehicledetails.php", ['vehicle' => $vehicle, 'users' => $users, 'vehicleWorks' => $vehicleWork]);
     }
 

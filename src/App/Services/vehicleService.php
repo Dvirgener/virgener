@@ -79,6 +79,8 @@ class vehicleService
 
     public function getVehicleDetails(int $id)
     {
+
+
         $vehicle = $this->db->query("SELECT * FROM vehicles WHERE id = :id", ['id' => $id])->find();
         $formattedDates = $this->db->query("SELECT DATE_FORMAT(renewal_date, '%Y-%m-%d') as renewalDate, DATE_FORMAT(year_acquired, '%Y-%m-%d') as acquiredDate  FROM vehicles WHERE id = :id", ['id' => $id])->find();
 
@@ -118,15 +120,41 @@ class vehicleService
 
     public function getVehicleWork(int $id)
     {
-        $vehicleQueues = $this->db->query("SELECT * FROM work WHERE veh_id = :id", ['id' => $id])->findAll();
         $returnArray = [];
-        foreach ($vehicleQueues as $vehicle) {
-            $addedBy = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $vehicle['added_by']])->find();
+        $vehicleHistory = $this->db->query("SELECT * FROM vehicle_history WHERE veh_id = :id", ['id' => $id])->findAll();
+
+        foreach ($vehicleHistory as $history) {
+            $addedBy = $this->db->query("SELECT * FROM users WHERE id = :id", ['id' => $history['added_by']])->find();
+
+            if ($history['work_id'] != NULL) {
+                // pd($history);
+                $vehQueue = $this->db->query("SELECT * FROM work WHERE id = :id", ['id' => $history['work_id']])->find();
+                // dd($vehQueue);
+                if ($vehQueue['status'] != 'COMPLIED') {
+                    $status = "ON GOING";
+                } else {
+                    $status = "COMPLIED";
+                }
+
+                $returnArray[] =
+                    [
+                        'vehWork' => true,
+                        'id' => $vehQueue['id'],
+                        'subject' => $history['remarks'],
+                        'addedBy' => $addedBy['actual_rank'] . " " . $addedBy['last_name'] . " PAF",
+                        'date' => $history['created_at'],
+                        'status' => $status
+                    ];
+                continue;
+            }
+
             $returnArray[] =
                 [
-                    'id' => $vehicle['id'],
-                    'subject' => $vehicle['subject'],
-                    'addedBy' => $addedBy['actual_rank'] . " " . $addedBy['last_name'] . " PAF"
+                    'vehWork' => false,
+                    'id' => $history['id'],
+                    'subject' => $history['remarks'],
+                    'addedBy' => $addedBy['actual_rank'] . " " . $addedBy['last_name'] . " PAF",
+                    'date' => $history['created_at']
                 ];
         }
 
@@ -141,6 +169,26 @@ class vehicleService
                 'veh_status' => $formData['vehStatus'],
                 'remarks' => $formData['vehicleRemarks'],
                 'id' => $formData['vehicleId']
+            ]
+        );
+
+        switch ($formData['vehStatus']) {
+            case 'IN':
+                $historyRemarks = "The vehicle has been rendered operational";
+                break;
+
+            case 'OUT':
+            case 'BER':
+                $historyRemarks = "The vehicle has been rendered " . $formData['vehStatus'] . " due to " . $formData['vehicleRemarks'];
+                break;
+        }
+
+        $this->db->query(
+            "INSERT INTO vehicle_history (veh_id, remarks, added_by) VALUES (:id,:remarks,:added_by)",
+            [
+                'id' => $formData['vehicleId'],
+                'remarks' => $historyRemarks,
+                'added_by' => $_SESSION['user']['id']
             ]
         );
     }
@@ -221,6 +269,18 @@ class vehicleService
                 );
             }
         }
+
+        $this->db->query(
+            "INSERT INTO vehicle_history (veh_id, work_id, remarks, added_by) VALUES (:id, :work_id, :remarks, :added_by)",
+            [
+                'id' => $formData['id'],
+                'work_id' => $workId,
+                'remarks' => $formData['subject'],
+                'added_by' => $_SESSION['user']['id']
+            ]
+        );
+
+
         return $workId;
     }
 
@@ -269,6 +329,16 @@ class vehicleService
                 ]
             );
         }
+
+        $this->db->query(
+            "INSERT INTO vehicle_history (veh_id, work_id, remarks, added_by) VALUES (:id, :work_id, :remarks, :added_by)",
+            [
+                'id' => $formData['id'],
+                'work_id' => $workId,
+                'remarks' => $subject,
+                'added_by' => $_SESSION['user']['id']
+            ]
+        );
 
         return $workId;
     }

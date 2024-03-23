@@ -7,6 +7,7 @@ $artist = $_GET['artist'];
 
 $json = json_encode($data);
 echo "<script>var data = $json;</script>";
+
 include $this->resolve("partials/_header.php");
 
 
@@ -69,7 +70,7 @@ include $this->resolve("partials/_header.php");
             </div>
             <div class="col-10 d-grid justify-content-center ">
                 <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
-                <div id="playersa" class="mb-2"></div>
+                <div id="playersa" class="mb-2 border border-gray-500"></div>
             </div>
 
         </div>

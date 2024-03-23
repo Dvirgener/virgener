@@ -144,20 +144,49 @@
     </div>
     <div class="col-12 col-md-5 d-grid">
         <div class="row">
-            <span class="fw-bold h5 text-center">VEHICLE HISTROY</span>
+            <span class="fw-bold h5 text-center">HISTORY</span>
         </div>
         <div class="row overflow-y-scroll mx-1 px-2 overflow-x-hidden align-content-start" style="height: 510px;">
             <?php foreach ($vehicleWorks as $vehicleWork) : ?>
-                <button type="button" class="btn btn-light buttonzoom viewWorkBut border border-2" style="margin-bottom: 2px; height:fit-content; width: 100%; <?= $work['style'] ?>" value="<?= $vehicleWork['id'] ?>">
-                    <div class="row">
-                        <h5 class="text-start fw-bold text-wrap fs-6"><?= $vehicleWork['subject'] ?></h5>
+                <?php if ($vehicleWork['vehWork']) : ?>
+                    <button type="button" class="btn btn-light buttonzoom viewWorkBut border border-2" style="margin-bottom: 2px; height:fit-content; width: 100%;" value="<?= $vehicleWork['id'] ?>">
+                        <div class="row">
+                            <h5 class="text-start fw-bold text-wrap fs-6"><?= $vehicleWork['subject'] ?></h5>
+                        </div>
+                        <div class="row text-start fw-bold mb-2">
+                            <span>STATUS: <?= $vehicleWork['status'] ?></span>
+                        </div>
+                        <div class="row text-start">
+                            <div class="col">
+                                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 20 20">
+                                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
+                                    </svg> <?= $vehicleWork['addedBy'] ?> </span>
+                            </div>
+                            <div class="col text-end">
+                                <span>Date: <?= $vehicleWork['date'] ?> </span>
+                            </div>
+
+                        </div>
+                    </button>
+                <?php else : ?>
+                    <div class="btn btn-light buttonzoom border border-2" style="margin-bottom: 2px; height:fit-content; width: 100%; <?= $work['style'] ?>" value="<?= $vehicleWork['id'] ?>">
+                        <div class="row">
+                            <h5 class="text-start fw-bold text-wrap fs-6"><?= $vehicleWork['subject'] ?></h5>
+                        </div>
+                        <div class="row text-start">
+                            <div class="col">
+                                <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 20 20">
+                                        <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
+                                    </svg> <?= $vehicleWork['addedBy'] ?> </span>
+                            </div>
+                            <div class="col text-end">
+                                <span>Date: <?= $vehicleWork['date'] ?> </span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="row text-start">
-                        <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-caret-right-fill" viewBox="0 0 20 20">
-                                <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z" />
-                            </svg> <?= $vehicleWork['addedBy'] ?> </span>
-                    </div>
-                </button>
+
+                <?php endif ?>
+
             <?php endforeach ?>
         </div>
     </div>

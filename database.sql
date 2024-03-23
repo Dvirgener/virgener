@@ -171,4 +171,14 @@ CREATE TABLE if NOT EXISTS vehicles(
     PRIMARY KEY (id)   
 );
 
+CREATE TABLE if NOT EXISTS vehicle_history(
+    id bigint(20) unsigned NOT NULL AUTO_INCREMENT, -- id of the file in DB
+    veh_id bigint(20) unsigned,
+    work_id bigint(20) unsigned,
+    remarks varchar(522),
+    added_by bigint(20),
+    created_at date NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+    PRIMARY KEY (id),
+    FOREIGN KEY (veh_id) REFERENCES vehicles (id)
+)
 
